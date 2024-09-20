@@ -15,3 +15,6 @@
 
 ## Features
 test2
+
+## Helpful Tips to run: 
+- change password to mySQL server in JDBCmyFlorabaseDemo.jsp
