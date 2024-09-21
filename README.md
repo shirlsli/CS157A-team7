@@ -14,7 +14,7 @@
 **Dr. Mike Wu**
 
 ## Features
-test2
+test3
 
 ## Helpful Tips to run: 
 - change password to mySQL server in JDBCmyFlorabaseDemo.jsp
