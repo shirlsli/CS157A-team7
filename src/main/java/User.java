@@ -1,12 +1,18 @@
-import java.io.File;
-
 public class User {
 	private int userId;
 	private String username;
+	private String password;
 	private byte[] profilePic;
 	private String description;
 	private boolean isAdmin;
 	
+	public User(int userId, String username, String password, boolean isAdmin) {
+		this.setUserId(userId);
+		this.setUsername(username);
+		this.setPassword(password);
+		this.setDescription(username + " has not described themself yet.");
+		this.setAdmin(isAdmin);
+	}
 	
 	public int getUserId() {
 		return userId;
@@ -46,5 +52,13 @@ public class User {
 	
 	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
