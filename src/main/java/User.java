@@ -3,7 +3,7 @@ import java.io.File;
 public class User {
 	private int userId;
 	private String username;
-	private File profilePic;
+	private byte[] profilePic;
 	private String description;
 	private boolean isAdmin;
 	
@@ -24,11 +24,11 @@ public class User {
 		this.username = username;
 	}
 	
-	public File getProfilePic() {
+	public byte[] getProfilePic() {
 		return profilePic;
 	}
 	
-	public void setProfilePic(File profilePic) {
+	public void setProfilePic(byte[] profilePic) {
 		this.profilePic = profilePic;
 	}
 	
