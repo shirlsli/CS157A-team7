@@ -35,7 +35,7 @@ function submitMarker(event) {
     // Create a new marker using AdvancedMarkerElement in test.js
     const newMarker = new AdvancedMarkerElement({
         map: map,
-        position: { latitude: latitude, longitude: longitude },
+        position: { lat: latitude, lng: longitude },
         title: title,
     });
 
