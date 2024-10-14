@@ -75,50 +75,91 @@
 	}
 	%>
 
-	<script>
+	<script defer>
 		function changeProfilePic() {
 
 		}
+		
+		function primaryButtonClick(buttonId) {
+			buttonId.style.border = '1px solid #EAAC9D';
+			buttonId.style.background = 'white';
+			buttonId.style.color = "#EAAC9D"
+		    
+		    setTimeout(() => {
+		    	buttonId.style.border = '';
+		    	buttonId.style.background = '#EAAC9D';
+		    	buttonId.style.color = "black";
+		    }, 200);
+		}
+		
+		function secondaryButtonClick(buttonId) {
+			buttonId.style.background = '#EAAC9D';
+			buttonId.style.color = "black"
+		    
+		    setTimeout(() => {
+		    	buttonId.style.background = 'white';
+		    	buttonId.style.color = "#EAAC9D";
+		    }, 200);
+		}
 
-		function editDescription() {
+		function editDescription(button) {
+			secondaryButtonClick(button);
+			button.style.display = "none";
 			const descriptionDiv = document.getElementById("descriptionDiv");
-			const description = document.getElementById("description").value;
+			const description = document.getElementById("description").textContent;
 			if (description && descriptionDiv) {
 				const temp = description;
-				description.parentNode.removeChild(description);
+				descriptionDiv.removeChild(document.getElementById("description"));
 				const textField = document.createElement("textarea");
 				const cancelButton = document.createElement("button");
 				const saveButton = document.createElement("button");
 				textField.setAttribute("id", "descriptionEditBox");
+				cancelButton.setAttribute("class", "secondary-button");
+				saveButton.setAttribute("class", "primary-button");
 				cancelButton.textContent = "Cancel";
 				saveButton.textContent = "Save";
-				cancelButton.addEventListener("click", function() {
-					endEditingDescription(temp);
-				});
-				saveButton.addEventListener("click", function() {
-					const newDescription = textField.value;
-					endEditingDescription(newDescription);
-				});
 				const span = document.createElement("span");
-				span.setAttribute("id", "buttonContainer");
-				span.appendChild(cancelButton);
+				span.setAttribute("id", "buttonGroup");
 				span.appendChild(saveButton);
+				span.appendChild(cancelButton);
 				descriptionDiv.appendChild(textField);
 				descriptionDiv.appendChild(span);
+				cancelButton.addEventListener("click", function() {
+					secondaryButtonClick(cancelButton);
+					endEditingDescription(temp, button);
+				});
+				saveButton.addEventListener("click", function() {
+					primaryButtonClick(saveButton);
+					const newDescription = textField.value;
+					fetch('/myFlorabase/updateDescription', { 
+					    method: 'POST',
+					    headers: {
+					        'Content-Type': 'application/x-www-form-urlencoded',
+					    },
+					    body: 'description=' + encodeURIComponent(newDescription) + '&userId=' + <%= user.getUserId() %>
+					})
+					.then(response => response.text())
+					.then(data => {
+					    console.log(data);
+					    endEditingDescription(newDescription, button);
+					})
+					.catch(error => console.error('Error:', error));
+				});
 			}
 		}
 
-		function endEditingDescription(description) {
+		function endEditingDescription(description, button) {
 			const descriptionDiv = document.getElementById("descriptionDiv");
-			const span = document.getElementById("buttonContainer");
-			const descriptionEditBox = document
-					.getElementById("descriptionEditBox");
+			const span = document.getElementById("buttonGroup");
+			const descriptionEditBox = document.getElementById("descriptionEditBox");
 			const descriptionText = document.createElement("p");
+			descriptionText.setAttribute("id", "description");
 			if (descriptionDiv && span && descriptionEditBox) {
-				descriptionText.value = description;
+				descriptionText.textContent = description;
 				descriptionDiv.removeChild(span);
 				descriptionDiv.removeChild(descriptionEditBox);
 				descriptionDiv.appendChild(descriptionText);
+				button.style.display = "block";
 			}
 		}
 	</script>
@@ -133,14 +174,14 @@
 		<div id="descriptionDiv">
 			<span class="section-title-with-button">
 				<h2>Description</h2>
-				<button class="secondary-button" onclick="editDescription()">Edit</button>
+				<button class="secondary-button" onclick="editDescription(this)">Edit</button>
 			</span>
 			<p id="description"><%=user.getDescription()%></p>
 		</div>
 		<div id="zoomDiv">
 			<span class="section-title-with-button">
 				<h2>Default Zoom</h2>
-				<button class="secondary-button" onclick="editDescription()">Edit</button>
+				<button class="secondary-button" onclick="editDescription(this)">Edit</button>
 			</span>
 			<p id="zoom"><%=mp.getZoom()%>%
 			</p>
@@ -148,7 +189,7 @@
 		<div id="filtersDiv">
 			<span class="section-title-with-button">
 				<h2>Filters</h2>
-				<button class="secondary-button" onclick="editDescription()">Edit</button>
+				<button class="secondary-button" onclick="editDescription(this)">Edit</button>
 			</span>
 			<%
 			for (Filter f : filters) {

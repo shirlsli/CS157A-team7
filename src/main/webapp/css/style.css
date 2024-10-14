@@ -75,17 +75,25 @@ button {
 	-webkit-user-select: none; /* Safari */
 	-ms-user-select: none; /* IE 10 and IE 11 */
 	user-select: none; /* Standard syntax */
+	min-width: 80px;
+	min-height: 30px;
 }
 
 .primary-button {
 	background: #EAAC9D;
+	border: 1px solid #EAAC9D;
 	border-radius: 30px;
 	text-align: center;
 	color: #000000;
 	font-weight: 700;
 	border-style: none;
-	min-width: 80px;
 	padding: 5px;
+}
+
+button.primary-button:hover {
+    border: 1px solid #EAAC9D; 
+    background: white; 
+    color: #EAAC9D; 
 }
 
 .secondary-button {
@@ -95,8 +103,13 @@ button {
 	font-weight: 800;
 	text-align: center;
 	color: #EAAC9D;
-	min-width: 80px;
 	padding: 5px;
+}
+
+button.secondary-button:hover {
+	border: 1px solid #EAAC9D;
+    background: #EAAC9D; 
+    color: black; 
 }
 
 .isAdmin {
@@ -160,4 +173,28 @@ input[type="checkbox"]:checked+.checkbox:after {
 	-webkit-user-select: none; /* Safari */
 	-ms-user-select: none; /* IE 10 and IE 11 */
 	user-select: none; /* Standard syntax */
+}
+
+textarea {
+	width: 100%;
+	height: 150px;
+	background: #FFFFFF;
+	border: 1px solid #308023;
+	border-radius: 10px;
+	padding: 20px;
+	resize: none;
+	background: #FFFFFF;
+	font-family: 'Inter', sans-serif;
+	color: #858585;
+}
+
+textarea:focus {
+	border-color: #308023;
+	outline: none;
+}
+
+#buttonGroup {
+	margin-top: 20px; justify-content : center;
+	gap: 30px;
+	justify-content: center;
 }
