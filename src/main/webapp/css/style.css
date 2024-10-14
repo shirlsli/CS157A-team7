@@ -8,16 +8,193 @@
  * that contains the map. 
  */
 #map {
-  height: 100%;
+	height: 100%;
 }
 
 /* 
  * Optional: Makes the sample page fill the window. 
  */
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: 'Inter', sans-serif;
 }
 
+header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 10px;
+}
+
+#headerText {
+	font-family: 'Inter', sans-serif;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 24px;
+	line-height: 40px;
+	color: #000000;
+}
+
+#profilePic {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+#profileUsername {
+	border: 0;
+}
+
+#profileHeading {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+#profilePage {
+	margin-left: 20vw;
+	margin-right: 20vw;
+}
+
+p {
+	color: #858585;
+	margin: 0;
+}
+
+span {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+button {
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none; /* Standard syntax */
+	min-width: 80px;
+	min-height: 30px;
+}
+
+.primary-button {
+	background: #EAAC9D;
+	border: 1px solid #EAAC9D;
+	border-radius: 30px;
+	text-align: center;
+	color: #000000;
+	font-weight: 700;
+	border-style: none;
+	padding: 5px;
+}
+
+button.primary-button:hover {
+    border: 1px solid #EAAC9D; 
+    background: white; 
+    color: #EAAC9D; 
+}
+
+.secondary-button {
+	background: #FFFFFF;
+	border: 1px solid #EAAC9D;
+	border-radius: 30px;
+	font-weight: 800;
+	text-align: center;
+	color: #EAAC9D;
+	padding: 5px;
+}
+
+button.secondary-button:hover {
+	border: 1px solid #EAAC9D;
+    background: #EAAC9D; 
+    color: black; 
+}
+
+.isAdmin {
+	border: 3px solid #B49C73;
+	color: #B49C73;
+}
+
+.isRegular {
+	border: 3px solid #308023;
+	color: #308023;
+}
+
+.section-title-with-button {
+	justify-content: space-between;
+}
+
+input[type="checkbox"] {
+	display: none;
+}
+
+.checkbox {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	position: relative;
+	cursor: pointer;
+	background: #FFFFFF;
+	border: 1px solid #EAAC9D;
+	border-radius: 4px;
+}
+
+input[type="checkbox"]:checked+.checkbox {
+	background-color: #EAAC9D;
+}
+
+.checkbox:after {
+	content: '';
+	position: absolute;
+	left: 5px;
+	top: 2px;
+	width: 3px;
+	height: 7px;
+	border: solid black;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+	opacity: 0;
+}
+
+input[type="checkbox"]:checked+.checkbox:after {
+	border-color: #000000;
+	opacity: 1;
+}
+
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.prevent-select {
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none; /* Standard syntax */
+}
+
+textarea {
+	width: 100%;
+	height: 150px;
+	background: #FFFFFF;
+	border: 1px solid #308023;
+	border-radius: 10px;
+	padding: 20px;
+	resize: none;
+	background: #FFFFFF;
+	font-family: 'Inter', sans-serif;
+	color: #858585;
+}
+
+textarea:focus {
+	border-color: #308023;
+	outline: none;
+}
+
+#buttonGroup {
+	margin-top: 20px; justify-content : center;
+	gap: 30px;
+	justify-content: center;
+}
