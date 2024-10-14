@@ -101,56 +101,73 @@
 		    	buttonId.style.color = "#EAAC9D";
 		    }, 200);
 		}
+		
+		function createSaveCancelButtons(container, saveCallback, cancelCallback) {
+		    const saveButton = document.createElement("button");
+		    const cancelButton = document.createElement("button");
+
+		    saveButton.setAttribute("class", "primary-button");
+		    cancelButton.setAttribute("class", "secondary-button");
+
+		    saveButton.textContent = "Save";
+		    cancelButton.textContent = "Cancel";
+
+		    const buttonGroup = document.createElement("span");
+		    buttonGroup.setAttribute("id", "buttonGroup");
+
+		    buttonGroup.appendChild(saveButton);
+		    buttonGroup.appendChild(cancelButton);
+
+		    cancelButton.addEventListener("click", function() {
+		    	cancelCallback(cancelButton, buttonGroup);
+		    });
+		    saveButton.addEventListener("click", function() {
+		    	saveCallback(saveButton, buttonGroup);
+		    });
+		    container.appendChild(buttonGroup);
+		}
+
 
 		function editDescription(button) {
 			secondaryButtonClick(button);
 			button.style.display = "none";
 			const descriptionDiv = document.getElementById("descriptionDiv");
-			const description = document.getElementById("description").textContent;
+			const description = document.getElementById("description");
 			if (description && descriptionDiv) {
-				const temp = description;
-				descriptionDiv.removeChild(document.getElementById("description"));
+				const temp = description.textContent;
+				descriptionDiv.removeChild(description);
 				const textField = document.createElement("textarea");
-				const cancelButton = document.createElement("button");
-				const saveButton = document.createElement("button");
 				textField.setAttribute("id", "descriptionEditBox");
-				cancelButton.setAttribute("class", "secondary-button");
-				saveButton.setAttribute("class", "primary-button");
-				cancelButton.textContent = "Cancel";
-				saveButton.textContent = "Save";
-				const span = document.createElement("span");
-				span.setAttribute("id", "buttonGroup");
-				span.appendChild(saveButton);
-				span.appendChild(cancelButton);
 				descriptionDiv.appendChild(textField);
-				descriptionDiv.appendChild(span);
-				cancelButton.addEventListener("click", function() {
-					secondaryButtonClick(cancelButton);
-					endEditingDescription(temp, button);
-				});
-				saveButton.addEventListener("click", function() {
-					primaryButtonClick(saveButton);
-					const newDescription = textField.value;
-					fetch('/myFlorabase/updateDescription', { 
-					    method: 'POST',
-					    headers: {
-					        'Content-Type': 'application/x-www-form-urlencoded',
-					    },
-					    body: 'description=' + encodeURIComponent(newDescription) + '&userId=' + <%= user.getUserId() %>
-					})
-					.then(response => response.text())
-					.then(data => {
-					    console.log(data);
-					    endEditingDescription(newDescription, button);
-					})
-					.catch(error => console.error('Error:', error));
-				});
+				textField.focus();
+				createSaveCancelButtons(descriptionDiv, 
+			            function(saveButton, buttonGroup) {
+			                primaryButtonClick(saveButton);
+			                const newDescription = textField.value;
+			                fetch('/myFlorabase/updateDescription', { 
+			                    method: 'POST',
+			                    headers: {
+			                        'Content-Type': 'application/x-www-form-urlencoded',
+			                    },
+			                    body: 'description=' + encodeURIComponent(newDescription) + '&userId=' + <%=user.getUserId()%>
+			                })
+			                .then(response => response.text())
+			                .then(data => {
+			                    console.log(data);
+			                    endEditingDescription(newDescription, button, buttonGroup);
+			                })
+			                .catch(error => console.error('Error:', error));
+			            },
+			            function(cancelButton, buttonGroup) {
+			                secondaryButtonClick(cancelButton);
+			                endEditingDescription(temp, button, buttonGroup);
+			            }
+			        );
 			}
 		}
 
-		function endEditingDescription(description, button) {
+		function endEditingDescription(description, button, span) {
 			const descriptionDiv = document.getElementById("descriptionDiv");
-			const span = document.getElementById("buttonGroup");
 			const descriptionEditBox = document.getElementById("descriptionEditBox");
 			const descriptionText = document.createElement("p");
 			descriptionText.setAttribute("id", "description");
@@ -159,6 +176,67 @@
 				descriptionDiv.removeChild(span);
 				descriptionDiv.removeChild(descriptionEditBox);
 				descriptionDiv.appendChild(descriptionText);
+				button.style.display = "block";
+			}
+		}
+		
+		function editFilter(button) {
+			secondaryButtonClick(button);
+			button.style.display = "none";
+			const zoomDiv = document.getElementById("zoomDiv");
+			const zoom = document.getElementById("zoom");
+			if (zoomDiv && zoom) {
+				const temp = Number(zoom.textContent.split("%")[0]);
+				zoomDiv.removeChild(zoom);
+				const select = document.createElement("select");
+				const options = [25, 50, 75, 100, 125, 150, 175, 200];
+				for (const option of options) {
+					const optionElement = document.createElement("option");
+					optionElement.value = option;
+					optionElement.textContent = option + "%";
+					if (option === temp) {
+						optionElement.selected = true;
+					}
+					select.appendChild(optionElement);
+				}
+				select.setAttribute("id", "zoomEditBox");
+				zoomDiv.appendChild(select);
+				createSaveCancelButtons(zoomDiv, 
+			            function(saveButton, buttonGroup) {
+			                primaryButtonClick(saveButton);
+			                const newZoom = select.value;
+			                fetch('/myFlorabase/updateMapPreference', { 
+			                    method: 'POST',
+			                    headers: {
+			                        'Content-Type': 'application/x-www-form-urlencoded',
+			                    },
+			                    body: 'zoom=' + encodeURIComponent(newZoom) + '&preferenceId=' + <%=mp.getPreferenceId()%>
+			                })
+			                .then(response => response.text())
+			                .then(data => {
+			                    console.log(data);
+			                    endEditingFilter(newZoom, button, buttonGroup);
+			                })
+			                .catch(error => console.error('Error:', error));
+			            },
+			            function(cancelButton, buttonGroup) {
+			                secondaryButtonClick(cancelButton);
+			                endEditingFilter(temp, button, buttonGroup);
+			            }
+			        );
+			}
+		}
+		
+		function endEditingFilter(zoom, button, span) {
+			const zoomDiv = document.getElementById("zoomDiv");
+			const zoomEditBox = document.getElementById("zoomEditBox");
+			const zoomText = document.createElement("p");
+			zoomText.setAttribute("id", "zoom");
+			if (zoomDiv && zoomEditBox) {
+				zoomText.textContent = zoom + "%";
+				zoomDiv.removeChild(span);
+				zoomDiv.removeChild(zoomEditBox);
+				zoomDiv.appendChild(zoomText);
 				button.style.display = "block";
 			}
 		}
@@ -181,7 +259,7 @@
 		<div id="zoomDiv">
 			<span class="section-title-with-button">
 				<h2>Default Zoom</h2>
-				<button class="secondary-button" onclick="editDescription(this)">Edit</button>
+				<button class="secondary-button" onclick="editFilter(this)">Edit</button>
 			</span>
 			<p id="zoom"><%=mp.getZoom()%>%
 			</p>
@@ -194,9 +272,8 @@
 			<%
 			for (Filter f : filters) {
 			%>
-				<label class="checkbox-label prevent-select"> 
-					<input type="checkbox">
-					<span class="checkbox"></span> <%=f.getFilterName()%></label>
+			<label class="checkbox-label prevent-select"> <input
+				type="checkbox" checked> <span class="checkbox"></span> <%=f.getFilterName()%></label>
 			<%
 			}
 			%>

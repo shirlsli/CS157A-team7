@@ -60,9 +60,11 @@ header {
 	margin-right: 20vw;
 }
 
-p {
+p, select {
+	font-family: 'Inter', sans-serif;
 	color: #858585;
 	margin: 0;
+	font-size: 16px;
 }
 
 span {
@@ -91,9 +93,9 @@ button {
 }
 
 button.primary-button:hover {
-    border: 1px solid #EAAC9D; 
-    background: white; 
-    color: #EAAC9D; 
+	border: 1px solid #EAAC9D;
+	background: white;
+	color: #EAAC9D;
 }
 
 .secondary-button {
@@ -108,8 +110,8 @@ button.primary-button:hover {
 
 button.secondary-button:hover {
 	border: 1px solid #EAAC9D;
-    background: #EAAC9D; 
-    color: black; 
+	background: #EAAC9D;
+	color: black;
 }
 
 .isAdmin {
@@ -194,7 +196,27 @@ textarea:focus {
 }
 
 #buttonGroup {
-	margin-top: 20px; justify-content : center;
+	margin-top: 20px;
+	justify-content: center;
 	gap: 30px;
 	justify-content: center;
+}
+
+select {
+	padding: 10px;
+	width: 90px;
+	height: 40px;
+	background: #FFFFFF;
+	border: 1px solid #308023;
+	border-radius: 10px;
+	appearance: none;
+	background: url('../assets/select_arrow.svg') no-repeat right 10px center; /* Custom dropdown arrow */
+}
+
+select:focus {
+	outline: none;
+}
+
+.hidden {
+	visibility: hidden;
 }
