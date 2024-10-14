@@ -1,3 +1,5 @@
+package com.example;
+
 public class User {
 	private int userId;
 	private String username;
@@ -6,11 +8,11 @@ public class User {
 	private String description;
 	private boolean isAdmin;
 	
-	public User(int userId, String username, String password, boolean isAdmin) {
+	public User(int userId, String username, String password, String description, boolean isAdmin) {
 		this.setUserId(userId);
 		this.setUsername(username);
 		this.setPassword(password);
-		this.setDescription(username + " has not described themself yet.");
+		this.setDescription(description != null ? description : username + " has not described themself yet.");
 		this.setAdmin(isAdmin);
 	}
 	
