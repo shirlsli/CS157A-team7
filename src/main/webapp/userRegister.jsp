@@ -17,11 +17,11 @@
 			</span>
 			<form action="Register" method="post">
 				<div class="inputGroup">
-					<label>Username</label> <span><input type="text"
+					<label class="textfield-label">Username</label> <span><input type="text"
 						name="uname" placeholder="Enter your username" required></span>
 				</div>
 				<div class="inputGroup">
-					<label>Password</label> <input id="psw" type="password"
+					<label class="textfield-label">Password</label> <input id="psw" type="password"
 						name="password" placeholder="Enter your password"
 						pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
 						title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
@@ -43,7 +43,7 @@
 					</p>
 				</div>
 				<div class="inputGroup">
-					<label>Confirm Password</label> <input id="psw2" type="password"
+					<label class="textfield-label">Confirm Password</label> <input id="psw2" type="password"
 						name="password" placeholder="Enter your password again"
 						title="Passwords must match" required>
 				</div>
