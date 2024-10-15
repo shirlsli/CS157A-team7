@@ -70,7 +70,7 @@ p, select {
 span {
 	display: flex;
 	align-items: center;
-	gap: 20px;
+	gap: 10px;
 }
 
 button {
@@ -126,6 +126,13 @@ button.secondary-button:hover {
 
 .section-title-with-button {
 	justify-content: space-between;
+}
+
+input[type="text"], input[type="password"] {
+	height: 50px;
+	background: #FFFFFF;
+	border: 1px solid #308023;
+	border-radius: 10px;
 }
 
 input[type="checkbox"] {
@@ -236,10 +243,27 @@ select:focus {
 	padding: 5px;
 }
 
-#signUpPage {
-	margin: auto;
-	width: max-content;
+#signUpPageHeader {
+	display: flex;
+  	justify-content: center;
+  	gap: 20px;
 }
+
+#signUpPage {
+	display: flex;
+  	justify-content: center; 
+  	align-items: center;     
+  	height: 100vh;   
+}
+
+.centerText {
+	font-style: normal;
+	font-weight: 700;
+	font-size: 48px;
+	text-align: center;
+	color: #000000;
+}
+
 .inputGroup{
 	margin: auto;
 	width: 400px;
