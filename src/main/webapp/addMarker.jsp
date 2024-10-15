@@ -13,7 +13,7 @@
 <head>
     <title>Interactive Google Maps</title>
     <!-- Link to External CSS -->
-    <link rel="stylesheet" type="text/css" href="./css/styles.css">
+    <link rel="stylesheet" type="text/css" href="./css/modals.css">
 </head>
 <body>
     <h1>Interactive Google Map</h1>
