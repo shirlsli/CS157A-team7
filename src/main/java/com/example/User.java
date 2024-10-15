@@ -16,6 +16,14 @@ public class User {
 		this.setAdmin(isAdmin);
 	}
 	
+	public User(String username, String password, boolean isAdmin) {
+		this.setUserId(userId);
+		this.setUsername(username);
+		this.setPassword(password);
+		this.setDescription(description != null ? description : username + " has not described themself yet.");
+		this.setAdmin(isAdmin);
+	}
+	
 	public int getUserId() {
 		return userId;
 	}
