@@ -29,7 +29,7 @@
 			statement.executeUpdate("USE myFlorabase");
 			String createMemberTable = "CREATE TABLE `User` (" + "`user_id` INT AUTO_INCREMENT PRIMARY KEY, "
 			+ "`username` VARCHAR(30) NOT NULL, " + "`password` VARCHAR(45) DEFAULT NULL, "
-			+ "`profile_pic` BLOB DEFAULT NULL, " + "`description` VARCHAR(500) DEFAULT NULL, "
+			+ "`profile_pic` MEDIUMBLOB DEFAULT NULL, " + "`description` VARCHAR(500) DEFAULT NULL, "
 			+ "`isAdmin` TINYINT(1) DEFAULT 0" + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 			String createMapPreferenceTable = "CREATE TABLE `MapPreference` (" + "`preference_id` INT AUTO_INCREMENT,"
 			+ "`user_id` int NOT NULL," + "`filter_id` int NOT NULL," + "`location_id` int NOT NULL,"
