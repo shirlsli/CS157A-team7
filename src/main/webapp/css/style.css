@@ -220,3 +220,83 @@ select:focus {
 .hidden {
 	visibility: hidden;
 }
+
+#signUpButtons{
+	margin: auto;
+	width: max-content;
+	text-align: center;
+	padding: 5px;
+}
+
+.centerButtons{
+	margin: auto;
+	width: max-content;
+	text-align: center;
+	align-content: center;
+	padding: 5px;
+}
+
+#signUpPage {
+	margin: auto;
+	width: max-content;
+}
+.inputGroup{
+	margin: auto;
+	width: 400px;
+	text-align: left;
+	padding: 10px;
+}
+label {
+	display: block;
+	margin-bottom: 0.5rem;
+	margin-top: 0.5rem;
+}
+
+input{
+	min-width: 100%;
+	max-width: 200%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
+	border-radius: 6px;
+}
+
+/* The message box is shown when the user clicks on the password field */
+#message {
+	display:none;
+	background: #f1f1f1;
+	color: #000;
+	position: relative;
+	padding: 20px;
+	margin-top: 10px;
+}
+
+#message p {
+	padding: 10px 35px;
+	font-size: 18px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+	color: green;
+}
+
+.valid:before {
+	position: relative;
+	left: -35px;
+
+}
+
+/* Add a red text color and an "x" icon when the requirements are wrong */
+.invalid {
+	color: red;
+}
+
+.invalid:before {
+	position: relative;
+	left: -35px;
+
+}
+
+
+
