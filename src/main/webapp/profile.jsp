@@ -31,20 +31,9 @@
 			int userId = rs.getInt("user_id");
 			String username = rs.getString("username");
 			String password = rs.getString("password");
-			Blob blob = rs.getBlob("profile_pic");
 			String description = rs.getString("description");
 			boolean isAdmin = rs.getBoolean("isAdmin");
 			user = new User(userId, username, password, description, isAdmin);
-			if (blob != null) {
-		byte[] profilePic = blob.getBytes(1, (int) blob.length());
-		response.setContentType("image/jpeg");
-		response.setContentLength(profilePic.length);
-		ServletOutputStream outputStream = response.getOutputStream();
-		outputStream.write(profilePic);
-		outputStream.close();
-			} else {
-		// set profile pic to default
-			}
 		}
 		String mapPreferenceSQL = "SELECT * FROM myflorabase.mappreference WHERE user_id=" + user.getUserId();
 		rs = statement.executeQuery(mapPreferenceSQL);
@@ -76,8 +65,34 @@
 	%>
 
 	<script defer>
-		function changeProfilePic() {
 
+		function changeProfilePic(curProfilePicElement) {
+			const fileUpload = document.getElementById('fileUpload');
+			fileUpload.click();
+			fileUpload.addEventListener("change", (e) => {
+				const newProfilePic = event.target.files[0];
+	            if (newProfilePic) {
+	                const formData = new FormData();
+            		formData.append('newProfilePic', newProfilePic);
+            		formData.append('userId', <%=user.getUserId()%>);
+	                const reader = new FileReader();
+	                reader.onload = function(e) {
+	                    curProfilePicElement.src = e.target.result;
+	                };
+	                reader.readAsDataURL(newProfilePic);
+	                fetch('/myFlorabase/updateProfilePic', {
+	                    method: 'POST',
+	                    body: formData
+	                })
+	                .then(response => response.text())  
+	                .then(data => {
+	                    console.log("File uploaded successfully:", data);
+	                })
+	                .catch(error => {
+	                    console.error("Error uploading file:", error);
+	                });
+	            }
+			})
 		}
 		
 		function primaryButtonClick(buttonId) {
@@ -240,12 +255,14 @@
 				button.style.display = "block";
 			}
 		}
+		
 	</script>
 	<jsp:include page="WEB-INF/components/header.jsp"></jsp:include>
 	<div id="profilePage">
-		<span> <img id="profilePic"
+		<input type="file" id="fileUpload" style="display: none;"
+			accept="image/*"> <span> <img id="profilePic"
 			class="prevent-select <%=user.isAdmin() ? "isAdmin" : "isRegular"%>"
-			src="assets/default_profile_pic.jpg" onclick="changeProfilePic()" />
+			src="/myFlorabase/getProfilePic?userId=<%=user.getUserId() %>" onclick="changeProfilePic(this)" />
 			<h1 class="<%=user.isAdmin() ? "isAdmin" : "isRegular"%>"
 				id="profileUsername"><%=user.getUsername()%></h1>
 		</span>
