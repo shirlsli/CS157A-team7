@@ -20,7 +20,7 @@ function submitMarker(event) {
     event.preventDefault();
 	
 	// Sending a simple log message "hi" to the addLog servlet
-	fetch('/addLog', {
+	fetch('/myFlorabase/addLog', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
