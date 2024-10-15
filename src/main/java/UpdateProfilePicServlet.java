@@ -41,13 +41,15 @@ public class UpdateProfilePicServlet extends HttpServlet {
                     int rowsUpdated = statement.executeUpdate(); 
                     response.getWriter().write(rowsUpdated + " row(s) updated."); 
                 }
+                profilePicInputStream.close();
             }
-            
             con.close();
 		} catch(SQLException e) {
             System.out.println("SQLException caught: " + e.getMessage());
         } catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		} finally {
+			newProfilePic.delete();
 		}
 	}
 }
