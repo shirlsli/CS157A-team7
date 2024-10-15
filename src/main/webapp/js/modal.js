@@ -18,6 +18,19 @@ function closeModal() {
 // Handle form submission
 function submitMarker(event) {
     event.preventDefault();
+	
+	// Sending a simple log message "hi" to the addLog servlet
+	fetch('/addLog', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: "hi" })  // Sending "hi" as a JSON object
+    })
+    .then(response => response.text())
+    .then(data => console.log('Server response:', data))
+    .catch(error => console.error('Error:', error));
+		
     const title = document.getElementById('title').value.trim();
     const description = document.getElementById('description').value.trim();
     const radius = parseInt(document.getElementById('radius').value, 10);
