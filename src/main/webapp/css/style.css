@@ -70,7 +70,7 @@ p, select {
 span {
 	display: flex;
 	align-items: center;
-	gap: 20px;
+	gap: 10px;
 }
 
 button {
@@ -126,6 +126,17 @@ button.secondary-button:hover {
 
 .section-title-with-button {
 	justify-content: space-between;
+}
+
+input[type="text"], input[type="password"] {
+	height: 45px;
+	background: #FFFFFF;
+	border: 1px solid #308023;
+	border-radius: 10px;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+	outline: none;
 }
 
 input[type="checkbox"] {
@@ -236,13 +247,30 @@ select:focus {
 	padding: 5px;
 }
 
-#signUpPage {
-	margin: auto;
-	width: max-content;
+#signUpPageHeader {
+	display: flex;
+  	justify-content: center;
+  	gap: 20px;
 }
+
+#signUpPage {
+	display: flex;
+  	justify-content: center; 
+  	align-items: center;     
+  	height: 100vh;   
+}
+
+.centerText {
+	font-style: normal;
+	font-weight: 700;
+	font-size: 40px;
+	text-align: center;
+	color: #000000;
+}
+
 .inputGroup{
 	margin: auto;
-	width: 400px;
+	width: 300px;
 	text-align: left;
 	padding: 10px;
 }
@@ -264,11 +292,13 @@ input{
 /* The message box is shown when the user clicks on the password field */
 #message {
 	display:none;
-	background: #f1f1f1;
 	color: #000;
 	position: relative;
 	padding: 20px;
-	margin-top: 10px;
+	border-radius: 10px;
+	border: 1px solid #EAAC9D;
+	font-size: 14px;
+	color: #858585;
 }
 
 #message p {
@@ -278,7 +308,7 @@ input{
 
 /* Add a green text color and a checkmark when the requirements are right */
 .valid {
-	color: green;
+	color: #308023;
 }
 
 .valid:before {
@@ -289,14 +319,33 @@ input{
 
 /* Add a red text color and an "x" icon when the requirements are wrong */
 .invalid {
+	font-size: 14px;
 	color: red;
 }
 
 .invalid:before {
 	position: relative;
 	left: -35px;
-
 }
 
+.textfield-label {
+	font-family: 'Inter', sans-serif;
+	font-style: normal;
+	font-weight: 700;
+	font-size: 14px;
+	margin-bottom: 0;
+}
 
+.label {
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.major-button {
+	font-size: 14px;
+	width: 90px;
+	height: 35px;
+}
 
