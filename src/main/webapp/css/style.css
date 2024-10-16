@@ -308,7 +308,7 @@ input{
 
 /* Add a green text color and a checkmark when the requirements are right */
 .valid {
-	color: green;
+	color: #308023;
 }
 
 .valid:before {
