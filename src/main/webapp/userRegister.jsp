@@ -15,7 +15,7 @@
 				src='assets/myFlorabase_Logo_Text.svg' width="59" height="98" />
 				<h1 class="centerText">Sign Up</h1>
 			</span>
-			<form action="Register" method="post">
+			<form action="submitForm" method="post">
 				<div class="inputGroup prevent-select">
 					<label class="textfield-label">Username</label> <span><input
 						type="text" name="uname" placeholder="Enter your username"
