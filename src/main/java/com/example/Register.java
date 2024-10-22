@@ -29,13 +29,13 @@ public class Register extends HttpServlet {
         // Set a dynamic attribute to be used in the JSP
         if (result) {
         	request.setAttribute("headermsg", "Registered!");
-        	request.setAttribute("dynamicContent", "Username: '" + uname + "' successfully signed up! Please login");
+        	request.setAttribute("dynamicContent", uname + "' successfully signed up! Please login");
         	request.setAttribute("buttonText", "Log In");
         	request.setAttribute("onclick", "window.location.href='login.jsp';");
         }
         else {
         	request.setAttribute("headermsg", "Not Registered!");
-        	request.setAttribute("dynamicContent", "Username: '" + uname + "' already exists. Please try again with a different username.");
+        	request.setAttribute("dynamicContent", uname + "' already exists. Please try again with a different username.");
         	request.setAttribute("buttonText", "Sign Up");
         	request.setAttribute("onclick", "window.location.href='userRegister.jsp';");
         }

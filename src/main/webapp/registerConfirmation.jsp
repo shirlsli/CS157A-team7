@@ -17,7 +17,7 @@
 			</span>
 			<div>
 				<div id="registerConfirmationMessage prevent-select" class="prevent-select">
-					<span><label>${dynamicContent}</label></span>
+					<span><label>The username '${dynamicContent}</label></span>
 				</div>
 				<div class="centerButtons">
 					<div id="signUpButtons">
