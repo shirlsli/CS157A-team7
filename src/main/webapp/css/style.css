@@ -306,6 +306,18 @@ input{
 	font-size: 18px;
 }
 
+/* existing username message box */
+#usernameMessage {
+	display:none;
+	color: #000;
+	position: relative;
+	padding: 20px;
+	border-radius: 10px;
+	border: 1px solid #EAAC9D;
+	font-size: 14px;
+	color: #858585;
+}
+
 /* Add a green text color and a checkmark when the requirements are right */
 .valid {
 	color: #308023;
