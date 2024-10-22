@@ -35,6 +35,18 @@ function closeModal() {
 // Handle form submission
 function submitMarker(event) {
 	event.preventDefault();
+  
+  // Sending a simple log message "hi" to the addLog servlet
+	fetch('/myFlorabase/addLog', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: "hi" })  // Sending "hi" as a JSON object
+    })
+    .then(response => response.text())
+    .then(data => console.log('Server response:', data))
+    .catch(error => console.error('Error:', error));
 	const plantName = document.getElementById('plantName').value.trim();
 	const date = document.getElementById('date').value.trim();
 	const description = document.getElementById('description').value.trim();
