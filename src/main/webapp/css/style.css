@@ -349,3 +349,28 @@ input{
 	height: 35px;
 }
 
+#registerConfirmationPage {
+	display: flex;
+  	justify-content: center; 
+  	align-items: center;     
+  	height: 100vh;   
+}
+
+#registerConfirmationHeader {
+	display: flex;
+  	justify-content: center;
+  	gap: 20px;
+}
+
+#registerConfirmationMessage{
+	margin: auto;
+	width: max-content;
+	text-align: left;
+	align-content: center;
+	padding: 10px;
+}
+
+.hidden-button{
+	display: none;
+}
+
