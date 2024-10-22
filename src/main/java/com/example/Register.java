@@ -24,27 +24,21 @@ public class Register extends HttpServlet {
         RegisterDao rDao = new RegisterDao();
         boolean result = rDao.insert(user);
         
-//        response.getWriter().print(result);
-        
-        // Set a dynamic attribute to be used in the JSP
         if (result) {
-        	request.setAttribute("headermsg", "Registered!");
-        	request.setAttribute("dynamicContent", uname + "' successfully signed up! Please login");
-        	request.setAttribute("buttonText", "Log In");
-        	request.setAttribute("onclick", "window.location.href='login.jsp';");
+        	request.setAttribute("dynamicContent", uname );
+            RequestDispatcher dispatcher = request.getRequestDispatcher("registerConfirmation.jsp");
+            dispatcher.forward(request, response);
+            response.sendRedirect("registerConfirmation.jsp");
         }
         else {
-        	request.setAttribute("headermsg", "Not Registered!");
-        	request.setAttribute("dynamicContent", uname + "' already exists. Please try again with a different username.");
-        	request.setAttribute("buttonText", "Sign Up");
-        	request.setAttribute("onclick", "window.location.href='userRegister.jsp';");
+        	request.setAttribute("uname", uname);
+        	request.setAttribute("password", password);
+        	request.setAttribute("usrnmError", "Username already exists. Please choose another username.");
+        	request.getRequestDispatcher("userRegister.jsp").forward(request, response);
         }
         
 
-        // Forward the request to the JSP page
-        RequestDispatcher dispatcher = request.getRequestDispatcher("registerConfirmation.jsp");
-        dispatcher.forward(request, response);
-        response.sendRedirect("registerConfirmation.jsp");
+        
     }
 
     public void destroy() {

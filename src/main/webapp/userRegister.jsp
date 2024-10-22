@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 </head>
-<body>
+<body onload="confirmation()">
 	<div id="signUpPage">
 		<div>
 			<span id="signUpPageHeader" class="prevent-select"> <img
@@ -18,12 +18,13 @@
 			<form action="submitForm" method="post">
 				<div class="inputGroup prevent-select">
 					<label class="textfield-label">Username</label> <span><input
-						type="text" name="uname" placeholder="Enter your username"
+						type="text" name="uname" placeholder="Enter your username" value="${uname}"
 						required></span>
+					<label>${usrnmError}</label>
 				</div>
 				<div class="inputGroup prevent-select">
 					<label class="textfield-label">Password</label> <input id="psw"
-						type="password" name="password" placeholder="Enter your password"
+						type="password" name="password" placeholder="Enter your password" value="${password}"
 						pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
 						title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
 						required>
@@ -45,18 +46,19 @@
 				</div>
 				<div class="inputGroup prevent-select">
 					<label class="textfield-label">Confirm Password</label> <input
-						id="psw2" type="password" name="password"
-						placeholder="Enter your password again"
+						id="psw2" type="password" name="password" 
+						placeholder="Enter your password again" value="${password}"
 						title="Passwords must match" required>
 				</div>
 				<div class="centerButtons">
 					<div id="signUpButtons">
-						<button id="signUpButton" class="major-button primary-button" value="Sign Up">Sign
-							Up</button>
+						<button id="signUpButton" class="major-button primary-button"
+							value="Sign Up">Sign Up</button>
 					</div>
 					<label class="label prevent-select">OR</label>
 					<%--                need to redirect this to the login page --%>
-					<button class="major-button secondary-button" value="Log in">Log in</button>
+					<button class="major-button secondary-button" value="Log in">Log
+						in</button>
 				</div>
 			</form>
 		</div>
