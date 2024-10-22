@@ -293,7 +293,6 @@ input{
 #message {
 	display:none;
 	color: #000;
-	position: relative;
 	padding: 20px;
 	border-radius: 10px;
 	border: 1px solid #EAAC9D;
@@ -308,14 +307,15 @@ input{
 
 /* existing username message box */
 #usernameMessage {
-	display:none;
-	color: #000;
-	position: relative;
 	padding: 20px;
 	border-radius: 10px;
 	border: 1px solid #EAAC9D;
 	font-size: 14px;
 	color: #858585;
+}
+#usernameMessage p {
+	padding: 10px 35px;
+	font-size: 18px;
 }
 
 /* Add a green text color and a checkmark when the requirements are right */
@@ -382,7 +382,33 @@ input{
 	padding: 10px;
 }
 
-.hidden-button{
-	display: none;
+.goToLogin-button {
+	font-size: 14px;
+	width: 100px;
+	height: 35px;
 }
+
+.confirmationText {
+	font-style: normal;
+	font-weight: 500;
+	font-size: 20px;
+	text-align: center;
+	color: #858585;
+}
+
+.confirmationUsernameText {
+	font-style: normal;
+	font-weight: 700;
+	font-size: 40px;
+	text-align: center;
+	color: #000000;
+	margin: 10px;
+	border: 1px solid #EAAC9D;
+	position: relative;
+	padding: 20px;
+	border-radius: 10px;
+}
+
+
+
 

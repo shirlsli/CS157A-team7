@@ -17,11 +17,15 @@
 			</span>
 			<div>
 				<div id="registerConfirmationMessage prevent-select" class="prevent-select">
-					<span><label>The username '${dynamicContent}' successfully signed up! Please login.</label></span>
+					
+						<p class="confirmationText">Your username: </p>
+						<p class="confirmationUsernameText"><b>${dynamicContent}</b></p> 
+						<p class="confirmationText"> Please proceed to login.</p>
+					
 				</div>
 				<div class="centerButtons">
 					<div id="signUpButtons">
-						<button onclick="window.location.href='login.jsp';" id="signUpButton" class="major-button primary-button"
+						<button onclick="window.location.href='login.jsp';" id="GoToLogInButton" class=".goToLogin-button primary-button"
 							value="Go To Log In">Go To Log In</button>
 			</div>
 

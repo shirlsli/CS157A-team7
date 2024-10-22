@@ -20,7 +20,7 @@
 					<label class="textfield-label">Username</label> <span><input
 						type="text" name="uname" placeholder="Enter your username" value="${uname}"
 						required></span>
-					<div id="usernameMessage"><p>${usrnmError}</p></div>
+					<label class="invalid">${usrnmError}</label>
 				</div>
 				<div class="inputGroup prevent-select">
 					<label class="textfield-label">Password</label> <input id="psw"

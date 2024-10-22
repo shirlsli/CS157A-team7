@@ -32,7 +32,7 @@ public class Register extends HttpServlet {
         }
         else {
         	request.setAttribute("uname", uname);
-        	request.setAttribute("password", password);
+//        	request.setAttribute("password", password);
         	request.setAttribute("usrnmError", "Username '"+uname+"' already exists. Please choose another username.");
         	request.getRequestDispatcher("userRegister.jsp").forward(request, response);
         }
