@@ -409,6 +409,36 @@ input{
 	border-radius: 10px;
 }
 
+/*toggle psw visibility*/
 
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
 
+.psw-wrap {
+	position: relative;
+}
 
+#toggle-psw, #toggle-psw2 {
+	position: absolute;
+	top: 60%;
+	right: .5rem;
+	transform: translateY(-50%);
+	cursor: pointer;
+	width: 20px;
+	align-items: center;
+	background: none;
+	border-radius: 30px;
+	border: none;
+}
+.toggle-button {
+	min-width: 30px;
+	min-height: 10px;
+	padding: 0px;
+
+	
+}
