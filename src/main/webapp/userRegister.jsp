@@ -25,8 +25,8 @@
 				<div class="inputGroup prevent-select">
 					<label class="textfield-label">Password</label> <input id="psw"
 						type="password" name="password" placeholder="Enter your password" value="${password}"
-						pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-						title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+						pattern='(?=.*[!@#\$%\^\&\*\(\),\.\?:\{\}\|"])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
+						title="Must contain at least one number and one uppercase and lowercase letter and one special character, and at least 8 or more characters"
 						required>
 				</div>
 				<div id="message">
@@ -39,6 +39,11 @@
 					</p>
 					<p id="number" class="invalid">
 						A <b>number</b>
+					</p>
+					<p id="special" class="invalid">
+						A <b>special</b> character:
+						<br>
+						!@#$%^&*(),.?:{}&quot;|
 					</p>
 					<p id="length" class="invalid">
 						Minimum <b>8 characters</b>
@@ -57,7 +62,7 @@
 					</div>
 					<label class="label prevent-select">OR</label>
 					<%--                need to redirect this to the login page --%>
-					<button class="major-button secondary-button" value="Log in">Log
+					<button onclick="window.location.href='login.jsp';" class="major-button secondary-button" value="Log in">Log
 						in</button>
 				</div>
 			</form>
@@ -71,6 +76,7 @@
 	var capital = document.getElementById("capital");
 	var number = document.getElementById("number");
 	var length = document.getElementById("length");
+	var special = document.getElementById("special");
 
 	var myInput2 = document.getElementById("psw2");
 	var match = document.getElementById("match");
@@ -144,6 +150,17 @@
 			length.classList.remove("valid");
 			length.classList.add("invalid");
 		}
+		
+		// Validate special characters
+		var specialChars = /[!@#$%^&*(),.?:{}|"]/g;
+		if (myInput.value.match(specialChars)) {
+			special.classList.remove("invalid");
+			special.classList.add("valid");
+		} else {
+			special.classList.remove("valid");
+			special.classList.add("invalid");
+		}
+		
 	}
 </script>
 </html>
