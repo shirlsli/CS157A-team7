@@ -1,12 +1,6 @@
-<%@ page import="java.util.Properties, java.io.FileInputStream, java.io.IOException" %>
+<%@ page import="java.util.Properties, java.io.InputStream, java.io.IOException" %>
 <%
-    Properties properties = new Properties();
-    try {
-        properties.load(new FileInputStream("/Users/seannian/Desktop/CS157A-team7/config.properties"));
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    String apiKey = properties.getProperty("GOOGLE_MAPS_API_KEY");
+     String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
 %>
 <!DOCTYPE html>
 <html>
