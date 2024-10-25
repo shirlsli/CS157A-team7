@@ -1,8 +1,3 @@
-#map {
-    height: 100%;
-    width: 100%;
-}
-
 html, body {
     height: 100%;
     margin: 0;
@@ -16,98 +11,26 @@ html, body {
     position: fixed;
     z-index: 1;
     left: 0;
-    top: 0;
+    top: 80px;
     width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    height: calc(100vh - 80px);
+    overflow: hidden;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #EAAC9D;
-    width: 350px;
-    border-radius: 10px;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
+    background-color: #ffffff;
+    padding: 20px 60px;
+    height: calc(100vh - 80px);
 }
 
 .form-group {
     margin-bottom: 15px;
 }
 
-label, input, select, textarea {
-    display: block;
-    width: 100%;
-    font-family: 'Inter', sans-serif;
-    color: #858585;
-    font-size: 16px;
-}
-
-input[type="text"],
-input[type="number"],
-select,
-textarea {
-    padding: 10px;
-    box-sizing: border-box;
-    background: #FFFFFF;
-    border: 1px solid #308023;
-    border-radius: 10px;
-}
 
 input[type="file"] {
     border: none;
     padding: 10px 0;
-}
-
-textarea {
-    height: 150px;
-    resize: none;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: #308023;
-}
-
-button {
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    min-width: 80px;
-    min-height: 30px;
-    padding: 10px 15px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-weight: 700;
-    text-align: center;
-}
-
-button[type="submit"] {
-    background: #EAAC9D;
-    border: 1px solid #EAAC9D;
-    color: #000000;
-}
-
-button[type="submit"]:hover {
-    background: white;
-    color: #EAAC9D;
 }
 
 /* Additional styles */

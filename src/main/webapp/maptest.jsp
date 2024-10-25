@@ -2,7 +2,7 @@
 <%
     Properties properties = new Properties();
     try {
-        properties.load(new FileInputStream("/Users/seannian/Desktop/CS157A-team7/config.properties"));
+        properties.load(new FileInputStream("../../Users/shirl/eclipse-workspace/myFlorabase/config.properties"));
     } catch (IOException e) {
         e.printStackTrace();
     }

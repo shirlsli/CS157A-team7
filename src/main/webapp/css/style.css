@@ -3,13 +3,6 @@
  * Copyright 2019 Google LLC. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-/* 
- * Always set the map height explicitly to define the size of the div element
- * that contains the map. 
- */
-#map {
-	height: 100%;
-}
 
 /* 
  * Optional: Makes the sample page fill the window. 
@@ -128,15 +121,20 @@ button.secondary-button:hover {
 	justify-content: space-between;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="date"], input[type="number"] {
 	height: 45px;
 	background: #FFFFFF;
 	border: 1px solid #308023;
 	border-radius: 10px;
+	font-family: Inter, serif-sans;
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus, input[type="number"]:focus {
 	outline: none;
+}
+
+input[type="date"], input[type="number"] {
+	max-width: 200px;
 }
 
 input[type="checkbox"] {
@@ -199,6 +197,8 @@ textarea {
 	background: #FFFFFF;
 	font-family: 'Inter', sans-serif;
 	color: #858585;
+	margin: 8px 0;
+	box-sizing: border-box;
 }
 
 textarea:focus {
@@ -208,7 +208,6 @@ textarea:focus {
 
 #buttonGroup {
 	margin-top: 20px;
-	justify-content: center;
 	gap: 30px;
 	justify-content: center;
 }
@@ -349,3 +348,51 @@ input{
 	height: 35px;
 }
 
+#map {
+    width: 50vw;
+    height: calc(100vh - 80px);
+}
+
+.pageTitle {
+	margin-block-start: 0;
+}
+
+.sightingsPage {
+	width: 100vw;
+	height: 100vh;
+	overflow-y: hidden;
+}
+
+.column-group {
+	display: flex;
+	gap: 40px;
+	height: 500px;
+}
+
+.column {
+	width: 50%;
+	height: 100%;
+}
+
+.reportSightingsMap {
+	height: calc(100% - 55px);
+}
+
+.button-group {
+	margin-top: 20px;
+	gap: 100px;
+	justify-content: center;
+}
+
+.required:after {
+    content:" *";
+    color: #EF3838;
+}
+
+#plantName {
+	width: 100%;
+}
+
+.input-span {
+	gap: 40px;
+}
