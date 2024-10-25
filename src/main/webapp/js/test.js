@@ -9,25 +9,21 @@ let clickedPosition;
 let AdvancedMarkerElement;
 
 async function initMap() {
-  // The location of Uluru
-  const position = { lat: -25.344, lng: 131.031 };
-  // Request needed libraries.
+  const position = { lat: 37.3352, lng: -121.8811 };
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");
   AdvancedMarkerElement = (await google.maps.importLibrary("marker")).AdvancedMarkerElement;
 
-  // The map, centered at Uluru
   map = new Map(document.getElementById("map"), {
-    zoom: 4,
+    zoom: 16,
     center: position,
     mapId: "DEMO_MAP_ID",
   });
 
-  // The marker, positioned at Uluru
   const marker = new AdvancedMarkerElement({
     map: map,
     position: position,
-    title: "Uluru",
+    title: "SJSU",
   });
 
   // Add click listener to the map
