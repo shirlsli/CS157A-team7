@@ -34,10 +34,10 @@ function closeModal() {
 
 // Handle form submission
 function submitMarker(event) {
-	event.preventDefault();
-  
-  // Sending a simple log message "hi" to the addLog servlet
-	fetch('/myFlorabase/addLog', {
+    event.preventDefault();
+	
+	// Sending a simple log message "hi" to the addLog servlet
+	fetch('/myFlorabase/AddLogServlet', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
