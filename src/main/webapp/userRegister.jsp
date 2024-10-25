@@ -10,7 +10,8 @@
 	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=visibility,visibility_off" />
 
 </head>
-<body onload="confirmation()">
+<body>
+	<jsp:include page="WEB-INF/components/header.jsp"></jsp:include>
 	<div id="signUpPage">
 		<div>
 			<span id="signUpPageHeader" class="prevent-select"> <img
