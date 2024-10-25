@@ -1,6 +1,7 @@
 <%@ page import="java.util.Properties, java.io.FileInputStream, java.io.IOException" %>
 <%
 	String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
+
 %>
 <!doctype html>
 <!--
