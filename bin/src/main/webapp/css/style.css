@@ -1,0 +1,398 @@
+/**
+ * @license
+ * Copyright 2019 Google LLC. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* 
+ * Optional: Makes the sample page fill the window. 
+ */
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: 'Inter', sans-serif;
+}
+
+header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 10px;
+}
+
+#headerText {
+	font-family: 'Inter', sans-serif;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 24px;
+	line-height: 40px;
+	color: #000000;
+}
+
+#profilePic {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+#profileUsername {
+	border: 0;
+}
+
+#profileHeading {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+#profilePage {
+	margin-left: 20vw;
+	margin-right: 20vw;
+}
+
+p, select {
+	font-family: 'Inter', sans-serif;
+	color: #858585;
+	margin: 0;
+	font-size: 16px;
+}
+
+span {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+button {
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none; /* Standard syntax */
+	min-width: 80px;
+	min-height: 30px;
+}
+
+.primary-button {
+	background: #EAAC9D;
+	border: 1px solid #EAAC9D;
+	border-radius: 30px;
+	text-align: center;
+	color: #000000;
+	font-weight: 700;
+	border-style: none;
+	padding: 5px;
+}
+
+button.primary-button:hover {
+	border: 1px solid #EAAC9D;
+	background: white;
+	color: #EAAC9D;
+}
+
+.secondary-button {
+	background: #FFFFFF;
+	border: 1px solid #EAAC9D;
+	border-radius: 30px;
+	font-weight: 800;
+	text-align: center;
+	color: #EAAC9D;
+	padding: 5px;
+}
+
+button.secondary-button:hover {
+	border: 1px solid #EAAC9D;
+	background: #EAAC9D;
+	color: black;
+}
+
+.isAdmin {
+	border: 3px solid #B49C73;
+	color: #B49C73;
+}
+
+.isRegular {
+	border: 3px solid #308023;
+	color: #308023;
+}
+
+.section-title-with-button {
+	justify-content: space-between;
+}
+
+input[type="text"], input[type="password"], input[type="date"], input[type="number"] {
+	height: 45px;
+	background: #FFFFFF;
+	border: 1px solid #308023;
+	border-radius: 10px;
+	font-family: Inter, serif-sans;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus, input[type="number"]:focus {
+	outline: none;
+}
+
+input[type="date"], input[type="number"] {
+	max-width: 200px;
+}
+
+input[type="checkbox"] {
+	display: none;
+}
+
+.checkbox {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	position: relative;
+	cursor: pointer;
+	background: #FFFFFF;
+	border: 1px solid #EAAC9D;
+	border-radius: 4px;
+}
+
+input[type="checkbox"]:checked+.checkbox {
+	background-color: #EAAC9D;
+}
+
+.checkbox:after {
+	content: '';
+	position: absolute;
+	left: 5px;
+	top: 2px;
+	width: 3px;
+	height: 7px;
+	border: solid black;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+	opacity: 0;
+}
+
+input[type="checkbox"]:checked+.checkbox:after {
+	border-color: #000000;
+	opacity: 1;
+}
+
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.prevent-select {
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none; /* Standard syntax */
+}
+
+textarea {
+	width: 100%;
+	height: 150px;
+	background: #FFFFFF;
+	border: 1px solid #308023;
+	border-radius: 10px;
+	padding: 20px;
+	resize: none;
+	background: #FFFFFF;
+	font-family: 'Inter', sans-serif;
+	color: #858585;
+	margin: 8px 0;
+	box-sizing: border-box;
+}
+
+textarea:focus {
+	border-color: #308023;
+	outline: none;
+}
+
+#buttonGroup {
+	margin-top: 20px;
+	gap: 30px;
+	justify-content: center;
+}
+
+select {
+	padding: 10px;
+	width: 90px;
+	height: 40px;
+	background: #FFFFFF;
+	border: 1px solid #308023;
+	border-radius: 10px;
+	appearance: none;
+	background: url('../assets/select_arrow.svg') no-repeat right 10px center; /* Custom dropdown arrow */
+}
+
+select:focus {
+	outline: none;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+#signUpButtons{
+	margin: auto;
+	width: max-content;
+	text-align: center;
+	padding: 5px;
+}
+
+.centerButtons{
+	margin: auto;
+	width: max-content;
+	text-align: center;
+	align-content: center;
+	padding: 5px;
+}
+
+#signUpPageHeader {
+	display: flex;
+  	justify-content: center;
+  	gap: 20px;
+}
+
+#signUpPage {
+	display: flex;
+  	justify-content: center; 
+  	align-items: center;     
+  	height: 100vh;   
+}
+
+.centerText {
+	font-style: normal;
+	font-weight: 700;
+	font-size: 40px;
+	text-align: center;
+	color: #000000;
+}
+
+.inputGroup{
+	margin: auto;
+	width: 300px;
+	text-align: left;
+	padding: 10px;
+}
+label {
+	display: block;
+	margin-bottom: 0.5rem;
+	margin-top: 0.5rem;
+}
+
+input{
+	min-width: 100%;
+	max-width: 200%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
+	border-radius: 6px;
+}
+
+/* The message box is shown when the user clicks on the password field */
+#message {
+	display:none;
+	color: #000;
+	position: relative;
+	padding: 20px;
+	border-radius: 10px;
+	border: 1px solid #EAAC9D;
+	font-size: 14px;
+	color: #858585;
+}
+
+#message p {
+	padding: 10px 35px;
+	font-size: 18px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+	color: #308023;
+}
+
+.valid:before {
+	position: relative;
+	left: -35px;
+
+}
+
+/* Add a red text color and an "x" icon when the requirements are wrong */
+.invalid {
+	font-size: 14px;
+	color: red;
+}
+
+.invalid:before {
+	position: relative;
+	left: -35px;
+}
+
+.textfield-label {
+	font-family: 'Inter', sans-serif;
+	font-style: normal;
+	font-weight: 700;
+	font-size: 14px;
+	margin-bottom: 0;
+}
+
+.label {
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.major-button {
+	font-size: 14px;
+	width: 90px;
+	height: 35px;
+}
+
+#map {
+    width: 50vw;
+    height: calc(100vh - 80px);
+}
+
+.pageTitle {
+	margin-block-start: 0;
+}
+
+.sightingsPage {
+	width: 100vw;
+	height: 100vh;
+	overflow-y: hidden;
+}
+
+.column-group {
+	display: flex;
+	gap: 40px;
+	height: 500px;
+}
+
+.column {
+	width: 50%;
+	height: 100%;
+}
+
+.reportSightingsMap {
+	height: calc(100% - 55px);
+}
+
+.button-group {
+	margin-top: 20px;
+	gap: 100px;
+	justify-content: center;
+}
+
+.required:after {
+    content:" *";
+    color: #EF3838;
+}
+
+#plantName {
+	width: 100%;
+}
+
+.input-span {
+	gap: 40px;
+}

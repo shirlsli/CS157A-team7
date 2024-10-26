@@ -34,20 +34,19 @@ function closeModal() {
 
 // Handle form submission
 function submitMarker(event) {
-	event.preventDefault(); 
+    event.preventDefault();
 	
 	// Sending a simple log message "hi" to the addLog servlet
-	fetch('/myFlorabase/addLog', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ message: "hi" })  // Sending "hi" as a JSON object
-	})
-		.then(response => response.text())
-		.then(data => console.log('Server response:', data))
-		.catch(error => console.error('Error:', error));
-		
+	fetch('/myFlorabase/AddLogServlet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: "hi" })  // Sending "hi" as a JSON object
+    })
+    .then(response => response.text())
+    .then(data => console.log('Server response:', data))
+    .catch(error => console.error('Error:', error));
 	const plantName = document.getElementById('plantName').value.trim();
 	const date = document.getElementById('date').value.trim();
 	const description = document.getElementById('description').value.trim();
@@ -68,7 +67,7 @@ function submitMarker(event) {
 		return;
 	}
 	// Create a new marker using AdvancedMarkerElement in test.js
-
+	
 	const newMarker = new AdvancedMarkerElement({
 		map: map,
 		position: loc,
