@@ -47,7 +47,6 @@ function submitMarker(event) {
     .then(response => response.text())
     .then(data => console.log('Server response:', data))
     .catch(error => console.error('Error:', error));
-
 	const plantName = document.getElementById('plantName').value.trim();
 	const date = document.getElementById('date').value.trim();
 	const description = document.getElementById('description').value.trim();
@@ -68,7 +67,7 @@ function submitMarker(event) {
 		return;
 	}
 	// Create a new marker using AdvancedMarkerElement in test.js
-
+	
 	const newMarker = new AdvancedMarkerElement({
 		map: map,
 		position: loc,
