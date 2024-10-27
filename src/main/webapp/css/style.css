@@ -305,6 +305,19 @@ input{
 	font-size: 18px;
 }
 
+/* existing username message box */
+#usernameMessage {
+	padding: 20px;
+	border-radius: 10px;
+	border: 1px solid #EAAC9D;
+	font-size: 14px;
+	color: #858585;
+}
+#usernameMessage p {
+	padding: 10px 35px;
+	font-size: 18px;
+}
+
 /* Add a green text color and a checkmark when the requirements are right */
 .valid {
 	color: #308023;
@@ -395,4 +408,87 @@ input{
 
 .input-span {
 	gap: 40px;
+}
+
+
+#registerConfirmationPage {
+	display: flex;
+  	justify-content: center; 
+  	align-items: center;     
+  	height: 100vh;   
+}
+
+#registerConfirmationHeader {
+	display: flex;
+  	justify-content: center;
+  	gap: 20px;
+}
+
+#registerConfirmationMessage{
+	margin: auto;
+	width: max-content;
+	text-align: left;
+	align-content: center;
+	padding: 10px;
+}
+
+.goToLogin-button {
+	font-size: 14px;
+	width: 100px;
+	height: 35px;
+}
+
+.confirmationText {
+	font-style: normal;
+	font-weight: 500;
+	font-size: 20px;
+	text-align: center;
+	color: #858585;
+}
+
+.confirmationUsernameText {
+	font-style: normal;
+	font-weight: 700;
+	font-size: 40px;
+	text-align: center;
+	color: #000000;
+	margin: 10px;
+	border: 1px solid #EAAC9D;
+	position: relative;
+	padding: 20px;
+	border-radius: 10px;
+}
+
+/*toggle psw visibility*/
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+.psw-wrap {
+	position: relative;
+}
+
+#toggle-psw, #toggle-psw2 {
+	position: absolute;
+	top: 60%;
+	right: .5rem;
+	transform: translateY(-50%);
+	cursor: pointer;
+	width: 20px;
+	align-items: center;
+	background: none;
+	border-radius: 30px;
+	border: none;
+}
+.toggle-button {
+	min-width: 30px;
+	min-height: 10px;
+	padding: 0px;
+
+	
 }
