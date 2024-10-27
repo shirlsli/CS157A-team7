@@ -3,7 +3,8 @@
 <html>
 <head>
 <title>myFlorabase Profile</title>
-<link rel="icon" href="assets/myFlorabase_Logo_No_Text.svg" type="image/svg">
+<link rel="icon" href="assets/myFlorabase_Logo_No_Text.svg"
+	type="image/svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
@@ -74,14 +75,16 @@
 				const newProfilePic = event.target.files[0];
 	            if (newProfilePic) {
 	                const formData = new FormData();
-            		formData.append('newProfilePic', newProfilePic);
-            		formData.append('userId', <%=user.getUserId()%>);
+            		formData.append('image', newProfilePic);
+            		formData.append('condition', "user_id");
+            		formData.append('conditionValue', <%=user.getUserId()%>);
+            		formData.append("imageAttributeName", "profile_pic");
 	                const reader = new FileReader();
 	                reader.onload = function(e) {
 	                    curProfilePicElement.src = e.target.result;
 	                };
 	                reader.readAsDataURL(newProfilePic);
-	                fetch('/myFlorabase/updateProfilePic', {
+	                fetch('/myFlorabase/updateImage', {
 	                    method: 'POST',
 	                    body: formData
 	                })
@@ -263,7 +266,8 @@
 		<input type="file" id="fileUpload" style="display: none;"
 			accept="image/*"> <span> <img id="profilePic"
 			class="prevent-select <%=user.isAdmin() ? "isAdmin" : "isRegular"%>"
-			src="/myFlorabase/getProfilePic?userId=<%=user.getUserId() %>" onclick="changeProfilePic(this)" />
+			src="/myFlorabase/getImage?condition=user_id&conditionValue=<%=user.getUserId()%>&imageAttributeName=profile_pic"
+			onclick="changeProfilePic(this)" />
 			<h1 class="<%=user.isAdmin() ? "isAdmin" : "isRegular"%>"
 				id="profileUsername"><%=user.getUsername()%></h1>
 		</span>
