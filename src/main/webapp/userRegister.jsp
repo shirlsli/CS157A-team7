@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>User Registration</title>
+<link rel="icon" href="assets/myFlorabase_Logo_No_Text.svg" type="image/svg">
 <link rel="stylesheet" href="css/style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

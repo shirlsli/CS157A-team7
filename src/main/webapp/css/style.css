@@ -121,7 +121,8 @@ button.secondary-button:hover {
 	justify-content: space-between;
 }
 
-input[type="text"], input[type="password"], input[type="date"], input[type="number"] {
+input[type="text"], input[type="password"], input[type="date"], input[type="number"]
+	{
 	height: 45px;
 	background: #FFFFFF;
 	border: 1px solid #308023;
@@ -129,7 +130,8 @@ input[type="text"], input[type="password"], input[type="date"], input[type="numb
 	font-family: Inter, serif-sans;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus, input[type="number"]:focus {
+input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus,
+	input[type="number"]:focus {
 	outline: none;
 }
 
@@ -220,7 +222,8 @@ select {
 	border: 1px solid #308023;
 	border-radius: 10px;
 	appearance: none;
-	background: url('../assets/select_arrow.svg') no-repeat right 10px center; /* Custom dropdown arrow */
+	background: url('../assets/select_arrow.svg') no-repeat right 10px
+		center; /* Custom dropdown arrow */
 }
 
 select:focus {
@@ -231,14 +234,14 @@ select:focus {
 	visibility: hidden;
 }
 
-#signUpButtons{
+#signUpButtons {
 	margin: auto;
 	width: max-content;
 	text-align: center;
 	padding: 5px;
 }
 
-.centerButtons{
+.centerButtons {
 	margin: auto;
 	width: max-content;
 	text-align: center;
@@ -248,15 +251,15 @@ select:focus {
 
 #signUpPageHeader {
 	display: flex;
-  	justify-content: center;
-  	gap: 20px;
+	justify-content: center;
+	gap: 20px;
 }
 
 #signUpPage {
 	display: flex;
-  	justify-content: center; 
-  	align-items: center;     
-  	height: 100vh;   
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
 }
 
 .centerText {
@@ -267,19 +270,20 @@ select:focus {
 	color: #000000;
 }
 
-.inputGroup{
+.inputGroup {
 	margin: auto;
 	width: 300px;
 	text-align: left;
 	padding: 10px;
 }
+
 label {
 	display: block;
 	margin-bottom: 0.5rem;
 	margin-top: 0.5rem;
 }
 
-input{
+input {
 	min-width: 100%;
 	max-width: 200%;
 	padding: 12px 20px;
@@ -290,7 +294,7 @@ input{
 
 /* The message box is shown when the user clicks on the password field */
 #message {
-	display:none;
+	display: none;
 	color: #000;
 	position: relative;
 	padding: 20px;
@@ -313,7 +317,6 @@ input{
 .valid:before {
 	position: relative;
 	left: -35px;
-
 }
 
 /* Add a red text color and an "x" icon when the requirements are wrong */
@@ -349,8 +352,8 @@ input{
 }
 
 #map {
-    width: 50vw;
-    height: calc(100vh - 80px);
+	width: 50vw;
+	height: calc(100vh - 80px);
 }
 
 .pageTitle {
@@ -385,14 +388,90 @@ input{
 }
 
 .required:after {
-    content:" *";
-    color: #EF3838;
+	content: " *";
+	color: #EF3838;
 }
 
 #plantName {
 	width: 100%;
 }
 
+.icon-row {
+	gap: 10px;
+}
+
 .input-span {
 	gap: 40px;
+}
+
+.sighting-header {
+	margin-top: 0;
+	margin-bottom: 0; font-style : normal;
+	font-weight: 700;
+	font-size: 24px;
+	text-align: center;
+	color: #000000;
+	font-style: normal;
+}
+
+.sighting-row {
+	margin: 8px 0;
+}
+
+.sightings-column {
+	margin-right: 40px;
+}
+
+.description-label {
+	font-weight: 700;
+}
+
+.sentence {
+	gap: 0.4em;
+}
+
+.sighting-photo {
+	border-radius: 10px;
+	margin-right: 10px;
+}
+
+.icon-hidden {
+	display: none;
+}
+
+.icon-shown {
+	display: block;
+}
+
+.tag-row {
+	margin-top: 20px;
+}
+
+.tag {
+	border-radius: 30px;
+	padding: 8px 20px;
+	color: #000000;
+}
+
+.poisonous {
+	background-color: #EED3D9;
+}
+
+.invasive {
+	background-color: #F5E8DD;
+}
+
+.endangered {
+	background-color: #CCD3CA;
+}
+
+#tagText {
+	color: #000000;
+}
+
+.icon-button {
+	border: none; 
+	background: none;
+	width: fit-content;
+	min-width: 0;
 }

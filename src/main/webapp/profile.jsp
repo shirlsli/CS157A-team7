@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>myFlorabase Profile</title>
+<link rel="icon" href="assets/myFlorabase_Logo_No_Text.svg" type="image/svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
@@ -16,7 +17,7 @@
 	User user = (User) curSession.getAttribute("loggedInUser"); */
 	String dUser; // assumes database name is the same as username
 	dUser = "root";
-	String pwd = "root";
+	String pwd = System.getenv("DB_PASSWORD");
 	User user = null;
 	MapPreference mp = null;
 	List<Filter> filters = new ArrayList<>();
