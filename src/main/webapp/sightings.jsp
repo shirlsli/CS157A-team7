@@ -1,13 +1,15 @@
 <%@ page
 	import="java.util.Properties, java.io.FileInputStream, java.io.IOException"%>
 <%
-Properties properties = new Properties();
+/* Properties properties = new Properties();
 try {
 	properties.load(new FileInputStream("../../eclipse-workspace/myFlorabase/config.properties"));
 } catch (IOException e) {
 	e.printStackTrace();
 }
-String apiKey = properties.getProperty("GOOGLE_MAPS_API_KEY");
+String apiKey = properties.getProperty("GOOGLE_MAPS_API_KEY"); */
+	String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
+
 %>
 <!DOCTYPE html>
 <html>
