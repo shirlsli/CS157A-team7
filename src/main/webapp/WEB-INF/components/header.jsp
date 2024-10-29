@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="css/header.css">
-<header class="prevent-select" onload="load()">
+<header class="prevent-select">
 
 	<span id="navbar"> 
 		<img id="logo-img" src='assets/myFlorabase_Logo_No_Text.svg' />
