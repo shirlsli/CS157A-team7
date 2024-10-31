@@ -18,15 +18,17 @@ import javax.servlet.http.HttpSession;
 
 import com.example.User;
 
-@WebServlet("/getProfilePic")
-public class ProfilePicServlet extends HttpServlet {
+@WebServlet("/getImage")
+public class ImageServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		HttpSession curSession = request.getSession();
 //		User user = (User) curSession.getAttribute("loggedInUser");
-		String userId = request.getParameter("userId");
+		String condition = request.getParameter("condition");
+		String conditionValue = request.getParameter("conditionValue");
+		String imageAttributeName = request.getParameter("imageAttributeName");
 		String databaseUser = "root";
 		String databasePassword = "root";
 		try {
@@ -34,27 +36,27 @@ public class ProfilePicServlet extends HttpServlet {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", databaseUser, databasePassword);
 
-            String sql = "SELECT profile_pic FROM myflorabase.user WHERE user_id = ?";
+            String sql = "SELECT " + imageAttributeName + " FROM myflorabase.user WHERE " + condition + " = ?";
             try (PreparedStatement statement = con.prepareStatement(sql)) {
-            	statement.setInt(1, Integer.parseInt(userId));
+            	statement.setInt(1, Integer.parseInt(conditionValue));
             	try (ResultSet rs = statement.executeQuery()) {
             		if (rs.next()) {
                         Blob blob = rs.getBlob("profile_pic");
                         if (blob != null) {
-                        	byte[] profilePic = blob.getBytes(1, (int) blob.length());
+                        	byte[] image = blob.getBytes(1, (int) blob.length());
                             response.setContentType("image/jpeg");
-                            response.setContentLength(profilePic.length);
+                            response.setContentLength(image.length);
                             ServletOutputStream outputStream = response.getOutputStream();
-                            outputStream.write(profilePic);
+                            outputStream.write(image);
                             outputStream.flush();
                             outputStream.close();
                         } else {
-                        	File defaultPicFile = new File("../../eclipse-workspace/myFlorabase/src/main/webapp/assets/default_profile_pic.jpg"); // need to change based on where working directory is
-                            byte[] defaultProfilePic = Files.readAllBytes(defaultPicFile.toPath());
+                        	File defaultImageFile = new File("../../eclipse-workspace/myFlorabase/src/main/webapp/assets/default_profile_pic.jpg"); // need to change based on where working directory is
+                            byte[] defaultImage = Files.readAllBytes(defaultImageFile.toPath());
                         	response.setContentType("image/jpeg");
-                            response.setContentLength(defaultProfilePic.length);
+                            response.setContentLength(defaultImage.length);
                             ServletOutputStream outputStream = response.getOutputStream();
-                            outputStream.write(defaultProfilePic);
+                            outputStream.write(defaultImage);
                             outputStream.flush();
                             outputStream.close();
                         }

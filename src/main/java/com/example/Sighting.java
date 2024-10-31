@@ -1,4 +1,5 @@
 package com.example;
+
 import java.util.Date;
 
 public class Sighting {
