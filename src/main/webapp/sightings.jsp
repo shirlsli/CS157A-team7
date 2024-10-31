@@ -1,21 +1,50 @@
 <%@ page
-	import="java.util.Properties, java.io.FileInputStream, java.io.IOException"%>
+	import="java.sql.*, java.util.Properties, java.io.FileInputStream, java.io.IOException, com.example.Sighting, com.example.User, com.example.Plant, java.util.Date"%>
 <%
-/* Properties properties = new Properties();
+
+String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
+Sighting sighting = new Sighting(1, "Roses are red, violets are blue", 2.0, new Date());
+Plant plant = new Plant(1, "Rose", "Rosa rubiginosa", "Roses are red, violets are blue", true, true, true);
+request.setAttribute("sighting", sighting);
+request.setAttribute("plant", plant);
+
+String dUser; // assumes database name is the same as username
+dUser = "root";
+String pwd = System.getenv("DB_PASSWORD");
+User user = null;
+
 try {
-	properties.load(new FileInputStream("../../eclipse-workspace/myFlorabase/config.properties"));
-} catch (IOException e) {
-	e.printStackTrace();
+	java.sql.Connection con;
+	Class.forName("com.mysql.jdbc.Driver");
+	con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", dUser, pwd);
+	Statement statement = con.createStatement();
+	String sql = "SELECT * FROM myflorabase.user WHERE user_id=1";
+	ResultSet rs = statement.executeQuery(sql);
+	if (rs.next()) {
+		int userId = rs.getInt("user_id");
+		String username = rs.getString("username");
+		String password = rs.getString("password");
+		String description = rs.getString("description");
+		boolean isAdmin = rs.getBoolean("isAdmin");
+		user = new User(userId, username, password, description, isAdmin);
+		request.setAttribute("user", user);
+	}
+	
+
+	rs.close();
+	statement.close();
+	con.close();
+} catch (SQLException e) {
+	System.out.println("SQLException caught: " + e.getMessage());
 }
-String apiKey = properties.getProperty("GOOGLE_MAPS_API_KEY"); */
-	String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
 
 %>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Report a New Sighting</title>
+<title>Sightings</title>
 <!-- Link to External CSS -->
+<link rel="icon" href="assets/myFlorabase_Logo_No_Text.svg" type="image/svg">
 <link rel="stylesheet" type="text/css" href="./css/modals.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +56,13 @@ String apiKey = properties.getProperty("GOOGLE_MAPS_API_KEY"); */
 <body>
 	<div class="sightingsPage">
 		<jsp:include page="WEB-INF/components/header.jsp"></jsp:include>
-		<div id="map"></div>
+		<div class="column-group">
+			<div id="map" class="column"></div>
+			<div class="column sightings-column">
+				<h1 class="pageTitle">Sightings</h1>
+				<jsp:include page="WEB-INF/components/sighting.jsp"></jsp:include>
+			</div>
+		</div>
 
 		<!-- Modal Structure -->
 		<div id="markerModal" class="modal">
@@ -64,8 +99,8 @@ String apiKey = properties.getProperty("GOOGLE_MAPS_API_KEY"); */
 								<div>
 									<div class="form-group">
 										<label class="textfield-label" for="radius">Estimated
-											Radius (meters)</label> <input type="number" id="radius" name="radius" min="0"
-											placeholder="Estimated radius" required />
+											Radius (meters)</label> <input type="number" id="radius"
+											name="radius" min="0" placeholder="Estimated radius" required />
 									</div>
 									<div class="form-group">
 										<label class="required textfield-label" for="photo">Photo

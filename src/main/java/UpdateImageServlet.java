@@ -15,15 +15,17 @@ import javax.servlet.http.Part;
 
 import com.example.User;
 
-@WebServlet("/updateProfilePic")
+@WebServlet("/updateImage")
 @MultipartConfig
-public class UpdateProfilePicServlet extends HttpServlet {
+public class UpdateImageServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userId = request.getParameter("userId");
-		Part newProfilePic = request.getPart("newProfilePic");
+		String condition = request.getParameter("condition");
+		String imageAttributeName = request.getParameter("imageAttributeName");
+		String conditionValue = request.getParameter("conditionValue");
+		Part image = request.getPart("image");
 		
 		String databaseUser = "root";
 		String databasePassword = "root";
@@ -31,12 +33,12 @@ public class UpdateProfilePicServlet extends HttpServlet {
 			java.sql.Connection con;
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", databaseUser, databasePassword);
-            if (newProfilePic != null) {
-            	String sql = "UPDATE myflorabase.user SET profile_pic = ? WHERE user_id = ?";
-            	InputStream profilePicInputStream = newProfilePic.getInputStream();
+            if (image != null) {
+            	String sql = "UPDATE myflorabase.user SET " + imageAttributeName + " = ? WHERE " + condition + " = ?";
+            	InputStream profilePicInputStream = image.getInputStream();
                 try (PreparedStatement statement = con.prepareStatement(sql)) {
                     statement.setBlob(1, profilePicInputStream);
-                    statement.setInt(2, Integer.parseInt(userId)); 
+                    statement.setInt(2, Integer.parseInt(conditionValue)); 
 
                     int rowsUpdated = statement.executeUpdate(); 
                     response.getWriter().write(rowsUpdated + " row(s) updated."); 
@@ -49,7 +51,7 @@ public class UpdateProfilePicServlet extends HttpServlet {
         } catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {
-			newProfilePic.delete();
+			image.delete();
 		}
 	}
 }
