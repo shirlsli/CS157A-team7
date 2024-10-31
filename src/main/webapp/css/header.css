@@ -1,0 +1,84 @@
+#headerText {
+	font-family: 'Inter', sans-serif;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 24px;
+	line-height: 40px;
+	color: #000000;
+	margin-right: auto;
+}
+/* Add a black background color to the top navigation */
+.topnav {
+	background: none;
+	overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+	/* float: right;
+	display: block; */
+	text-align: center;
+	text-decoration: none;
+	font-family: 'Inter', sans-serif;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 24px;
+	line-height: 39px;
+	/* identical to box height */
+	color: #858585;
+/* 	align-self: right; */
+margin: 20px;
+
+}
+
+
+/* Add an active class to highlight the current page */
+.topnav a.active {
+	background-color: white;
+	color: black;
+	
+}
+
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-underline-animation::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 4px;
+  bottom: 0;
+  left: 0;
+  background-color: #0087ca;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+  margin: auto;
+  padding: auto;
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Hide the link that should open and close the topnav on small screens */
+.topnav .icon {
+	display: none;
+}
+
+#navbar {
+	display: flex;
+	min-width: 100%;
+}
+
+#myTopnav {
+	margin-left: auto;
+}
+
+/* Sightings */
+
+
+

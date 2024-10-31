@@ -16,20 +16,9 @@
 ## Features
 test3
 
-## Helpful Tips to run: 
-- change password to mySQL server in JDBCmyFlorabaseDemo.jsp
-
-## API Key Setup Guide
-### 1. Create `config.properties`
-
-- In the root of the project, create a file called `config.properties`.
-
-- Open the `config.properties` file and add your Google Maps API key: 
-    > `GOOGLE_MAPS_API_KEY=`YOUR_ACTUAL_API_KEY
-
-### 2. Create `.gitignore`
-
-- In the root of the project, create a file called `.gitignore`.
-
-- Open the `.gitignore` file and add: 
-    > config.properties
+## API Key and Database Setup Guide (for Eclipse)
+### In Eclipse, go to `Run` > `Run Configurations` > your `Apache Tomcat Server` > `Environment`
+- Add:
+    > `GOOGLE_MAPS_API_KEY`=YOUR_ACTUAL_API_KEY
+    > 
+    > `DB_PASSWORD`=YOUR_ACTUAL_DB_PASSWORD
