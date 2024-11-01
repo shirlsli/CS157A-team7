@@ -1,6 +1,7 @@
 <%@ page
 	import="java.sql.*, java.util.Properties, java.io.FileInputStream, java.io.IOException, com.example.Sighting, com.example.User, com.example.Plant, java.util.Date"%>
 <%
+
 String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
 Sighting sighting = new Sighting(1, "Roses are red, violets are blue", 2.0, new Date());
 Plant plant = new Plant(1, "Rose", "Rosa rubiginosa", "Roses are red, violets are blue", true, true, true);
