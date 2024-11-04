@@ -3,13 +3,6 @@
  * Copyright 2019 Google LLC. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-/* 
- * Always set the map height explicitly to define the size of the div element
- * that contains the map. 
- */
-#map {
-	height: 100%;
-}
 
 /* 
  * Optional: Makes the sample page fill the window. 
@@ -128,15 +121,22 @@ button.secondary-button:hover {
 	justify-content: space-between;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="date"], input[type="number"]
+	{
 	height: 45px;
 	background: #FFFFFF;
 	border: 1px solid #308023;
 	border-radius: 10px;
+	font-family: Inter, serif-sans;
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus,
+	input[type="number"]:focus {
 	outline: none;
+}
+
+input[type="date"], input[type="number"] {
+	max-width: 200px;
 }
 
 input[type="checkbox"] {
@@ -199,6 +199,8 @@ textarea {
 	background: #FFFFFF;
 	font-family: 'Inter', sans-serif;
 	color: #858585;
+	margin: 8px 0;
+	box-sizing: border-box;
 }
 
 textarea:focus {
@@ -208,7 +210,6 @@ textarea:focus {
 
 #buttonGroup {
 	margin-top: 20px;
-	justify-content: center;
 	gap: 30px;
 	justify-content: center;
 }
@@ -221,7 +222,8 @@ select {
 	border: 1px solid #308023;
 	border-radius: 10px;
 	appearance: none;
-	background: url('../assets/select_arrow.svg') no-repeat right 10px center; /* Custom dropdown arrow */
+	background: url('../assets/select_arrow.svg') no-repeat right 10px
+		center; /* Custom dropdown arrow */
 }
 
 select:focus {
@@ -232,14 +234,14 @@ select:focus {
 	visibility: hidden;
 }
 
-#signUpButtons{
+#signUpButtons {
 	margin: auto;
 	width: max-content;
 	text-align: center;
 	padding: 5px;
 }
 
-.centerButtons{
+.centerButtons {
 	margin: auto;
 	width: max-content;
 	text-align: center;
@@ -249,15 +251,15 @@ select:focus {
 
 #signUpPageHeader {
 	display: flex;
-  	justify-content: center;
-  	gap: 20px;
+	justify-content: center;
+	gap: 20px;
 }
 
 #signUpPage {
 	display: flex;
-  	justify-content: center; 
-  	align-items: center;     
-  	height: 100vh;   
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
 }
 
 .centerText {
@@ -268,19 +270,20 @@ select:focus {
 	color: #000000;
 }
 
-.inputGroup{
+.inputGroup {
 	margin: auto;
 	width: 300px;
 	text-align: left;
 	padding: 10px;
 }
+
 label {
 	display: block;
 	margin-bottom: 0.5rem;
 	margin-top: 0.5rem;
 }
 
-input{
+input {
 	min-width: 100%;
 	max-width: 200%;
 	padding: 12px 20px;
@@ -291,7 +294,7 @@ input{
 
 /* The message box is shown when the user clicks on the password field */
 #message {
-	display:none;
+	display: none;
 	color: #000;
 	position: relative;
 	padding: 20px;
@@ -306,6 +309,19 @@ input{
 	font-size: 18px;
 }
 
+/* existing username message box */
+#usernameMessage {
+	padding: 20px;
+	border-radius: 10px;
+	border: 1px solid #EAAC9D;
+	font-size: 14px;
+	color: #858585;
+}
+#usernameMessage p {
+	padding: 10px 35px;
+	font-size: 18px;
+}
+
 /* Add a green text color and a checkmark when the requirements are right */
 .valid {
 	color: #308023;
@@ -314,7 +330,6 @@ input{
 .valid:before {
 	position: relative;
 	left: -35px;
-
 }
 
 /* Add a red text color and an "x" icon when the requirements are wrong */
@@ -349,3 +364,209 @@ input{
 	height: 35px;
 }
 
+#map {
+	width: 50vw;
+	height: calc(100vh - 80px);
+}
+
+.pageTitle {
+	margin-block-start: 0;
+}
+
+.sightingsPage {
+	width: 100vw;
+	height: 100vh;
+	overflow-y: hidden;
+}
+
+.column-group {
+	display: flex;
+	gap: 40px;
+	height: 500px;
+}
+
+.column {
+	width: 50%;
+	height: 100%;
+}
+
+.reportSightingsMap {
+	height: calc(100% - 55px);
+}
+
+.button-group {
+	margin-top: 20px;
+	gap: 100px;
+	justify-content: center;
+}
+
+.required:after {
+	content: " *";
+	color: #EF3838;
+}
+
+#plantName {
+	width: 100%;
+}
+
+.icon-row {
+	gap: 10px;
+}
+
+.input-span {
+	gap: 40px;
+}
+
+.sighting-header {
+	margin-top: 0;
+	margin-bottom: 0; font-style : normal;
+	font-weight: 700;
+	font-size: 24px;
+	text-align: center;
+	color: #000000;
+	font-style: normal;
+}
+
+.sighting-row {
+	margin: 8px 0;
+}
+
+.sightings-column {
+	margin-right: 40px;
+}
+
+.description-label {
+	font-weight: 700;
+}
+
+.sentence {
+	gap: 0.4em;
+}
+
+.sighting-photo {
+	border-radius: 10px;
+	margin-right: 10px;
+}
+
+.icon-hidden {
+	display: none;
+}
+
+.icon-shown {
+	display: block;
+}
+
+.tag-row {
+	margin-top: 20px;
+}
+
+.tag {
+	border-radius: 30px;
+	padding: 8px 20px;
+	color: #000000;
+}
+
+.poisonous {
+	background-color: #EED3D9;
+}
+
+.invasive {
+	background-color: #F5E8DD;
+}
+
+.endangered {
+	background-color: #CCD3CA;
+}
+
+#tagText {
+	color: #000000;
+}
+
+.icon-button {
+	border: none; 
+	background: none;
+	width: fit-content;
+	min-width: 0;
+}
+
+#registerConfirmationPage {
+	display: flex;
+  	justify-content: center; 
+  	align-items: center;     
+  	height: 100vh;   
+}
+
+#registerConfirmationHeader {
+	display: flex;
+  	justify-content: center;
+  	gap: 20px;
+}
+
+#registerConfirmationMessage{
+	margin: auto;
+	width: max-content;
+	text-align: left;
+	align-content: center;
+	padding: 10px;
+}
+
+.goToLogin-button {
+	font-size: 14px;
+	width: 100px;
+	height: 35px;
+}
+
+.confirmationText {
+	font-style: normal;
+	font-weight: 500;
+	font-size: 20px;
+	text-align: center;
+	color: #858585;
+}
+
+.confirmationUsernameText {
+	font-style: normal;
+	font-weight: 700;
+	font-size: 40px;
+	text-align: center;
+	color: #000000;
+	margin: 10px;
+	border: 1px solid #EAAC9D;
+	position: relative;
+	padding: 20px;
+	border-radius: 10px;
+}
+
+/*toggle psw visibility*/
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+.psw-wrap {
+	position: relative;
+}
+
+#toggle-psw, #toggle-psw2 {
+	position: absolute;
+	top: 60%;
+	right: .5rem;
+	transform: translateY(-50%);
+	cursor: pointer;
+	width: 20px;
+	align-items: center;
+	background: none;
+	border-radius: 30px;
+	border: none;
+}
+.toggle-button {
+	min-width: 30px;
+	min-height: 10px;
+	padding: 0px;
+
+	
+}

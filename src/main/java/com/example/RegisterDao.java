@@ -31,10 +31,10 @@ public class RegisterDao {
         return con;
     }
 
-    public String insert(User user){
+    public boolean insert(User user){
         loadDriver(dbdriver);
         Connection con=getConnection();
-        String result="data entered successfully";
+        boolean result=true;
 
 
         String s = "SELECT * FROM myflorabase.user WHERE username = '" + user.getUsername() + "'";
@@ -43,15 +43,15 @@ public class RegisterDao {
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.isBeforeFirst() ) {
 //                System.out.println("No data");
-                result="Data not entered, username already exists";
-                return result;
+//                result="' already exists. Please Sign Up again with a different username.";
+                return false;
             }
 
 
         } catch (SQLException e){
             e.printStackTrace();
-            result="Data not entered";
-            return result;
+//            result="Data not entered";
+            return false;
         }
 
         String sql="insert into myflorabase.user(username, password, description, isAdmin) values(?,?,?,?)";
@@ -65,7 +65,7 @@ public class RegisterDao {
         } catch (SQLException e) {
 //            throw new RuntimeException(e);
             e.printStackTrace();
-            result="Data not entered";
+            result=false;
         }
 
         return result;
