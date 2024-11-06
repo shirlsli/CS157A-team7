@@ -15,6 +15,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.example.User;
 
 /**
  * Servlet implementation class LoginServlet
@@ -49,7 +52,6 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String databaseUser = "root";
 		String databasePassword = "root";
-		/* PrintWriter out = response.getWriter(); */
 		String uname = request.getParameter("uname");
 		String password = request.getParameter("password");
 
@@ -59,7 +61,7 @@ public class LoginServlet extends HttpServlet {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false",
 					databaseUser, databasePassword);
-			String sql = "SELECT username, password FROM myflorabase.user WHERE username = ?";
+			String sql = "SELECT user_id, username, password, description, isAdmin FROM myflorabase.user WHERE username = ?";
 			try (PreparedStatement statement = con.prepareStatement(sql)) {
 				statement.setString(1, uname);
 				ResultSet result = statement.executeQuery();
@@ -67,7 +69,20 @@ public class LoginServlet extends HttpServlet {
 				if (result.next()) {
 					// User exists, now verify password
 					String storedPassword = result.getString("password");
+					// correct password, create User object to return
 					if (storedPassword.equals(password)) {
+
+						int userId = result.getInt("user_id");
+						String dbUsername = result.getString("username");
+						String dbPassword = result.getString("password");
+						String description = result.getString("description");
+						boolean isAdmin = result.getBoolean("isAdmin");
+
+						User user = new User(userId, dbUsername, dbPassword, description, isAdmin);
+
+						HttpSession session = request.getSession();
+						session.setAttribute("user", user);
+
 						RequestDispatcher rd = request.getRequestDispatcher("sightings.jsp");
 						rd.forward(request, response);
 					} else {
@@ -93,5 +108,4 @@ public class LoginServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
 }
