@@ -50,32 +50,9 @@
 
 	</div>
 	
-	<!-- Include the errorBox.jsp for displaying error messages when present -->
-<%--     <jsp:include page="WEB-INF/jsp/errorBox.jsp" /> --%>
-    
+	<!-- Include the errorBox.jsp for displaying error messages when present -->   
 	<jsp:include page="WEB-INF/components/errorBox.jsp" />
-	
-<%-- <!-- Error Box: Only display if errorTitle and errorMessage are present -->
-    <% 
-        String errorTitle = (String) request.getAttribute("errorTitle");
-        String errorMessage = (String) request.getAttribute("errorMessage");
-        if (errorTitle != null && errorMessage != null) {
-    %>
-        <div class="modal">
-            <div class="modal-content">
-                <div class="modal-header"><%= errorTitle %></div>
-                <div class="modal-message"><%= errorMessage %></div>
-                <button class="modal-button" onclick="closeModal()">Close</button>
-            </div>
-        </div>
-    <% } %>
 
-    <script>
-        function closeModal() {
-            document.querySelector('.modal').style.display = 'none';
-        }
-    </script>
-</body> --%>
 
 <!-- <script>
 	function togglePswVisibility() {

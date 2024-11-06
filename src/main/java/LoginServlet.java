@@ -85,27 +85,6 @@ public class LoginServlet extends HttpServlet {
 					rd.forward(request, response);
 				}
 			}
-			/*
-			 * try (PreparedStatement statement = con.prepareStatement(sql)) {
-			 * statement.setString(1, uname);
-			 * 
-			 * statement.setString(2, password); ResultSet result =
-			 * statement.executeQuery(); if(result.next()) { RequestDispatcher rd =
-			 * request.getRequestDispatcher("sightings.jsp"); rd.forward(request, response);
-			 * } else { request.setAttribute("errorMessage",
-			 * "Invalid username or password"); RequestDispatcher rd =
-			 * request.getRequestDispatcher("login.jsp"); rd.forward(request, response); }
-			 * 
-			 * else {
-			 * 
-			 * // TODO: Pop up an error box before redirect to login page
-			 * out.println("<font color=red size=20>Login Failed!!!<br>");
-			 * out.println("<a href=login.jsp>Try AGAIN!! </a>"); // RequestDispatcher rd =
-			 * request.getRequestDispatcher("login.jsp"); // rd.forward(request, response);
-			 * }
-			 * 
-			 * }
-			 */
 
 			con.close();
 		} catch (SQLException e) {
