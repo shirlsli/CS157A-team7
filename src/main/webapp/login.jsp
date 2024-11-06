@@ -4,6 +4,7 @@
 <head>
 <title>Log In</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/errorBox.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -48,8 +49,30 @@
 		</div>
 
 	</div>
+	
+	<jsp:include page="WEB-INF\components/errorBox.jsp" />
+	
+<%-- <!-- Error Box: Only display if errorTitle and errorMessage are present -->
+    <% 
+        String errorTitle = (String) request.getAttribute("errorTitle");
+        String errorMessage = (String) request.getAttribute("errorMessage");
+        if (errorTitle != null && errorMessage != null) {
+    %>
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-header"><%= errorTitle %></div>
+                <div class="modal-message"><%= errorMessage %></div>
+                <button class="modal-button" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    <% } %>
 
-</body>
+    <script>
+        function closeModal() {
+            document.querySelector('.modal').style.display = 'none';
+        }
+    </script>
+</body> --%>
 
 <!-- <script>
 	function togglePswVisibility() {
