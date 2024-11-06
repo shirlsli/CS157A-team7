@@ -50,7 +50,10 @@
 
 	</div>
 	
-	<jsp:include page="WEB-INF\components/errorBox.jsp" />
+	<!-- Include the errorBox.jsp for displaying error messages when present -->
+<%--     <jsp:include page="WEB-INF/jsp/errorBox.jsp" /> --%>
+    
+	<jsp:include page="WEB-INF/components/errorBox.jsp" />
 	
 <%-- <!-- Error Box: Only display if errorTitle and errorMessage are present -->
     <% 

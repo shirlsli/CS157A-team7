@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String databaseUser = "root";
 		String databasePassword = "root";
-		PrintWriter out = response.getWriter();
+		/* PrintWriter out = response.getWriter(); */
 		String uname = request.getParameter("uname");
 		String password = request.getParameter("password");
 
