@@ -22,61 +22,74 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public LoginServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public LoginServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String databaseUser = "root";
 		String databasePassword = "root";
-		PrintWriter out = response.getWriter();
+		/* PrintWriter out = response.getWriter(); */
+		String uname = request.getParameter("uname");
+		String password = request.getParameter("password");
+
 		// Connect to database and compare user's input
 		try {
 			java.sql.Connection con;
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", databaseUser, databasePassword);
-            String uname = request.getParameter("uname");
-    		String password = request.getParameter("password");
-    		String sql = "SELECT username FROM myflorabase.user WHERE username = ? AND password=?";
-           		
-    		try (PreparedStatement statement = con.prepareStatement(sql)) {
-            	statement.setString(1, uname);
-            	statement.setString(2, password);
-            	ResultSet result = statement.executeQuery();
-            	if(result.next()) {
-            		RequestDispatcher rd = request.getRequestDispatcher("sightings.jsp");
-            		rd.forward(request, response);
-            	}
-            	else {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false",
+					databaseUser, databasePassword);
+			String sql = "SELECT username, password FROM myflorabase.user WHERE username = ?";
+			try (PreparedStatement statement = con.prepareStatement(sql)) {
+				statement.setString(1, uname);
+				ResultSet result = statement.executeQuery();
 
-            		// TODO: Pop up an error box before redirect to login page
-            		out.println("<font color=red size=20>Login Failed!!!<br>");
-            		out.println("<a href=login.jsp>Try AGAIN!! </a>");
-//            		RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
-//            		rd.forward(request, response);
-            	}
-            }
-            
-            con.close();
-		} catch(SQLException e) {
-            System.out.println("SQLException caught: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
+				if (result.next()) {
+					// User exists, now verify password
+					String storedPassword = result.getString("password");
+					if (storedPassword.equals(password)) {
+						RequestDispatcher rd = request.getRequestDispatcher("sightings.jsp");
+						rd.forward(request, response);
+					} else {
+						// Password does not match
+						request.setAttribute("errorTitle", "Login Error");
+						request.setAttribute("errorMessage", "Invalid password. Please try again.");
+						RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+						rd.forward(request, response);
+					}
+				} else {
+					// Username not found
+					request.setAttribute("errorTitle", "Login Error");
+					request.setAttribute("errorMessage", "Username not found. Please try again.");
+					RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+					rd.forward(request, response);
+				}
+			}
+
+			con.close();
+		} catch (SQLException e) {
+			System.out.println("SQLException caught: " + e.getMessage());
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
