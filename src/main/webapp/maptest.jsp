@@ -43,6 +43,7 @@
         #tree { background: #009c1a; }
         #grass { background: #22b600; }
         #weed { background: #26cc00; }
+        #none { background: #555555; }
         button:active { background: #999999 !important; }
     </style>
     <script>
@@ -98,7 +99,6 @@
         function initMap() {
             const myLatLng = { lat: 40.3769, lng: -80.5417 };
             const map = new google.maps.Map(document.getElementById("map"), {
-                mapId: "ffcdd6091fa9fb03",
                 zoom: 5, // Increased initial zoom for better visibility
                 center: myLatLng,
                 maxZoom: 16,
@@ -130,6 +130,9 @@
                 const pollenMapType = new PollenMapType(new google.maps.Size(256, 256));
                 map.overlayMapTypes.insertAt(0, pollenMapType);
             });
+            document.querySelector("#none").addEventListener("click", function() {
+                map.overlayMapTypes.removeAt(0);
+            });
         }
     </script>
     <script
@@ -141,6 +144,7 @@
         <button type="button" id="tree">TREE</button>
         <button type="button" id="grass">GRASS</button>
         <button type="button" id="weed">WEED</button>
+        <button type="button" id="none">NONE</button>
     </div>
     <div id="map"></div>
 </body>

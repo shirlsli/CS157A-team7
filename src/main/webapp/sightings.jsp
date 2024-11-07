@@ -142,4 +142,13 @@ try {
 	<script src="./js/test.js"></script>
 	<script src="./js/modal.js"></script>
 </body>
+<body>
+  <div id="container">
+    <button type="button" id="tree">TREE</button>
+    <button type="button" id="grass">GRASS</button>
+    <button type="button" id="weed">WEED</button>
+    <button type="button" id="none">NONE</button>
+  </div>
+  <div id="map" style="height: 600px; width: 100%;"></div>
+</body>
 </html>
