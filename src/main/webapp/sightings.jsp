@@ -63,7 +63,6 @@ try {
 				<jsp:include page="WEB-INF/components/sighting.jsp"></jsp:include>
 			</div>
 		</div>
-
 		<!-- Modal Structure -->
 		<div id="markerModal" class="modal">
 			<div class="modal-content">
@@ -132,23 +131,24 @@ try {
 			</div>
 		</div>
 	</div>
+	<div id="container">
+		    <button type="button" id="tree">TREE</button>
+		    <button type="button" id="grass">GRASS</button>
+		    <button type="button" id="weed">WEED</button>
+		    <button type="button" id="none">NONE</button>
+	</div>
 	<!-- Load the Google Maps JavaScript API -->
+	<script>
+        // Expose the API key to the external JavaScript file
+        var GOOGLE_MAPS_API_KEY = "<%= apiKey %>";
+    </script>
 	<script async
 		src="https://maps.googleapis.com/maps/api/js?key=<%=apiKey%>&callback=initMap">
 		
 	</script>
 
 	<!-- Link to External JavaScript -->
-	<script src="./js/test.js"></script>
+	<script src="./js/custom.js"></script>
 	<script src="./js/modal.js"></script>
-</body>
-<body>
-  <div id="container">
-    <button type="button" id="tree">TREE</button>
-    <button type="button" id="grass">GRASS</button>
-    <button type="button" id="weed">WEED</button>
-    <button type="button" id="none">NONE</button>
-  </div>
-  <div id="map" style="height: 600px; width: 100%;"></div>
 </body>
 </html>
