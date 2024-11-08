@@ -36,18 +36,6 @@ function closeModal() {
 function submitMarker(event) {
     event.preventDefault();
 	
-	// Sending a simple log message "hi" to the addLog servlet
-	fetch('/myFlorabase/AddLogServlet', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ message: "hi" })  // Sending "hi" as a JSON object
-    })
-    .then(response => response.text())
-    .then(data => console.log('Server response:', data))
-    .catch(error => console.error('Error:', error));
-
 	const plantName = document.getElementById('plantName').value.trim();
 	const date = document.getElementById('date').value.trim();
 	const description = document.getElementById('description').value.trim();
@@ -68,7 +56,7 @@ function submitMarker(event) {
 		return;
 	}
 	// Create a new marker using AdvancedMarkerElement in test.js
-
+	
 	const newMarker = new AdvancedMarkerElement({
 		map: map,
 		position: loc,
@@ -91,6 +79,26 @@ function submitMarker(event) {
 	} else {
 		attachInfoWindow(newMarker, infoContent);
 	}
+	
+	// Prepare URL-encoded data
+	const params = new URLSearchParams();
+	params.append('plantName', plantName);
+	params.append('date', date);
+	params.append('description', description);
+	params.append('radius', radius);
+	selectedValues.forEach(value => params.append('selectedValues', value));
+
+	// Send the data to the server
+	fetch('/myFlorabase/AddLogServlet', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
+		body: params.toString()  // Convert URLSearchParams to string
+	})
+	.then(response => response.text())
+	.then(data => console.log('Server response:', data))
+	.catch(error => console.error('Error:', error));
 
 	// Close the modal
 	closeModal();
