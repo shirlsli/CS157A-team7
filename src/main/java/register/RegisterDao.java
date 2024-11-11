@@ -1,4 +1,6 @@
-package com.example;
+package register;
+import com.example.*;
+
 
 import java.sql.*;
 import java.util.Properties;

@@ -1,4 +1,6 @@
-package com.example;
+package register;
+
+import com.example.*;
 
 import java.io.*;
 import javax.servlet.http.*;
