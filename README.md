@@ -1,4 +1,4 @@
-# 🌸🌿🌼🍃🌺🌻 myFloraBase 🌻🌺🍃🌼🌿🌸
+# 🌸🌿🌼🍃🌺🌻 myFloraBase 🌻🌺🍃🌼🌿🌸 (Forked after making changes in *shirley* branch)
 ## 👥 Team Members (Team 7)
 
 - **Irene Chen**
