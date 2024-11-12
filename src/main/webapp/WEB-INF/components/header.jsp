@@ -10,13 +10,15 @@
 			<button id="reportSightings" onClick="reportSightings()" class=" ${reportSightingActive} hover-underline-animation">Report Sighting</button>
 
 		</div>
-		<div id="profile-container" >
-			<div id="profile-underline" class="${profileActive}">
-				
-			</div>
+		<div id="profile-container" class="dropdown">
+			<div id="profile-underline" class="${profileActive}"></div>
 			<button id="profile-button" class="${userType}" onClick="profile()">
 				<img id="profile-img" src="assets/default_profile_pic.jpg" alt="Profile picture">
-				</button>
+			</button>
+			<div class="dropdown-content">
+			  <button onClick="profile()">Profile</button>
+			  <button onClick="logOut()">Log Out</button>
+		  	</div>
 		</div>
 
 	</span>
@@ -39,6 +41,10 @@ function reportSightings() {
 
 function profile() {
 	window.location='profile';
+}
+
+function logOut() {
+	window.location='login';
 }
 
 
