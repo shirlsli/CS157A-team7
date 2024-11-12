@@ -14,7 +14,7 @@
 </head>
 <body>
 	<%
-	HttpSession curSession = request.getSession(true);
+	HttpSession curSession = request.getSession(false);
 	User user = (User) curSession.getAttribute("user"); 
 	String dUser; // assumes database name is the same as username
 	dUser = "root";

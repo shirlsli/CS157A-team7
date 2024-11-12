@@ -34,7 +34,9 @@ public class LogoutServlet extends HttpServlet {
 		if (session != null) {
 		    session.invalidate(); // Invalidates the session
 		}
-		
+		request.setAttribute("errorTitle", "Successfully logged out!");
+		request.setAttribute("errorMessage", "Please Sign In again to access your account");
+		request.getRequestDispatcher("login.jsp").forward(request, response);
 		 response.sendRedirect("login.jsp");
 	}
 

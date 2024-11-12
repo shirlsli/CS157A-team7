@@ -20,17 +20,22 @@ public class ReportSightingServlet extends HttpServlet {
         request.setAttribute("reportSightingActive", "active"); //set active header tab
         
         // set profile outline color
-        HttpSession curSession = request.getSession();
-    	User user = (User) curSession.getAttribute("user");
-    	
-    	if (user.isAdmin()) {
-            request.setAttribute("userType", "admin");
+        HttpSession curSession = request.getSession(false);
+        if (curSession == null || curSession.getAttribute("user") == null) {
+        	response.sendRedirect("login.jsp");
     	} else {
-            request.setAttribute("userType", "user");
+    		User user = (User) curSession.getAttribute("user");
+        	
+        	if (user.isAdmin()) {
+                request.setAttribute("userType", "admin");
+        	} else {
+                request.setAttribute("userType", "user");
+        	}
+            RequestDispatcher dispatcher = request.getRequestDispatcher("sightings.jsp");
+            dispatcher.forward(request, response);
+            response.sendRedirect("sightings.jsp");
     	}
-        RequestDispatcher dispatcher = request.getRequestDispatcher("sightings.jsp");
-        dispatcher.forward(request, response);
-        response.sendRedirect("sightings.jsp");
+    	
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

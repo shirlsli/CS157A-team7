@@ -17,20 +17,28 @@ public class profileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     	
     	// set profile outline color, and active tab status
-    	HttpSession curSession = request.getSession();
-    	User user = (User) curSession.getAttribute("user");
-    	
-    	if (user.isAdmin()) {
-            request.setAttribute("profileActive", "active");
-            request.setAttribute("userType", "admin");
+    	HttpSession curSession = request.getSession(false);
+    	if (curSession == null || curSession.getAttribute("user") == null) {
+    		request.setAttribute("errorTitle", "You were logged out!");
+			request.setAttribute("errorMessage", "Please Sign In again.");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+        	response.sendRedirect("login.jsp");
     	} else {
-            request.setAttribute("profileActive", "active");
-            request.setAttribute("userType", "user");
+    		User user = (User) curSession.getAttribute("user");
+        	
+        	if (user.isAdmin()) {
+                request.setAttribute("profileActive", "active");
+                request.setAttribute("userType", "admin");
+        	} else {
+                request.setAttribute("profileActive", "active");
+                request.setAttribute("userType", "user");
+        	}
+        	
+            RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp"); 
+            dispatcher.forward(request, response);
+            response.sendRedirect("profile.jsp"); 
     	}
     	
-        RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp"); 
-        dispatcher.forward(request, response);
-        response.sendRedirect("profile.jsp"); 
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

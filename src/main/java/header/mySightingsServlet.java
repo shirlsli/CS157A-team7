@@ -20,18 +20,25 @@ public class mySightingsServlet extends HttpServlet {
         request.setAttribute("mySightingActive", "active"); //set active header tab
         
         // set profile outline color
-        HttpSession curSession = request.getSession();
-    	User user = (User) curSession.getAttribute("user");
-    	
-    	if (user.isAdmin()) {
-            request.setAttribute("userType", "admin");
+        HttpSession curSession = request.getSession(false);
+        
+        if (curSession == null || curSession.getAttribute("user") == null) {
+        	response.sendRedirect("login.jsp");
     	} else {
-            request.setAttribute("userType", "user");
+    		User user = (User) curSession.getAttribute("user");
+        	
+        	if (user.isAdmin()) {
+                request.setAttribute("userType", "admin");
+        	} else {
+                request.setAttribute("userType", "user");
+        	}
+            
+            RequestDispatcher dispatcher = request.getRequestDispatcher("sightings.jsp"); // this needs to be changed to the correct jsp file? using sightings.jsp as temporary test
+            dispatcher.forward(request, response);
+            response.sendRedirect("sightings.jsp"); // this needs to be changed to the correct jsp file? using sightings.jsp as temporary test
+
     	}
         
-        RequestDispatcher dispatcher = request.getRequestDispatcher("sightings.jsp"); // this needs to be changed to the correct jsp file? using sightings.jsp as temporary test
-        dispatcher.forward(request, response);
-        response.sendRedirect("sightings.jsp"); // this needs to be changed to the correct jsp file? using sightings.jsp as temporary test
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
