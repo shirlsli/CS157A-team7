@@ -1,8 +1,17 @@
 var clickedLocation;
 var loc;
 // Open the modal
-function openModal(location) {
+function openModal(location, sighting) {
+	const modalTitle = document.getElementById('modalTitle');
+	if (sighting != null) {
+		modalTitle.textContent = "Edit this Sighting";
+		// set the other values
+	} else {
+		modalTitle.textContent = "Report a New Sighting";
+	}
 	const modal = document.getElementById('markerModal');
+	const header = document.getElementById('header');
+	header.style.display = "hidden";
 	modal.style.display = "block";
 	loadReportSightingsMap(location);
 	loc = location;
@@ -28,6 +37,8 @@ async function loadReportSightingsMap(location) {
 // Close the modal
 function closeModal() {
 	const modal = document.getElementById('markerModal');
+	const header = document.getElementById('header');
+	header.style.display = "block";
 	modal.style.display = "none";
 	document.getElementById('markerForm').reset();
 }
