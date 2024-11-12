@@ -86,6 +86,8 @@ function submitMarker(event) {
 	params.append('date', date);
 	params.append('description', description);
 	params.append('radius', radius);
+	params.append('latitude', loc.lat);
+	params.append('longitude', loc.lng);
 	selectedValues.forEach(value => params.append('selectedValues', value));
 
 	// Send the data to the server

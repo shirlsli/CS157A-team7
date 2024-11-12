@@ -67,7 +67,7 @@ try {
 		<div id="markerModal" class="modal">
 			<div class="modal-content">
 				<h1 class="pageTitle">Report a New Sighting</h1>
-				<form id="markerForm" onsubmit="submitMarker(event)">
+				<form id="markerForm" enctype="multipart/form-data" onsubmit="submitMarker(event)">
 					<div class="column-group">
 						<div class="column">
 							<div id="reportSightingsMap" class="reportSightingsMap"></div>
@@ -149,6 +149,6 @@ try {
 
 	<!-- Link to External JavaScript -->
 	<script src="./js/custom.js"></script>
-	<script src="./js/modal.js"></script>
+	<script src="./js/modal3.js"></script>
 </body>
 </html>
