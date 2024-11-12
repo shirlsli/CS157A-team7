@@ -1,5 +1,7 @@
 package header;
 
+import com.example.*;
+
 import java.io.*;
 import javax.servlet.http.*;
 import javax.servlet.RequestDispatcher;
@@ -13,16 +15,26 @@ public class profileServlet extends HttpServlet {
     public profileServlet() {super();}
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-//        response.getWriter().append("Served at: ").append(request.getContextPath());
-        request.setAttribute("profileActive", "active");
-        
+    	
+    	// set profile outline color, and active tab status
+    	HttpSession curSession = request.getSession();
+    	User user = (User) curSession.getAttribute("user");
+    	
+    	if (user.isAdmin()) {
+            request.setAttribute("profileActive", "active");
+            request.setAttribute("userType", "admin");
+    	} else {
+            request.setAttribute("profileActive", "active");
+            request.setAttribute("userType", "user");
+    	}
+    	
         RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp"); 
         dispatcher.forward(request, response);
         response.sendRedirect("profile.jsp"); 
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
+    	
         
     }
 

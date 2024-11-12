@@ -82,9 +82,20 @@ public class LoginServlet extends HttpServlet {
 
 						HttpSession session = request.getSession();
 						session.setAttribute("user", user);
-
+						
+						// setting the profile pic outline color
+						if (user.isAdmin()) {
+				            request.setAttribute("userType", "admin"); // golden profile pic outline for admins
+				    	} else {
+				            request.setAttribute("userType", "user"); // green profile pic outline for regular users
+				    	}
+						
+				        request.setAttribute("generalSightingActive", "active"); // set "Sightings" as active tab in header, since directing to sightings.jsp
+						
 						RequestDispatcher rd = request.getRequestDispatcher("sightings.jsp");
 						rd.forward(request, response);
+						response.sendRedirect("sightings.jsp");
+
 					} else {
 						// Password does not match
 						request.setAttribute("errorTitle", "Login Error");

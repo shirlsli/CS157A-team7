@@ -14,12 +14,12 @@
 </head>
 <body>
 	<%
-	/* HttpSession curSession = request.getSession();
-	User user = (User) curSession.getAttribute("loggedInUser"); */
+	HttpSession curSession = request.getSession(true);
+	User user = (User) curSession.getAttribute("user"); 
 	String dUser; // assumes database name is the same as username
 	dUser = "root";
 	String pwd = System.getenv("DB_PASSWORD");
-	User user = null;
+	// User user = null;
 	MapPreference mp = null;
 	List<Filter> filters = new ArrayList<>();
 	try {
@@ -27,7 +27,7 @@
 		Class.forName("com.mysql.jdbc.Driver");
 		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", dUser, pwd);
 		Statement statement = con.createStatement();
-		String sql = "SELECT * FROM myflorabase.user WHERE user_id=1";
+		String sql = "SELECT * FROM myflorabase.user WHERE user_id=" + user.getUserId();
 		ResultSet rs = statement.executeQuery(sql);
 		if (rs.next()) {
 			int userId = rs.getInt("user_id");

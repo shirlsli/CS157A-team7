@@ -2,6 +2,9 @@ package header;
 
 import java.io.*;
 import javax.servlet.http.*;
+
+import com.example.User;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.*;
@@ -14,8 +17,17 @@ public class ReportSightingServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 //        response.getWriter().append("Served at: ").append(request.getContextPath());
-        request.setAttribute("reportSightingActive", "active");
+        request.setAttribute("reportSightingActive", "active"); //set active header tab
         
+        // set profile outline color
+        HttpSession curSession = request.getSession();
+    	User user = (User) curSession.getAttribute("user");
+    	
+    	if (user.isAdmin()) {
+            request.setAttribute("userType", "admin");
+    	} else {
+            request.setAttribute("userType", "user");
+    	}
         RequestDispatcher dispatcher = request.getRequestDispatcher("sightings.jsp");
         dispatcher.forward(request, response);
         response.sendRedirect("sightings.jsp");
