@@ -23,6 +23,9 @@ public class mySightingsServlet extends HttpServlet {
         HttpSession curSession = request.getSession(false);
         
         if (curSession == null || curSession.getAttribute("user") == null) {
+        	request.setAttribute("errorTitle", "You were logged out!");
+			request.setAttribute("errorMessage", "Please Sign In again.");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
         	response.sendRedirect("login.jsp");
     	} else {
     		User user = (User) curSession.getAttribute("user");
