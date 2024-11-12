@@ -149,6 +149,6 @@ try {
 
 	<!-- Link to External JavaScript -->
 	<script src="./js/custom.js"></script>
-	<script src="./js/modal3.js"></script>
+	<script src="./js/modal.js"></script>
 </body>
 </html>
