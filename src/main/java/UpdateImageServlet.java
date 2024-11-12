@@ -28,7 +28,7 @@ public class UpdateImageServlet extends HttpServlet {
 		Part image = request.getPart("image");
 		
 		String databaseUser = "root";
-		String databasePassword = "root";
+		String databasePassword = System.getenv("DB_PASSWORD");
 		try {
 			java.sql.Connection con;
             Class.forName("com.mysql.jdbc.Driver");

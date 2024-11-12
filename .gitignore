@@ -1,4 +1,6 @@
 config.properties
+bin/*
+build/*
 
 target/
 !.mvn/wrapper/maven-wrapper.jar

@@ -19,6 +19,9 @@
 	String dUser; // assumes database name is the same as username
 	dUser = "root";
 	String pwd = System.getenv("DB_PASSWORD");
+	if (pwd == null) {
+	    System.out.println("DB_PASSWORD environment variable is not set.");
+	}
 	User user = null;
 	MapPreference mp = null;
 	List<Filter> filters = new ArrayList<>();
