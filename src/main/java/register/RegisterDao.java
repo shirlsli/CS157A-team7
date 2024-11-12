@@ -10,13 +10,12 @@ import java.io.IOException;
 public class RegisterDao {
     private String dburl="jdbc:mysql://localhost:3306/myflorabase";
     private String dbuname="root";
-    private String dbpwd="root";
+    private String dbpwd=System.getenv("DB_PASSWORD");
     private String dbdriver="com.mysql.jdbc.Driver";
     public void loadDriver(String dbdriver){
         try {
             Class.forName(dbdriver);
         } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
             e.printStackTrace();
         }
     }
@@ -27,7 +26,6 @@ public class RegisterDao {
         	
             con = DriverManager.getConnection(dburl, dbuname,dbpwd);
         } catch (SQLException e) {
-//            throw new RuntimeException(e);
             e.printStackTrace();
         }
         return con;
@@ -44,15 +42,12 @@ public class RegisterDao {
             PreparedStatement ps = con.prepareStatement(s);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.isBeforeFirst() ) {
-//                System.out.println("No data");
-//                result="' already exists. Please Sign Up again with a different username.";
                 return false;
             }
 
 
         } catch (SQLException e){
             e.printStackTrace();
-//            result="Data not entered";
             return false;
         }
 
@@ -65,11 +60,30 @@ public class RegisterDao {
             ps.setBoolean(4, user.isAdmin());
             ps.executeUpdate();
         } catch (SQLException e) {
-//            throw new RuntimeException(e);
             e.printStackTrace();
             result=false;
         }
 
         return result;
+    }
+    
+    public boolean checkFor(String username) {
+    	loadDriver(dbdriver);
+        Connection con=getConnection();
+
+
+        String s = "SELECT * FROM myflorabase.user WHERE username = '" + username + "'";
+        try{
+            PreparedStatement ps = con.prepareStatement(s);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.isBeforeFirst() ) {
+                return false;
+            }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }
