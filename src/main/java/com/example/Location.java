@@ -1,3 +1,5 @@
+package com.example;
+
 public class Location {
     private int locationId;
     private double latitude;
