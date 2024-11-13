@@ -29,7 +29,6 @@ public class Register extends HttpServlet {
         	request.setAttribute("dynamicContent", uname );
             RequestDispatcher dispatcher = request.getRequestDispatcher("registerConfirmation.jsp");
             dispatcher.forward(request, response);
-            response.sendRedirect("registerConfirmation.jsp");
         }
         else {
         	request.setAttribute("errorTitle", "Sign Up Error");
