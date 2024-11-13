@@ -29,13 +29,6 @@ public class ReportSightingServlet extends HttpServlet {
 			request.setAttribute("errorMessage", "Please Sign In again.");
 			request.getRequestDispatcher("login.jsp").forward(request, response);
 		} else {
-			User user = (User) curSession.getAttribute("user");
-
-			if (user.isAdmin()) {
-				request.setAttribute("userType", "admin");
-			} else {
-				request.setAttribute("userType", "user");
-			}
 			RequestDispatcher dispatcher = request.getRequestDispatcher("sightings.jsp");
 			dispatcher.forward(request, response);
 		}

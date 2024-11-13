@@ -30,13 +30,6 @@ public class generalSightingsServlet extends HttpServlet {
 			request.setAttribute("errorMessage", "Please Sign In again.");
 			request.getRequestDispatcher("login.jsp").forward(request, response);
 		} else {
-			User user = (User) curSession.getAttribute("user");
-
-			if (user.isAdmin()) {
-				request.setAttribute("userType", "admin");
-			} else {
-				request.setAttribute("userType", "user");
-			}
 
 			RequestDispatcher dispatcher = request.getRequestDispatcher("sightings.jsp"); // this needs to be changed to
 																							// the correct jsp file?

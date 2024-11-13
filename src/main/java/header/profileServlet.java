@@ -26,15 +26,7 @@ public class profileServlet extends HttpServlet {
 			request.setAttribute("errorMessage", "Please Sign In again.");
 			request.getRequestDispatcher("login.jsp").forward(request, response);
 		} else {
-			User user = (User) curSession.getAttribute("user");
-
-			if (user.isAdmin()) {
-				request.setAttribute("profileActive", "active");
-				request.setAttribute("userType", "admin");
-			} else {
-				request.setAttribute("profileActive", "active");
-				request.setAttribute("userType", "user");
-			}
+			request.setAttribute("profileActive", "active");
 
 			RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
 			dispatcher.forward(request, response);
