@@ -87,7 +87,6 @@ public class LoginServlet extends HttpServlet {
 						
 						RequestDispatcher rd = request.getRequestDispatcher("sightings.jsp");
 						rd.forward(request, response);
-						response.sendRedirect("sightings.jsp");
 
 					} else {
 						// Password does not match
