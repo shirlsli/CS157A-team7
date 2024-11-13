@@ -293,7 +293,7 @@
 		<div id="filtersDiv">
 			<span class="section-title-with-button">
 				<h2>Filters</h2>
-				<button class="secondary-button" onclick="editDescription(this)">Edit</button>
+				<button class="secondary-button" onclick="newFilter(this)">New</button>
 			</span>
 			<%
 			for (Filter f : filters) {
