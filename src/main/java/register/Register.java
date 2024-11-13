@@ -32,7 +32,7 @@ public class Register extends HttpServlet {
         }
         else {
         	request.setAttribute("errorTitle", "Sign Up Error");
-			request.setAttribute("errorMessage", "Please check database or database connection and try again.");
+			request.setAttribute("errorMessage", "Did you sign up already? Try logging in. Otherwise, please check database/database connection and try again.");
 			request.getRequestDispatcher("userRegister.jsp").forward(request, response);
         }
         
