@@ -115,11 +115,11 @@
 }
 
 #profile-button.admin {
-	border: 1px solid #B49C73;
+	border: 3px solid #B49C73;
 }
 
-#profile-button.user {
-	border: 1px solid #308023;
+#profile-button.regular {
+	border: 3px solid #308023;
 }
 
 #profile-img {
