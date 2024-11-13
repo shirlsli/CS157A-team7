@@ -28,7 +28,6 @@ public class ReportSightingServlet extends HttpServlet {
 			request.setAttribute("errorTitle", "You were logged out!");
 			request.setAttribute("errorMessage", "Please Sign In again.");
 			request.getRequestDispatcher("login.jsp").forward(request, response);
-			response.sendRedirect("login.jsp");
 		} else {
 			User user = (User) curSession.getAttribute("user");
 
@@ -39,7 +38,6 @@ public class ReportSightingServlet extends HttpServlet {
 			}
 			RequestDispatcher dispatcher = request.getRequestDispatcher("sightings.jsp");
 			dispatcher.forward(request, response);
-			response.sendRedirect("sightings.jsp");
 		}
 
 	}

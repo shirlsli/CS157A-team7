@@ -29,7 +29,6 @@ public class generalSightingsServlet extends HttpServlet {
 			request.setAttribute("errorTitle", "You were logged out!");
 			request.setAttribute("errorMessage", "Please Sign In again.");
 			request.getRequestDispatcher("login.jsp").forward(request, response);
-			response.sendRedirect("login.jsp");
 		} else {
 			User user = (User) curSession.getAttribute("user");
 
@@ -44,9 +43,6 @@ public class generalSightingsServlet extends HttpServlet {
 																							// using sightings.jsp as
 																							// temporary test
 			dispatcher.forward(request, response);
-			response.sendRedirect("sightings.jsp"); // this needs to be changed to the correct jsp file? using
-													// sightings.jsp as temporary test
-
 		}
 
 	}
