@@ -22,7 +22,7 @@ public class UpdateMapPreferenceServlet extends HttpServlet {
 		String zoom = request.getParameter("zoom");
 		
 		String databaseUser = "root";
-		String databasePassword = "root";
+		String databasePassword = System.getenv("DB_PASSWORD");
 		try {
 			java.sql.Connection con;
             Class.forName("com.mysql.jdbc.Driver");

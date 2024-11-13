@@ -7,7 +7,7 @@ let map;
 let clickedPosition;
 let AdvancedMarkerElement;
 
-let pollen = "TREE_UPI";
+// let pollen = "TREE_UPI"; 
 
 class PollenMapType {
     constructor(tileSize, apiKey) {
@@ -85,9 +85,12 @@ async function initMap() {
         return;
     }
 
-    const pollenMapType = new PollenMapType(new google.maps.Size(256, 256), apiKey);
-    map.overlayMapTypes.insertAt(0, pollenMapType);
+    // Commented out the pollen-related map overlay initialization
+    // const pollenMapType = new PollenMapType(new google.maps.Size(256, 256), apiKey);
+    // map.overlayMapTypes.insertAt(0, pollenMapType);
 
+    // Commented out pollen map type update listeners
+    /*
     document.getElementById("tree").addEventListener("click", function() {
         pollen = "TREE_UPI";
         updatePollenMapType(map, apiKey);
@@ -103,6 +106,7 @@ async function initMap() {
     document.getElementById("none").addEventListener("click", function() {
         map.overlayMapTypes.removeAt(0);
     });
+    */
 }
 
 window.initMap = initMap;

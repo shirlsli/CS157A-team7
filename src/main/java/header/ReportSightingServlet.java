@@ -19,6 +19,7 @@ public class ReportSightingServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+
 		request.setAttribute("reportSightingActive", "active"); // set active header tab
 
 		// set profile outline color
