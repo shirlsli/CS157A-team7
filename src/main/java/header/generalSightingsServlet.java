@@ -22,7 +22,6 @@ public class generalSightingsServlet extends HttpServlet {
 
 		request.setAttribute("generalSightingActive", "active"); // set active header tab
 
-		// set profile outline color
 		HttpSession curSession = request.getSession(false);
 
 		if (curSession == null || curSession.getAttribute("user") == null) {

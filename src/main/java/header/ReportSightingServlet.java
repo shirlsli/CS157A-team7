@@ -22,8 +22,8 @@ public class ReportSightingServlet extends HttpServlet {
 
 		request.setAttribute("reportSightingActive", "active"); // set active header tab
 
-		// set profile outline color
 		HttpSession curSession = request.getSession(false);
+		
 		if (curSession == null || curSession.getAttribute("user") == null) {
 			request.setAttribute("errorTitle", "You were logged out!");
 			request.setAttribute("errorMessage", "Please Sign In again.");

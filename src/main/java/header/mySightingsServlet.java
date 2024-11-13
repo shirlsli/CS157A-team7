@@ -22,7 +22,6 @@ public class mySightingsServlet extends HttpServlet {
 
 		request.setAttribute("mySightingActive", "active"); // set active header tab
 
-		// set profile outline color
 		HttpSession curSession = request.getSession(false);
 
 		if (curSession == null || curSession.getAttribute("user") == null) {

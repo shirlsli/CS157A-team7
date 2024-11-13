@@ -19,15 +19,15 @@ public class profileServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		// set profile outline color, and active tab status
+		request.setAttribute("profileActive", "active");
+
 		HttpSession curSession = request.getSession(false);
+		
 		if (curSession == null || curSession.getAttribute("user") == null) {
 			request.setAttribute("errorTitle", "You were logged out!");
 			request.setAttribute("errorMessage", "Please Sign In again.");
 			request.getRequestDispatcher("login.jsp").forward(request, response);
 		} else {
-			request.setAttribute("profileActive", "active");
-
 			RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
 			dispatcher.forward(request, response);
 		}
