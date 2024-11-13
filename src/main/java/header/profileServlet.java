@@ -10,42 +10,45 @@ import javax.servlet.annotation.*;
 
 @WebServlet("/profile")
 public class profileServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public profileServlet() {super();}
+	public profileServlet() {
+		super();
+	}
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    	
-    	// set profile outline color, and active tab status
-    	HttpSession curSession = request.getSession(false);
-    	if (curSession == null || curSession.getAttribute("user") == null) {
-    		request.setAttribute("errorTitle", "You were logged out!");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+
+		// set profile outline color, and active tab status
+		HttpSession curSession = request.getSession(false);
+		if (curSession == null || curSession.getAttribute("user") == null) {
+			request.setAttribute("errorTitle", "You were logged out!");
 			request.setAttribute("errorMessage", "Please Sign In again.");
 			request.getRequestDispatcher("login.jsp").forward(request, response);
-        	response.sendRedirect("login.jsp");
-    	} else {
-    		User user = (User) curSession.getAttribute("user");
-        	
-        	if (user.isAdmin()) {
-                request.setAttribute("profileActive", "active");
-                request.setAttribute("userType", "admin");
-        	} else {
-                request.setAttribute("profileActive", "active");
-                request.setAttribute("userType", "user");
-        	}
-        	
-            RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp"); 
-            dispatcher.forward(request, response);
-            response.sendRedirect("profile.jsp"); 
-    	}
-    	
-    }
+			response.sendRedirect("login.jsp");
+		} else {
+			User user = (User) curSession.getAttribute("user");
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    	
-        
-    }
+			if (user.isAdmin()) {
+				request.setAttribute("profileActive", "active");
+				request.setAttribute("userType", "admin");
+			} else {
+				request.setAttribute("profileActive", "active");
+				request.setAttribute("userType", "user");
+			}
 
-    public void destroy() {
-    }
+			RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
+			dispatcher.forward(request, response);
+			response.sendRedirect("profile.jsp");
+		}
+
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+
+	}
+
+	public void destroy() {
+	}
 }

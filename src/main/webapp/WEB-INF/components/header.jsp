@@ -3,11 +3,11 @@
 
 	<span id="navbar"> 
 		<img id="logo-img" src='assets/myFlorabase_Logo_No_Text.svg' />
-		<h1 id="headerTextTitle">myFlorabase</h1>
+		<h1 id="headerText" class="header-text">myFlorabase</h1>
 		<div class="topnav" id="right-Topnav">
-			<button id="sightings" onClick="sightings()" class="${generalSightingActive} hover-underline-animation">Sightings</button> 
-			<button id="mySightings" onClick="mySightings()" class="${mySightingActive} hover-underline-animation">My Sightings</button> 
-			<button id="reportSightings" onClick="reportSightings()" class=" ${reportSightingActive} hover-underline-animation">Report Sighting</button>
+			<button id="sightings" onClick="sightings()" class="${generalSightingActive} hover-underline-animation header-text">Sightings</button> 
+			<button id="mySightings" onClick="mySightings()" class="${mySightingActive} hover-underline-animation header-text">My Sightings</button> 
+			<button id="reportSightings" onClick="reportSightings()" class=" ${reportSightingActive} hover-underline-animation header-text">Report Sighting</button>
 
 		</div>
 		<div id="profile-container" class="dropdown">
