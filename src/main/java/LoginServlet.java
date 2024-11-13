@@ -83,11 +83,10 @@ public class LoginServlet extends HttpServlet {
 						HttpSession session = request.getSession();
 						session.setAttribute("user", user);
 						
-				        request.setAttribute("generalSightingActive", "active"); // set "Sightings" as active tab in header, since directing to sightings.jsp
+				        	request.setAttribute("generalSightingActive", "active"); // set "Sightings" as active tab in header, since directing to sightings.jsp
 						
 						RequestDispatcher rd = request.getRequestDispatcher("sightings.jsp");
 						rd.forward(request, response);
-
 					} else {
 						// Password does not match
 						request.setAttribute("errorTitle", "Login Error");
