@@ -19,7 +19,7 @@ public class mySightingsServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-//        response.getWriter().append("Served at: ").append(request.getContextPath());
+		
 		request.setAttribute("mySightingActive", "active"); // set active header tab
 
 		// set profile outline color
@@ -53,7 +53,6 @@ public class mySightingsServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-
 	}
 
 	public void destroy() {

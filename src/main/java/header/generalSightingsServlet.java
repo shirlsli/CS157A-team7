@@ -19,6 +19,7 @@ public class generalSightingsServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+
 		request.setAttribute("generalSightingActive", "active"); // set active header tab
 
 		// set profile outline color
