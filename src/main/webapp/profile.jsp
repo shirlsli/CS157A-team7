@@ -14,15 +14,16 @@
 </head>
 <body>
 	<%
-	/* HttpSession curSession = request.getSession();
-	User user = (User) curSession.getAttribute("loggedInUser"); */
+	HttpSession curSession = request.getSession(false);
+	User user = (User) curSession.getAttribute("user"); 
 	String dUser; // assumes database name is the same as username
 	dUser = "root";
 	String pwd = System.getenv("DB_PASSWORD");
+
 	if (pwd == null) {
 	    System.out.println("DB_PASSWORD environment variable is not set.");
 	}
-	User user = null;
+
 	MapPreference mp = null;
 	List<Filter> filters = new ArrayList<>();
 	try {
@@ -30,7 +31,7 @@
 		Class.forName("com.mysql.jdbc.Driver");
 		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", dUser, pwd);
 		Statement statement = con.createStatement();
-		String sql = "SELECT * FROM myflorabase.user WHERE user_id=1";
+		String sql = "SELECT * FROM myflorabase.user WHERE user_id=" + user.getUserId();
 		ResultSet rs = statement.executeQuery(sql);
 		if (rs.next()) {
 			int userId = rs.getInt("user_id");
@@ -292,7 +293,7 @@
 		<div id="filtersDiv">
 			<span class="section-title-with-button">
 				<h2>Filters</h2>
-				<button class="secondary-button" onclick="editDescription(this)">Edit</button>
+				<button class="secondary-button" onclick="newFilter(this)">New</button>
 			</span>
 			<%
 			for (Filter f : filters) {

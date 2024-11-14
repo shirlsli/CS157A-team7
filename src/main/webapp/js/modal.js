@@ -92,21 +92,26 @@ function submitMarker(event) {
 	}
 	
 	// Prepare URL-encoded data
-	const params = new URLSearchParams();
-	params.append('plantName', plantName);
-	params.append('date', date);
-	params.append('description', description);
-	params.append('radius', radius);
-	selectedValues.forEach(value => params.append('selectedValues', value));
+	const formData = new FormData();
+	formData.append('plantId', '1'); // Replace with actual plantId
+	formData.append('userId', '1'); // Replace with actual userId
+	formData.append('locationId', '1'); // Replace with actual locationId
+	formData.append('plantName', plantName);
+	formData.append('date', date);
+	formData.append('description', description);
+	formData.append('radius', radius);
+	formData.append('latitude', loc.lat());
+	formData.append('longitude', loc.lng());
+	selectedValues.forEach(value => formData.append('selectedValues', value));
+	if (photoFile) {
+	    formData.append('photo', photoFile);
+	}
 
 	// Send the data to the server
 	fetch('/myFlorabase/AddLogServlet', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		},
-		body: params.toString()  // Convert URLSearchParams to string
-	})
+	        method: 'POST',
+	        body: formData // FormData handles setting the correct multipart/form-data header
+	    })
 	.then(response => response.text())
 	.then(data => console.log('Server response:', data))
 	.catch(error => console.error('Error:', error));

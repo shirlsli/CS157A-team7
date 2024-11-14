@@ -1,5 +1,7 @@
 package header;
 
+import com.example.*;
+
 import java.io.*;
 import javax.servlet.http.*;
 import javax.servlet.RequestDispatcher;
@@ -16,19 +18,24 @@ public class profileServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-//        response.getWriter().append("Served at: ").append(request.getContextPath());
+
 		request.setAttribute("profileActive", "active");
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
-		dispatcher.forward(request, response);
-		// commented out below line because I got a IllegalStateException saying cannot
-		// call sendRedirect() after response has been committed
-		// response.sendRedirect("profile.jsp");
+		HttpSession curSession = request.getSession(false);
+		
+		if (curSession == null || curSession.getAttribute("user") == null) {
+			request.setAttribute("errorTitle", "You were logged out!");
+			request.setAttribute("errorMessage", "Please Sign In again.");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+		} else {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
+			dispatcher.forward(request, response);
+		}
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-
 	}
 
 	public void destroy() {
