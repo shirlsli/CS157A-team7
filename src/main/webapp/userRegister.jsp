@@ -3,8 +3,10 @@
 <html>
 <head>
 <title>User Registration</title>
-<link rel="icon" href="assets/myFlorabase_Logo_No_Text.svg" type="image/svg">
+<link rel="icon" href="assets/myFlorabase_Logo_No_Text.svg"
+	type="image/svg">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/errorBox.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet"
@@ -18,17 +20,19 @@
 				src='assets/myFlorabase_Logo_Text.svg' width="59" height="98" />
 				<h1 class="centerText">Sign Up</h1>
 			</span>
-			<form action="submitForm" method="post">
+			<form action="register" method="post">
 				<div class="inputGroup prevent-select">
 					<label class="textfield-label">Username</label> <span><input
-						type="text" name="uname" placeholder="Enter your username"
-						value="${uname}" required></span> <label class="invalid">${usrnmError}</label>
+						id="username" type="text" name="uname"
+						placeholder="Enter your username" 
+						pattern='^(?=[A-Za-z0-9_]{3,15}$)(?=.*[A-Za-z]).*'
+						title='Must only use letters, numbers, and underscores. Must be 3 to 15 characters, and at least one character must be a letter'
+						required></span> <label class="invalid" id="usernameStatus"></label>
 				</div>
 				<div class="inputGroup prevent-select">
 					<div class="psw-wrap">
 						<label class="textfield-label">Password</label> <input id="psw"
 							type="password" name="password" placeholder="Enter your password"
-							value="${password}"
 							pattern='(?=.*[!@#\$%\^\&\*\(\),\.\?:\{\}\|"])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
 							title="Must contain at least one number and one uppercase and lowercase letter and one special character, and at least 8 or more characters"
 							required>
@@ -82,9 +86,11 @@
 				</div>
 			</form>
 		</div>
+		<jsp:include page="WEB-INF/components/errorBox.jsp" />
 	</div>
-
+		
 </body>
+
 <script>
 	var myInput = document.getElementById("psw");
 	var letter = document.getElementById("letter");
@@ -95,6 +101,43 @@
 
 	var myInput2 = document.getElementById("psw2");
 	var match = document.getElementById("match");
+
+	// checks if the username is unique, gives live error message
+	document.getElementById("username").addEventListener("input", function() {
+			var username = this.value;
+			var statusElement = document
+					.getElementById("usernameStatus");
+
+			if (username.length >= 3) { // Only send request if username has at least 3 characters
+				// Create the AJAX request
+				var xhr = new XMLHttpRequest();
+				xhr.open("GET", "UsernameCheckServlet?username="
+						+ encodeURIComponent(username), true);
+
+				xhr.onload = function() {
+					if (xhr.status === 200) {
+						var response = JSON.parse(xhr.responseText);
+						if (response.available) {
+							statusElement.textContent = "";
+							document.getElementById("username").setCustomValidity('');
+						} else {
+							statusElement.textContent = "Username is already taken. Please enter a different username.";
+							document.getElementById("username").setCustomValidity('Please enter a different username');
+						}
+					} else {
+						console.error("Error checking username availability");
+					}
+				};
+
+				xhr.onerror = function() {
+					console.error("Request failed");
+				};
+
+				xhr.send();
+			} else {
+				statusElement.textContent = "";
+			}
+		});
 
 	// When the user clicks on the password field, show the message box
 	myInput.onfocus = function() {
@@ -135,7 +178,7 @@
 		if (!document.getElementById("psw").checkValidity()) {
 			document.getElementById("message").style.display = "block";
 		}
-		
+
 		var lowerCaseLetters = /[a-z]/g;
 		if (myInput.value.match(lowerCaseLetters)) {
 			letter.classList.remove("invalid");
@@ -185,18 +228,6 @@
 		}
 
 	}
-
-	/* togglePassword.addEventListener("click", function () {
-		  if (passwordField.type === "password") {
-		    passwordField.type = "text";
-		    togglePassword.classList.remove("fa-eye");
-		    togglePassword.classList.add("fa-eye-slash");
-		  } else {
-		    passwordField.type = "password";
-		    togglePassword.classList.remove("fa-eye-slash");
-		    togglePassword.classList.add("fa-eye");
-		  }
-		}); */
 
 	function togglePswVisibility() {
 		var x = document.getElementById("psw");
