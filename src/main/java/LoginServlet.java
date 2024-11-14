@@ -51,7 +51,7 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String databaseUser = "root";
-		String databasePassword = "root";
+		String databasePassword = System.getenv("DB_PASSWORD");
 		String uname = request.getParameter("uname");
 		String password = request.getParameter("password");
 
