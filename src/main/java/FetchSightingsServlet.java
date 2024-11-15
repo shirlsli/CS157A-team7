@@ -57,7 +57,6 @@ public class FetchSightingsServlet extends HttpServlet {
 	        String jsonResponse = gson.toJson(sightings);
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
-
 	        response.getWriter().write(jsonResponse);
 	        
 		} catch (SQLException e) {

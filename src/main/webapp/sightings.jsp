@@ -1,36 +1,10 @@
 <%@ page
-	import="java.sql.*, java.util.Properties, java.io.FileInputStream, java.io.IOException, java.util.HashMap, java.util.List, java.util.ArrayList, com.example.Sighting, com.example.User, com.example.Plant, java.util.Date"%>
+	import="java.sql.*, java.util.Properties, com.google.gson.Gson, java.io.FileInputStream, java.io.IOException, java.util.HashMap, java.util.List, java.util.ArrayList, com.example.Sighting, com.example.User, com.example.Plant, java.util.Date"%>
 <%
 String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
-
-String dUser; // assumes database name is the same as username
-dUser = "root";
-String pwd = System.getenv("DB_PASSWORD");
-User user = null;
-
-try {
-	java.sql.Connection con;
-	Class.forName("com.mysql.jdbc.Driver");
-	con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", dUser, pwd);
-	Statement statement = con.createStatement();
-	String sql = "SELECT * FROM myflorabase.user WHERE user_id=1";
-	String fetchSightingsSQL = "SELECT * FROM myflorabase.sighting";
-	ResultSet rs = statement.executeQuery(sql);
-	if (rs.next()) {
-		int userId = rs.getInt("user_id");
-		String username = rs.getString("username");
-		String password = rs.getString("password");
-		String description = rs.getString("description");
-		boolean isAdmin = rs.getBoolean("isAdmin");
-		user = new User(userId, username, password, description, isAdmin);
-		request.setAttribute("user", user);
-	}
-	rs.close();
-	statement.close();
-	con.close();
-} catch (SQLException e) {
-	System.out.println("SQLException caught: " + e.getMessage());
-}
+HttpSession curSession = request.getSession(false);
+User user = (User) curSession.getAttribute("user");
+String userJson = new Gson().toJson(user);
 %>
 <!DOCTYPE html>
 <html>
@@ -70,50 +44,43 @@ try {
 		<button type="button" id="weed">WEED</button>
 		<button type="button" id="none">NONE</button>
 	</div>
-	<!-- Load the Google Maps JavaScript API -->
-	<script>
-        // Expose the API key to the external JavaScript file
-        var GOOGLE_MAPS_API_KEY = "<%=apiKey%>
-		";
-	</script>
-	<script async
-		src="https://maps.googleapis.com/maps/api/js?key=<%=apiKey%>&callback=initMap">
-		
-	</script>
+
 
 	<script>
-        window.onload = function() {
-            var sightingsListContainer = document.getElementById('sightingsList');
-            fetch("/myFlorabase/getSightings")
-            .then(response => {
-              return response.json();
-            })
-            .then(sightings => {
-              console.log(sightings);  
-              sightings.forEach(sighting => {
-            	  fetch("/myFlorabase/getSightingInfo?userId=" + sighting.userId + "&plantId=" + sighting.plantId + "&locationId=" + sighting.locationId, {
-            		  method: 'GET',
-            		})
-            	  .then(response => {
-            		  return response.json();
-            	  })
-            	  .then(info => {
-            		  console.log(info);
-            		  // info[0] = user, info[1] = plant, info[2] = location
-            		  const sightingComponent = createSighting(sighting, info[0], info[1], info[2]);
-                	  sightingsListContainer.appendChild(sightingComponent);
-            	  })
-            	  .catch(error => {
-            		  console.error("Issue with fetching from FetchSightingInfo", error);
-            	  });
-              })
-            })
-            .catch(error => {
-              console.error("Issue with fetching from FetchSightingsServlet", error);
-            });
-        };
+	window.addEventListener("load", function() {
+        var sightingsListContainer = document.getElementById('sightingsList');
+        fetch("/myFlorabase/getSightings")
+        .then(response => {
+          return response.json();
+        })
+        .then(sightings => {
+          console.log(sightings);  
+          sightings.forEach(sighting => {
+        	  fetch("/myFlorabase/getSightingInfo?userId=" + sighting.userId + "&plantId=" + sighting.plantId + "&locationId=" + sighting.locationId, {
+        		  method: 'GET',
+        		})
+        	  .then(response => {
+        		  return response.json();
+        	  })
+        	  .then(info => {
+        		  console.log(info);
+        		  // info[0] = user, info[1] = plant, info[2] = location
+        		  const curUser = <%=userJson%>;
+        		  const sightingComponent = createSighting(sighting, info[0], info[1], info[2], curUser);
+            	  sightingsListContainer.appendChild(sightingComponent);
+        	  })
+        	  .catch(error => {
+        		  console.error("Issue with fetching from FetchSightingInfo", error);
+        	  });
+          })
+        })
+        .catch(error => {
+          console.error("Issue with fetching from FetchSightingsServlet", error);
+        });
+    })
+		
         
-        function createSighting(sighting, user, plant, location) {
+        function createSighting(sighting, user, plant, location, curUser) {
         	const sightingComponent = document.createElement('div');
         	const headerContainer = document.createElement('div');
         	  sightingComponent.classList.add('prevent-select', 'sightings-component');
@@ -146,7 +113,7 @@ try {
         	  editIcon.src = 'assets/edit_icon.svg';
         	  editIcon.width = 20;
         	  editIcon.height = 20;
-        	  editIcon.classList.add(user.isAdmin ? 'icon-shown' : 'icon-hidden');
+        	  editIcon.classList.add(curUser.isAdmin ? 'icon-shown' : 'icon-hidden');
         	  editIcon.addEventListener('mouseover', function() {
         		  changeImage(this, 'assets/edit_icon_hover.svg');
         		});
@@ -157,6 +124,7 @@ try {
 
         		editIcon.addEventListener('click', function() {
         		  changeImage(this, 'assets/edit_icon_hover.svg');
+        		  editSighting(location.latitude, location.longitude, sighting, plant);
         		});
         	  editButton.appendChild(editIcon);
 
@@ -166,7 +134,7 @@ try {
         	  trashIcon.src = 'assets/trash_icon.svg';
         	  trashIcon.width = 20;
         	  trashIcon.height = 20;
-        	  trashIcon.classList.add(user.isAdmin ? 'icon-shown' : 'icon-hidden');
+        	  trashIcon.classList.add(curUser.isAdmin ? 'icon-shown' : 'icon-hidden');
         	  trashIcon.addEventListener('mouseover', function() {
         		  changeImage(this, 'assets/trash_icon_hover.svg');
         		});
@@ -247,23 +215,28 @@ try {
 
         	  const tagRow = document.createElement('span');
         	  tagRow.classList.add('tag-row');
-
         	  const poisonousTag = document.createElement('span');
-        	  poisonousTag.classList.add(plant.isPoisonous ? 'icon-shown' : 'icon-hidden', 'tag', 'poisonous');
+        	  poisonousTag.classList.add(plant.poisonous ? 'icon-shown' : 'icon-hidden');
+        	  poisonousTag.classList.add('tag');
+        	  poisonousTag.classList.add('poisonous');
         	  const poisonousText = document.createElement('p');
         	  poisonousText.id = 'tagText';
         	  poisonousText.textContent = 'Poisonous';
         	  poisonousTag.appendChild(poisonousText);
 
         	  const invasiveTag = document.createElement('span');
-        	  invasiveTag.classList.add(plant.isInvasive ? 'icon-shown' : 'icon-hidden', 'tag', 'invasive');
+        	  invasiveTag.classList.add(plant.invasive ? 'icon-shown' : 'icon-hidden');
+        	  invasiveTag.classList.add('tag');
+        	  invasiveTag.classList.add('invasive');
         	  const invasiveText = document.createElement('p');
         	  invasiveText.id = 'tagText';
         	  invasiveText.textContent = 'Invasive';
         	  invasiveTag.appendChild(invasiveText);
 
         	  const endangeredTag = document.createElement('span');
-        	  endangeredTag.classList.add(plant.isEndangered ? 'icon-shown' : 'icon-hidden', 'tag', 'endangered');
+        	  endangeredTag.classList.add(plant.endangered ? 'icon-shown' : 'icon-hidden');
+        	  endangeredTag.classList.add('tag');
+        	  endangeredTag.classList.add('endangered');
         	  const endangeredText = document.createElement('p');
         	  endangeredText.id = 'tagText';
         	  endangeredText.textContent = 'Endangered';
@@ -289,11 +262,24 @@ try {
     		curImg.src = newImage;
     	}
 
-    	function editSighting() {
+    	function editSighting(latitude, longitude, sighting, plant) {
     		// call openModal with this sighting object
-    		// 
+    		const location = new google.maps.LatLng(latitude, longitude);
+    		openModal(location, sighting, plant);
     	}
     </script>
+
+	<!-- Load the Google Maps JavaScript API -->
+	<script>
+        // Expose the API key to the external JavaScript file
+       var GOOGLE_MAPS_API_KEY = "<%=apiKey%>";
+
+	</script>
+
+	<script async
+		src="https://maps.googleapis.com/maps/api/js?key=<%=apiKey%>&callback=initMap">
+		
+	</script>
 
 	<!-- Link to External JavaScript -->
 	<script src="./js/custom.js"></script>

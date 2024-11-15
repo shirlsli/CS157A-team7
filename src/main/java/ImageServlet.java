@@ -40,25 +40,24 @@ public class ImageServlet extends HttpServlet {
             try (PreparedStatement statement = con.prepareStatement(sql)) {
             	try (ResultSet rs = statement.executeQuery()) {
             		if (rs.next()) {
-                        Blob blob = rs.getBlob("profile_pic");
+                        Blob blob = rs.getBlob(imageAttributeName);
                         if (blob != null) {
                         	byte[] image = blob.getBytes(1, (int) blob.length());
                             response.setContentType("image/jpeg");
                             response.setContentLength(image.length);
-                            ServletOutputStream outputStream = response.getOutputStream();
-                            outputStream.write(image);
-                            outputStream.flush();
-                            outputStream.close();
+                            response.getOutputStream().write(image);
                         } else {
-                        	File defaultImageFile = new File("rose.png"); // need to change based on where working directory is
-                            byte[] defaultImage = Files.readAllBytes(defaultImageFile.toPath());
-                        	response.setContentType("image/jpeg");
-                            response.setContentLength(defaultImage.length);
-                            ServletOutputStream outputStream = response.getOutputStream();
-                            outputStream.write(defaultImage);
-                            outputStream.flush();
-                            outputStream.close();
+                        	System.out.println("What happened?");
                         }
+						/*
+						 * else { File defaultImageFile = new File("rose.png"); // need to change based
+						 * on where working directory is byte[] defaultImage =
+						 * Files.readAllBytes(defaultImageFile.toPath());
+						 * response.setContentType("image/jpeg");
+						 * response.setContentLength(defaultImage.length); ServletOutputStream
+						 * outputStream = response.getOutputStream(); outputStream.write(defaultImage);
+						 * outputStream.flush(); outputStream.close(); }
+						 */
                     }
             	}
             }

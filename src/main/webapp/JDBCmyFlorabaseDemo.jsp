@@ -84,6 +84,8 @@
 			"INSERT INTO myflorabase.location (latitude, longitude, name)" + "VALUES ('37.3352', '121.8811', 'SJSU')");
 			statement.executeUpdate("INSERT INTO myflorabase.mappreference (user_id, filter_id, location_id, zoom)"
 			+ "VALUES ('1', '1', 1, 125)");
+			statement.executeUpdate("INSERT INTO myflorabase.mappreference (user_id, filter_id, location_id, zoom)"
+					+ "VALUES ('2', '1', 1, 150)");
 			statement.executeUpdate(
 			"INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius)"
 					+ "VALUES (1, 1, 1, 1, 'Roses are red, violets are blue', '2024-11-11', null, 2)");

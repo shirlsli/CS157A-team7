@@ -28,7 +28,7 @@
 				<div class="column">
 					<div id="reportSightingsMap" class="reportSightingsMap"></div>
 					<span class="button-group">
-						<button class="major-button primary-button" type="submit">Report</button>
+						<button id="reportButton" class="major-button primary-button" type="submit">Report</button>
 						<button class="major-button secondary-button" type="button"
 							onclick="closeModal()">Close</button>
 					</span>
