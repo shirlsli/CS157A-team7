@@ -39,18 +39,25 @@ header {
 }
 
 /* Add an active class to highlight the current page */
-.topnav button.active {
+.topnav button.active-regular {
 	background-color: white;
 	color: black;
 	border-bottom: solid #308023 2px;
 }
 
-.hover-underline-animation {
+.topnav button.active-admin {
+	background-color: white;
+	color: black;
+	border-bottom: solid #B49C73 2px;
+}
+
+
+.hover-underline-animation-regular, .hover-underline-animation-admin {
 	display: inline-block;
 	position: relative;
 }
 
-.hover-underline-animation::after {
+.hover-underline-animation-regular::after {
 	content: '';
 	position: absolute;
 	width: 100%;
@@ -65,7 +72,22 @@ header {
 	padding: auto;
 }
 
-.hover-underline-animation:hover::after {
+.hover-underline-animation-admin::after {
+	content: '';
+	position: absolute;
+	width: 100%;
+	transform: scaleX(0);
+	height: 2px;
+	bottom: -3px;
+	left: 0;
+	background-color:  #B49C73;
+	transform-origin: bottom right;
+	transition: transform 0.25s ease-out;
+	margin: auto;
+	padding: auto;
+}
+
+.hover-underline-animation-regular:hover::after, .hover-underline-animation-admin:hover::after {
 	transform: scaleX(1);
 	transform-origin: bottom left;
 }

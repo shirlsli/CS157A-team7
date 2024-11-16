@@ -14,17 +14,17 @@
 		<h1 id="headerText" class="header-text">myFlorabase</h1>
 		<div class="topnav" id="right-Topnav">
 			<button id="sightings" onClick="sightings()"
-				class="${generalSightingActive} hover-underline-animation header-text">Sightings</button>
+				class="${generalSightingActive}-<%=user.isAdmin() ? "admin" : "regular"%> hover-underline-animation-<%=user.isAdmin() ? "admin" : "regular"%> header-text">Sightings</button>
 			<button id="mySightings" onClick="mySightings()"
-				class="${mySightingActive} hover-underline-animation header-text">My
+				class="${mySightingActive}-<%=user.isAdmin() ? "admin" : "regular"%> hover-underline-animation-<%=user.isAdmin() ? "admin" : "regular"%> header-text">My
 				Sightings</button>
 			<button id="reportSightings" onClick="reportSightings()"
-				class=" ${reportSightingActive} hover-underline-animation header-text">Report
+				class=" ${reportSightingActive}-<%=user.isAdmin() ? "admin" : "regular"%> hover-underline-animation-<%=user.isAdmin() ? "admin" : "regular"%> header-text">Report
 				Sighting</button>
 
 		</div>
 		<div id="profile-container" class="dropdown">
-			<div id="profile-underline" class="${profileActive}"></div>
+			<div id="profile-underline" class="${profileActive}-<%=user.isAdmin() ? "admin" : "regular"%>"></div>
 			<button id="profile-button"
 				class="<%=user.isAdmin() ? "admin" : "regular"%>"
 				onClick="profile()">
