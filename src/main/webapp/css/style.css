@@ -589,3 +589,21 @@ input {
 	width: 100%;
 	max-width: 400px;
 }
+
+/*filter modal*/
+.centered-column {
+	width: 55%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#filter-name-group {
+	width: 40%;
+}
+
+#filter-button-group {
+	gap: 40px;
+}
+
+
+
