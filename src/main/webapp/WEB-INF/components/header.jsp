@@ -13,6 +13,8 @@
 		src='assets/myFlorabase_Logo_No_Text.svg' />
 		<h1 id="headerText" class="header-text">myFlorabase</h1>
 		<div class="topnav" id="right-Topnav">
+			<button id="admin" onClick="adminPage()" style="display: <%=user.isAdmin() ? "inline" : "none"%>"
+				class ="${adminPageActive}-admin hover-underline-animation-admin header-text">Admin Page</button>
 			<button id="sightings" onClick="sightings()"
 				class="${generalSightingActive}-<%=user.isAdmin() ? "admin" : "regular"%> hover-underline-animation-<%=user.isAdmin() ? "admin" : "regular"%> header-text">Sightings</button>
 			<button id="mySightings" onClick="mySightings()"
@@ -43,6 +45,10 @@
 
 </header>
 <script>
+
+	function adminPage() {
+		window.location = 'adminpage'; // TODO: create servlet to load the correct page
+	}
 	function sightings() {
 		window.location = 'sightings';
 	}
