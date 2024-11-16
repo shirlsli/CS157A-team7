@@ -31,18 +31,8 @@
 		Class.forName("com.mysql.jdbc.Driver");
 		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", dUser, pwd);
 		Statement statement = con.createStatement();
-		String sql = "SELECT * FROM myflorabase.user WHERE user_id=" + user.getUserId();
-		ResultSet rs = statement.executeQuery(sql);
-		if (rs.next()) {
-			int userId = rs.getInt("user_id");
-			String username = rs.getString("username");
-			String password = rs.getString("password");
-			String description = rs.getString("description");
-			boolean isAdmin = rs.getBoolean("isAdmin");
-			user = new User(userId, username, password, description, isAdmin);
-		}
 		String mapPreferenceSQL = "SELECT * FROM myflorabase.mappreference WHERE user_id=" + user.getUserId();
-		rs = statement.executeQuery(mapPreferenceSQL);
+		ResultSet rs = statement.executeQuery(mapPreferenceSQL);
 		if (rs.next()) {
 			int preferenceId = rs.getInt("preference_id");
 			int prefUserId = rs.getInt("user_id");

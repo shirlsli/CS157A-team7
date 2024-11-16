@@ -1,11 +1,37 @@
 var clickedLocation;
 var loc;
 // Open the modal
-function openModal(location, sighting) {
+function openModal(location, sighting, plant) {
+	console.log(location);
 	const modalTitle = document.getElementById('modalTitle');
 	if (sighting != null) {
 		modalTitle.textContent = "Edit this Sighting";
 		// set the other values
+		const plantName = document.getElementById('plantName');
+		plantName.value = plant.name;
+		const date = document.getElementById('date');
+		const dateValue = new Date(sighting.date);
+		const year = dateValue.getFullYear();
+		const month = String(dateValue.getMonth() + 1).padStart(2, '0');
+		const day = String(dateValue.getDate()).padStart(2, '0');
+		const formattedDate = `${year}-${month}-${day}`;
+		date.value = formattedDate;
+		const description = document.getElementById('description');
+		description.textContent = sighting.description;
+		const radius = document.getElementById('radius');
+		radius.value = sighting.radius;
+		const selected = document.querySelectorAll('#specificTags input[type="checkbox"]');
+		if (plant.poisonous) {
+			selected[0].checked = true;
+		}
+		if (plant.invasive) {
+			selected[1].checked = true;
+		}
+		if (plant.endangered) {
+			selected[2].checked = true;
+		}
+		const reportButton = document.getElementById("reportButton");
+		reportButton.textContent = "Save";
 	} else {
 		modalTitle.textContent = "Report a New Sighting";
 	}
@@ -45,8 +71,8 @@ function closeModal() {
 
 // Handle form submission
 function submitMarker(event) {
-    event.preventDefault();
-	
+	event.preventDefault();
+
 	const plantName = document.getElementById('plantName').value.trim();
 	const date = document.getElementById('date').value.trim();
 	const description = document.getElementById('description').value.trim();
@@ -67,7 +93,7 @@ function submitMarker(event) {
 		return;
 	}
 	// Create a new marker using AdvancedMarkerElement in test.js
-	
+
 	const newMarker = new AdvancedMarkerElement({
 		map: map,
 		position: loc,
@@ -90,7 +116,7 @@ function submitMarker(event) {
 	} else {
 		attachInfoWindow(newMarker, infoContent);
 	}
-	
+
 	// Prepare URL-encoded data
 	const formData = new FormData();
 	formData.append('plantId', '1'); // Replace with actual plantId
@@ -104,17 +130,17 @@ function submitMarker(event) {
 	formData.append('longitude', loc.lng());
 	selectedValues.forEach(value => formData.append('selectedValues', value));
 	if (photoFile) {
-	    formData.append('photo', photoFile);
+		formData.append('photo', photoFile);
 	}
 
 	// Send the data to the server
 	fetch('/myFlorabase/AddLogServlet', {
-	        method: 'POST',
-	        body: formData // FormData handles setting the correct multipart/form-data header
-	    })
-	.then(response => response.text())
-	.then(data => console.log('Server response:', data))
-	.catch(error => console.error('Error:', error));
+		method: 'POST',
+		body: formData // FormData handles setting the correct multipart/form-data header
+	})
+		.then(response => response.text())
+		.then(data => console.log('Server response:', data))
+		.catch(error => console.error('Error:', error));
 
 	// Close the modal
 	closeModal();
