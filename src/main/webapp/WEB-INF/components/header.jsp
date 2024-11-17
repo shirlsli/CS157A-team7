@@ -27,6 +27,11 @@
 		</div>
 		<div id="profile-container" class="dropdown">
 			<div id="profile-underline" class="${profileActive}-<%=user.isAdmin() ? "admin" : "regular"%>"></div>
+
+			<div class="dropdown-content">
+				<button class="dropdown-button" onClick="profile()">Profile</button>
+				<button class="dropdown-button" onClick="logOut()">Log Out</button>
+			</div>
 			<button id="profile-button"
 				class="<%=user.isAdmin() ? "admin" : "regular"%>"
 				onClick="profile()">
@@ -34,10 +39,7 @@
 					src="/myFlorabase/getImage?condition=user_id&conditionValue=<%=user.getUserId()%>&imageAttributeName=profile_pic"
 					alt="Profile picture">
 			</button>
-			<div class="dropdown-content">
-				<button onClick="profile()">Profile</button>
-				<button onClick="logOut()">Log Out</button>
-			</div>
+			
 		</div>
 
 	</span>

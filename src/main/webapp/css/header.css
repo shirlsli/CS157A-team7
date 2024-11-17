@@ -122,8 +122,12 @@ header {
 	border-bottom: none;
 }
 
-#profile-underline.active {
+#profile-underline.active-regular {
 	border-bottom: solid #308023 2px;
+}
+
+#profile-underline.active-admin {
+	border-bottom: solid #B49C73 2px;
 }
 
 #profile-button {
@@ -165,13 +169,41 @@ header {
 	display: none;
 	background-color: #f9f9f9;
 	min-width: 100px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	padding: 12px 16px;
-	position: relative;
-	top: -90px;
-	left: -60px;
+	box-shadow: 0px 8px 16px 0px #EAAC9D;
+	padding: 20px 24px;
+	position: absolute;
+	top: 60px;
+	left: -70px;
+	border-radius: 30px;
 }
 
 .dropdown:hover .dropdown-content {
 	display: block;
+}
+
+button {
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none; /* Standard syntax */
+	min-width: 80px;
+	min-height: 30px;
+}
+
+.dropdown-button {
+	background: #FFFFFF;
+	border: 1px solid #EAAC9D;
+	border-radius: 30px;
+	font-weight: 800;
+	text-align: center;
+	color: #EAAC9D;
+	padding: 5px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	width: 100%;
+}
+
+button.dropdown-button:hover {
+	border: 1px solid #EAAC9D;
+	background: #EAAC9D;
+	color: black;
 }
