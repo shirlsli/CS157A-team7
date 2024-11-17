@@ -2,11 +2,9 @@ var clickedLocation;
 var loc;
 // Open the modal
 function openModal(location, sighting, plant) {
-	console.log(location);
 	const modalTitle = document.getElementById('modalTitle');
 	if (sighting != null) {
 		modalTitle.textContent = "Edit this Sighting";
-		// set the other values
 		const plantName = document.getElementById('plantName');
 		plantName.value = plant.name;
 		const date = document.getElementById('date');
@@ -40,6 +38,7 @@ function openModal(location, sighting, plant) {
 	header.style.display = "hidden";
 	modal.style.display = "block";
 	loadReportSightingsMap(location);
+	sessionStorage.setItem("sighting", JSON.stringify(sighting));
 	loc = location;
 }
 
@@ -117,11 +116,14 @@ function submitMarker(event) {
 		attachInfoWindow(newMarker, infoContent);
 	}
 
+	const sightingRaw = sessionStorage.getItem("sighting");
+	const sighting = sightingRaw !== "undefined" ? JSON.parse(sightingRaw) : null;
 	// Prepare URL-encoded data
 	const formData = new FormData();
-	formData.append('plantId', '1'); // Replace with actual plantId
-	formData.append('userId', '1'); // Replace with actual userId
-	formData.append('locationId', '1'); // Replace with actual locationId
+	formData.append('sightingId', sighting ? sighting.sightingId : -1);
+	formData.append('plantId', sighting ? sighting.plantId : -1);
+	formData.append('userId', sighting ? sighting.userId : -1);
+	formData.append('locationId', sighting ? sighting.locationId : -1);
 	formData.append('plantName', plantName);
 	formData.append('date', date);
 	formData.append('description', description);
@@ -133,17 +135,23 @@ function submitMarker(event) {
 		formData.append('photo', photoFile);
 	}
 
+	let url = '/myFlorabase/AddLogServlet';
+
+	if (sighting) {
+		url = '/myFlorabase/editSighting';
+	}
 	// Send the data to the server
-	fetch('/myFlorabase/AddLogServlet', {
+	fetch(url, {
 		method: 'POST',
-		body: formData // FormData handles setting the correct multipart/form-data header
+		body: formData
 	})
 		.then(response => response.text())
-		.then(data => console.log('Server response:', data))
+		.then(data => {
+			console.log('Successfully completed operation');
+			closeModal();
+			createPopup(sighting, (sighting) ? "Your edits have been saved." : "Thank you for your report! It's been successfully created.", "Close", "");
+		})
 		.catch(error => console.error('Error:', error));
-
-	// Close the modal
-	closeModal();
 }
 
 // Attach an info window to a marker
@@ -155,6 +163,33 @@ function attachInfoWindow(marker, content) {
 	marker.addListener('click', function() {
 		infoWindow.open(map, marker);
 	});
+}
+
+function createPopup(sighting, message, primaryButtonText, secondaryButtonText, primaryCallback) {
+	const popupContainer = document.getElementById("popupContainer");
+	popupContainer.classList.add('popup-modal');
+	const popup = document.createElement('div');
+	popup.classList.add('popup-modal-content');
+	const popupMessage = document.createElement('p');
+	popupMessage.textContent = message;
+	popupMessage.classList.add('popup-modal-message');
+	popup.appendChild(popupMessage);
+	if (secondaryButtonText !== "") {
+		createSaveCancelButtons(popup, primaryButtonText, secondaryButtonText, primaryCallback, function() {
+			popupContainer.removeChild(popup);
+			popupContainer.classList.remove('popup-modal');
+		});
+	} else {
+		const primaryButton = document.createElement("button");
+		primaryButton.classList.add("primary-button", "popup-modal-button");
+		primaryButton.textContent = primaryButtonText;
+
+		primaryButton.addEventListener("click", function() {
+			window.location.reload();
+		});
+		popup.appendChild(primaryButton);
+	}
+	popupContainer.appendChild(popup);
 }
 
 // Close the modal when the user clicks outside of it

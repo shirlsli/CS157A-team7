@@ -148,7 +148,7 @@ public class AddLogServlet extends HttpServlet {
 				+ "}";
 
 		try {
-			URL url = new URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + System.getenv("GEMINI_KEY"));
+			URL url = new URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=" + System.getenv("GEMINI_KEY"));
 			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");

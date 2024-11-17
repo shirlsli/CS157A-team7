@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="css/errorBox.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+	rel="stylesheet">
 
 </head>
 <body>
@@ -26,7 +29,7 @@
 					<div class="inputGroup textfield-label">
 						<label>Password</label> <input type="password" name="password"
 							placeholder="Enter your password" required>
-							
+
 						<!-- //TODO: Add toggle to show password -->
 						<!-- <button type="button" id="toggle-psw"
 							class="toggle-button material-symbols-outlined"
@@ -40,21 +43,20 @@
 					</div>
 				</form>
 				<div class="centerButtons">
-						<label class="label prevent-select">OR</label>
-						<button class="major-button secondary-button" value="Sign Up"
-							onclick="window.location.href='userRegister.jsp'">Sign
-							Up</button>
+					<label class="label prevent-select">OR</label>
+					<button class="major-button secondary-button" value="Sign Up"
+						onclick="window.location.href='userRegister.jsp'">Sign Up</button>
 				</div>
 			</div>
 		</div>
 
 	</div>
-	
-	<!-- Include the errorBox.jsp for displaying error messages when present -->   
+
+	<!-- Include the errorBox.jsp for displaying error messages when present -->
 	<jsp:include page="WEB-INF/components/errorBox.jsp" />
 
 
-<!-- <script>
+	<!-- <script>
 	function togglePswVisibility() {
 		var x = document.getElementById("psw");
 		if (x.type === "password") {
