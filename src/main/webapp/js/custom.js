@@ -4,10 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 let map;
-let clickedPosition;
 let AdvancedMarkerElement;
-
-// let pollen = "TREE_UPI"; 
 
 class PollenMapType {
     constructor(tileSize, apiKey) {
@@ -67,22 +64,59 @@ async function initMap() {
         mapId: "DEMO_MAP_ID",
     });
 
-    const marker = new AdvancedMarkerElement({
-        map: map,
-        position: position,
-        title: "SJSU",
-    });
-
-    map.addListener('click', function(event) {
-        clickedPosition = event.latLng;
-        openModal(clickedPosition);
-    });
-
     const apiKey = window.GOOGLE_MAPS_API_KEY;
 
     if (!apiKey) {
         console.error("Google Maps API key is not found.");
         return;
+    }
+
+    // Fetch the list of sightings
+    try {
+        const sightingsResponse = await fetch('/getSightings');
+        const sightings = await sightingsResponse.json();
+
+        // For each sighting, fetch additional info and place a marker on the map
+        for (const sighting of sightings) {
+            const { sightingId, plantId, userId, locationId, description, radius, date } = sighting;
+
+            // Fetch additional info for the sighting
+            const sightingInfoResponse = await fetch(`/getSightingInfo?userId=${userId}&plantId=${plantId}&locationId=${locationId}`);
+            const sightingInfo = await sightingInfoResponse.json();
+
+            // sightingInfo is an array of [user, plant, location]
+            const user = sightingInfo[0];
+            const plant = sightingInfo[1];
+            const location = sightingInfo[2];
+
+            const position = { lat: location.latitude, lng: location.longitude };
+
+            // Create a marker at the location
+            const marker = new AdvancedMarkerElement({
+                map: map,
+                position: position,
+                title: plant.name,
+            });
+
+            // Prepare content for the info window
+            let infoContent = `<h3>${plant.name}</h3>`;
+            if (description) {
+                infoContent += `<p>${description}</p>`;
+            }
+            infoContent += `<p>Date: ${new Date(date).toLocaleDateString()}</p>`;
+            infoContent += `<p>Reported by: ${user.username}</p>`;
+
+            // Attach an info window to the marker
+            const infoWindow = new google.maps.InfoWindow({
+                content: infoContent
+            });
+
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching sightings:', error);
     }
 
     // Commented out the pollen-related map overlay initialization
