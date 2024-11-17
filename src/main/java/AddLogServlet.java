@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import com.example.Plant;
+import com.example.User;
 
 import com.example.Plant;
 import com.example.User;
@@ -59,6 +61,7 @@ public class AddLogServlet extends HttpServlet {
 
 			int locationId = getOrInsertLocation(con, locationName, latitude, longitude);
 			int plantId = getOrInsertPlant(con, plant);
+
 			plant.setPlantId(plantId);
 			byte[] photoBytes = readPhotoBytes(photoPart);
 			insertSighting(con, plantId, userId, locationId, description, date, photoBytes, radius);
@@ -151,6 +154,7 @@ public class AddLogServlet extends HttpServlet {
 
 		try {
 			URL url = new URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + System.getenv("GEMINI_KEY"));
+
 			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");

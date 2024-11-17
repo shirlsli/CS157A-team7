@@ -29,6 +29,7 @@ public class ImageServlet extends HttpServlet {
 		String condition = request.getParameter("condition");
 		String conditionValue = request.getParameter("conditionValue");
 		String imageAttributeName = request.getParameter("imageAttributeName");
+		String table = request.getParameter("table");
 		String databaseUser = "root";
 		String databasePassword = System.getenv("DB_PASSWORD");
 		try {
@@ -36,7 +37,7 @@ public class ImageServlet extends HttpServlet {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", databaseUser, databasePassword);
 
-            String sql = "SELECT " + imageAttributeName + " FROM myflorabase.user WHERE " + condition + " = " + conditionValue;
+            String sql = "SELECT " + imageAttributeName + " FROM myflorabase." + table + " WHERE " + condition + " = " + conditionValue;
             try (PreparedStatement statement = con.prepareStatement(sql)) {
             	try (ResultSet rs = statement.executeQuery()) {
             		if (rs.next()) {
@@ -47,7 +48,7 @@ public class ImageServlet extends HttpServlet {
                             response.setContentLength(image.length);
                             response.getOutputStream().write(image);
                         } else {
-                        	System.out.println("What happened?");
+                        	System.out.println("There is no image associated with this query");
                         }
 						/*
 						 * else { File defaultImageFile = new File("rose.png"); // need to change based

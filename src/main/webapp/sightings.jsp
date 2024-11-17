@@ -22,7 +22,7 @@ String userJson = new Gson().toJson(user);
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-	<div class="sightingsPage">
+	<div id="sightingsPage" class="sightingsPage">
 		<div id="header"><jsp:include
 				page="WEB-INF/components/header.jsp"></jsp:include></div>
 		<div class="column-group">
@@ -37,6 +37,7 @@ String userJson = new Gson().toJson(user);
 		</div>
 		<!-- Modal Structure -->
 		<jsp:include page="WEB-INF/components/modal.jsp"></jsp:include>
+		<div id="popupContainer"></div>
 	</div>
 	<div id="container">
 		<button type="button" id="tree">TREE</button>
@@ -45,7 +46,8 @@ String userJson = new Gson().toJson(user);
 		<button type="button" id="none">NONE</button>
 	</div>
 
-
+	<script src="./js/buttons.js"></script>
+	<script src="./js/modal.js"></script>
 	<script>
 	window.addEventListener("load", function() {
         var sightingsListContainer = document.getElementById('sightingsList');
@@ -88,7 +90,7 @@ String userJson = new Gson().toJson(user);
         	  headerContainer.classList.add('header-container');
 
         	  const sightingPhoto = document.createElement('img');
-        	  sightingPhoto.src = "/myFlorabase/getImage?condition=sighting_id&conditionValue=" + sighting.sightingId + "&imageAttributeName=photo"; 
+        	  sightingPhoto.src = "/myFlorabase/getImage?condition=sighting_id&conditionValue=" + sighting.sightingId + "&imageAttributeName=photo" + "&table=sighting"; 
         	  sightingPhoto.width = 110;
         	  sightingPhoto.height = 100;
         	  sightingPhoto.classList.add('sighting-photo');
@@ -145,6 +147,7 @@ String userJson = new Gson().toJson(user);
 
         		trashIcon.addEventListener('click', function() {
         		  changeImage(this, 'assets/trash_icon_hover.svg');
+        		  deleteSighting(sighting);
         		});
         	  trashButton.appendChild(trashIcon);
 
@@ -166,16 +169,16 @@ String userJson = new Gson().toJson(user);
         	  
         	  const spottedByText = document.createElement('p');
         	  spottedByText.textContent = 'Spotted by';
-        	  const userUsername = document.createElement('p');
-        	  userUsername.classList.add(user.isAdmin ? 'isAdmin' : 'isRegular');
-        	  userUsername.id = "profileUsername";
-        	  userUsername.textContent = user.username;
+        	  const username = document.createElement('p');
+        	  username.classList.add(user.isAdmin ? 'isAdmin' : 'isRegular');
+        	  username.id = "profileUsername";
+        	  username.textContent = user.username;
         	  
         	  const spottedOn = document.createElement('p');
         	  spottedOn.textContent = "on " + sighting.date;
         	  
         	  spottedBy.appendChild(spottedByText);
-        	  spottedBy.appendChild(userUsername);
+        	  spottedBy.appendChild(username);
         	  spottedBy.appendChild(spottedOn);
 
         	  sightingInfo.appendChild(plantId);
@@ -206,7 +209,7 @@ String userJson = new Gson().toJson(user);
         	  locationRow.appendChild(locationText);
 
         	  const descriptionLabel = document.createElement('p');
-        	  descriptionLabel.classList.add('sighting-row', 'description-label', 'tag-row');
+        	  descriptionLabel.classList.add('sighting-row', 'description-label');
         	  descriptionLabel.textContent = 'Description';
 
         	  const description = document.createElement('p');
@@ -263,9 +266,32 @@ String userJson = new Gson().toJson(user);
     	}
 
     	function editSighting(latitude, longitude, sighting, plant) {
-    		// call openModal with this sighting object
     		const location = new google.maps.LatLng(latitude, longitude);
     		openModal(location, sighting, plant);
+    	}
+    	
+    	function deleteSighting(sighting) {
+    		createPopup(sighting, "Are you sure you want to delete this sighting?", "Delete", "Cancel", function() {
+    			const dateValue = new Date(sighting.date);
+        		const year = dateValue.getFullYear();
+        		const month = String(dateValue.getMonth() + 1).padStart(2, '0');
+        		const day = String(dateValue.getDate()).padStart(2, '0');
+        		const formattedDate = year + "-" + month + "-" + day;
+        		sighting.date = formattedDate;
+        		fetch('/myFlorabase/deleteSighting', {
+        			method: 'POST',
+        			headers: {
+        		        'Content-Type': 'application/json'
+        		    },
+        			body: JSON.stringify(sighting)
+        		})
+        			.then(response => response.text())
+        			.then(data => {
+        				console.log("Successfully deleted sighting");
+        				window.location.reload();
+        			})
+        			.catch(error => console.error('Error:', error)); 
+    		});
     	}
     </script>
 
@@ -283,6 +309,5 @@ String userJson = new Gson().toJson(user);
 
 	<!-- Link to External JavaScript -->
 	<script src="./js/custom.js"></script>
-	<script src="./js/modal.js"></script>
 </body>
 </html>

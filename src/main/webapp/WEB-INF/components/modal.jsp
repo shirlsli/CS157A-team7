@@ -1,8 +1,5 @@
 <%@ page
 	import="java.util.Properties, java.io.FileInputStream, java.io.IOException, com.example.Sighting, com.example.User, com.example.Plant, java.text.SimpleDateFormat"%>
-<%
-
-%>
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="./css/modals.css">
@@ -15,10 +12,6 @@
 <script src="./js/custom.js"></script>
 <script src="./js/modal.js"></script>
 </head>
-
-<script defer>
-	
-</script>
 
 <div id="markerModal" class="modal">
 	<div class="modal-content">

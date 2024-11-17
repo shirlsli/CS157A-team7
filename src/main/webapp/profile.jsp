@@ -2,7 +2,7 @@
 	import="java.sql.*, com.example.User, com.example.MapPreference, com.example.Filter, java.util.List, java.util.ArrayList"%>
 <html>
 <head>
-<title>myFlorabase Profile</title>
+<title>Profile</title>
 <link rel="icon" href="assets/myFlorabase_Logo_No_Text.svg"
 	type="image/svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,6 +11,7 @@
 	href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script src="./js/buttons.js"></script>
 </head>
 <body>
 	<%
@@ -83,6 +84,7 @@
             		formData.append('condition', "user_id");
             		formData.append('conditionValue', <%=user.getUserId()%>);
             		formData.append("imageAttributeName", "profile_pic");
+            		formData.append("table", "user");
 	                const reader = new FileReader();
 	                reader.onload = function(e) {
 	                    curProfilePicElement.src = e.target.result;
@@ -102,54 +104,6 @@
 	            }
 			})
 		}
-		
-		function primaryButtonClick(buttonId) {
-			buttonId.style.border = '1px solid #EAAC9D';
-			buttonId.style.background = 'white';
-			buttonId.style.color = "#EAAC9D"
-		    
-		    setTimeout(() => {
-		    	buttonId.style.border = '';
-		    	buttonId.style.background = '#EAAC9D';
-		    	buttonId.style.color = "black";
-		    }, 200);
-		}
-		
-		function secondaryButtonClick(buttonId) {
-			buttonId.style.background = '#EAAC9D';
-			buttonId.style.color = "black"
-		    
-		    setTimeout(() => {
-		    	buttonId.style.background = 'white';
-		    	buttonId.style.color = "#EAAC9D";
-		    }, 200);
-		}
-		
-		function createSaveCancelButtons(container, saveCallback, cancelCallback) {
-		    const saveButton = document.createElement("button");
-		    const cancelButton = document.createElement("button");
-
-		    saveButton.setAttribute("class", "primary-button");
-		    cancelButton.setAttribute("class", "secondary-button");
-
-		    saveButton.textContent = "Save";
-		    cancelButton.textContent = "Cancel";
-
-		    const buttonGroup = document.createElement("span");
-		    buttonGroup.setAttribute("id", "buttonGroup");
-
-		    buttonGroup.appendChild(saveButton);
-		    buttonGroup.appendChild(cancelButton);
-
-		    cancelButton.addEventListener("click", function() {
-		    	cancelCallback(cancelButton, buttonGroup);
-		    });
-		    saveButton.addEventListener("click", function() {
-		    	saveCallback(saveButton, buttonGroup);
-		    });
-		    container.appendChild(buttonGroup);
-		}
-
 
 		function editDescription(button) {
 			secondaryButtonClick(button);
@@ -163,7 +117,7 @@
 				textField.setAttribute("id", "descriptionEditBox");
 				descriptionDiv.appendChild(textField);
 				textField.focus();
-				createSaveCancelButtons(descriptionDiv, 
+				createSaveCancelButtons(descriptionDiv, "Save", "Cancel",
 			            function(saveButton, buttonGroup) {
 			                primaryButtonClick(saveButton);
 			                const newDescription = textField.value;
@@ -224,7 +178,7 @@
 				}
 				select.setAttribute("id", "zoomEditBox");
 				zoomDiv.appendChild(select);
-				createSaveCancelButtons(zoomDiv, 
+				createSaveCancelButtons(zoomDiv, "Save", "Cancel",
 			            function(saveButton, buttonGroup) {
 			                primaryButtonClick(saveButton);
 			                const newZoom = select.value;
@@ -336,7 +290,7 @@
 		<input type="file" id="fileUpload" style="display: none;"
 			accept="image/*"> <span> <img id="profilePic"
 			class="prevent-select <%=user.isAdmin() ? "isAdmin" : "isRegular"%>"
-			src="/myFlorabase/getImage?condition=user_id&conditionValue=<%=user.getUserId()%>&imageAttributeName=profile_pic"
+			src="/myFlorabase/getImage?condition=user_id&conditionValue=<%=user.getUserId()%>&imageAttributeName=profile_pic&table=user"
 			onclick="changeProfilePic(this)" />
 			<h1 class="<%=user.isAdmin() ? "isAdmin" : "isRegular"%>"
 				id="profileUsername"><%=user.getUsername()%></h1>
