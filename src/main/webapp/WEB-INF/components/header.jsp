@@ -36,7 +36,7 @@
 				class="<%=user.isAdmin() ? "admin" : "regular"%>"
 				onClick="profile()">
 				<img id="profile-img"
-					src="/myFlorabase/getImage?condition=user_id&conditionValue=<%=user.getUserId()%>&imageAttributeName=profile_pic"
+					src="/myFlorabase/getImage?condition=user_id&conditionValue=<%=user.getUserId()%>&imageAttributeName=profile_pic&table=user"
 					alt="Profile picture">
 			</button>
 			
