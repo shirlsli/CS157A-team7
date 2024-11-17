@@ -95,43 +95,66 @@ async function initMap() {
         return;
     }
 
-    fetch("/myFlorabase/getSightings")
-        .then(response => response.json())
-        .then(sightings => {
-            console.log(sightings);
-            let sightingsArray = [];
-            sightings.forEach(sighting => {
-                fetch(`/myFlorabase/getSightingInfo?userId=${sighting.userId}&plantId=${sighting.plantId}&locationId=${sighting.locationId}`, {
-                    method: 'GET',
-                })
-                .then(response => response.json())
-                .then(info => {
-                    console.log(info);
-                    // info[0] = user, info[1] = plant, info[2] = location
-                    sightingsArray.push(info);
+	fetch("/myFlorabase/getSightings")
+	    .then(response => response.json())
+	    .then(sightings => {
+	        console.log(sightings);
+	        let sightingsArray = [];
+	        sightings.forEach(sighting => {
+	            fetch(`/myFlorabase/getSightingInfo?userId=${sighting.userId}&plantId=${sighting.plantId}&locationId=${sighting.locationId}`, {
+	                method: 'GET',
+	            })
+	            .then(response => response.json())
+	            .then(info => {
+	                console.log(info);
+	                // info[0] = user, info[1] = plant, info[2] = location
+	                sightingsArray.push(info);
 
-                    // Create markers with info windows for each sighting
-                    const location = { lat: info[2].latitude, lng: info[2].longitude };
-                    const plantName = info[1].name;
-                    const newMarker = new AdvancedMarkerElement({
-                        map: map,
-                        position: location,
-                        title: plantName,
-                    });
-                    console.log('Marker added for:', plantName);
+	                // Create markers with info windows for each sighting
+	                const location = { lat: info[2].latitude, lng: info[2].longitude };
+	                const plantName = info[1].name;
+	                const newMarker = new AdvancedMarkerElement({
+	                    map: map,
+	                    position: location,
+	                    title: plantName,
+	                });
+	                console.log('Marker added for:', plantName);
 
-                    const infoContent = `<div><h3>${plantName}</h3><p>Location: ${info[2].name}</p><p>Reported by: ${info[0].username}</p></div>`;
-                    attachInfoWindow(newMarker, infoContent);
-                })
-                .catch(error => {
-                    console.error("Issue with fetching from FetchSightingInfo", error);
-                });
-            });
-            console.log("Parsed Sightings Array: ", sightingsArray);
-        })
-        .catch(error => {
-            console.error("Issue with fetching from FetchSightingsServlet", error);
-        });
+	                let infoContent = `
+	                    <div>
+	                        <h3>${plantName}</h3>
+	                        <p>Location: ${info[2].name}</p>
+	                        <p>Reported by: ${info[0].username}</p>
+	                    </div>`;
+
+	                // If sighting has a photo, convert it to a base64 string
+	                if (sighting.photo && sighting.photo.length > 0) {
+	                    const photoBase64 = arrayBufferToBase64(sighting.photo);
+	                    infoContent += `<img src="data:image/jpeg;base64,${photoBase64}" alt="Sighting Photo" style="max-width: 200px; max-height: 200px;"/>`;
+	                }
+
+	                attachInfoWindow(newMarker, infoContent);
+	            })
+	            .catch(error => {
+	                console.error("Issue with fetching from FetchSightingInfo", error);
+	            });
+	        });
+	        console.log("Parsed Sightings Array: ", sightingsArray);
+	    })
+	    .catch(error => {
+	        console.error("Issue with fetching from FetchSightingsServlet", error);
+	    });
+
+	// Helper function to convert byte array to base64 string
+	function arrayBufferToBase64(buffer) {
+	    let binary = '';
+	    const bytes = new Uint8Array(buffer);
+	    for (let i = 0; i < bytes.byteLength; i++) {
+	        binary += String.fromCharCode(bytes[i]);
+	    }
+	    return btoa(binary);
+	}
+
 
     // Commented out the pollen-related map overlay initialization
     // const pollenMapType = new PollenMapType(new google.maps.Size(256, 256), apiKey);
@@ -158,5 +181,5 @@ async function initMap() {
 }
 
 window.initMap = initMap;
-console.log("Test 2");
+console.log("Test 2222");
 initMap();
