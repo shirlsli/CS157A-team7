@@ -55,6 +55,16 @@ function updatePollenMapType(map, apiKey) {
     map.overlayMapTypes.insertAt(0, newPollenMapType);
 }
 
+function attachInfoWindow(marker, content) {
+    const infoWindow = new google.maps.InfoWindow({
+        content: content
+    });
+
+    marker.addListener('click', function() {
+        infoWindow.open(map, marker);
+    });
+}
+
 async function initMap() {
     const position = { lat: 37.3352, lng: -121.8811 };
     //@ts-ignore
@@ -85,7 +95,6 @@ async function initMap() {
         return;
     }
 
-    const sightingsListContainer = document.getElementById('sightingsList');
     fetch("/myFlorabase/getSightings")
         .then(response => response.json())
         .then(sightings => {
@@ -100,6 +109,19 @@ async function initMap() {
                     console.log(info);
                     // info[0] = user, info[1] = plant, info[2] = location
                     sightingsArray.push(info);
+
+                    // Create markers with info windows for each sighting
+                    const location = { lat: info[2].latitude, lng: info[2].longitude };
+                    const plantName = info[1].name;
+                    const newMarker = new AdvancedMarkerElement({
+                        map: map,
+                        position: location,
+                        title: plantName,
+                    });
+                    console.log('Marker added for:', plantName);
+
+                    const infoContent = `<div><h3>${plantName}</h3><p>Location: ${info[2].name}</p><p>Reported by: ${info[0].username}</p></div>`;
+                    attachInfoWindow(newMarker, infoContent);
                 })
                 .catch(error => {
                     console.error("Issue with fetching from FetchSightingInfo", error);
@@ -136,5 +158,5 @@ async function initMap() {
 }
 
 window.initMap = initMap;
-console.log("Test 10");
+console.log("Test 2");
 initMap();
