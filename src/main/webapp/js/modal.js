@@ -119,9 +119,6 @@ function submitMarker(event) {
 
 	// Prepare URL-encoded data
 	const formData = new FormData();
-	formData.append('plantId', '1'); // Replace with actual plantId
-	formData.append('userId', '1'); // Replace with actual userId
-	formData.append('locationId', '1'); // Replace with actual locationId
 	formData.append('plantName', plantName);
 	formData.append('date', date);
 	formData.append('description', description);

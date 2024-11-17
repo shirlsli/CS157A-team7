@@ -20,7 +20,7 @@
             + "`location_id` INT NOT NULL, "
             + "`description` TEXT, "
             + "`date` DATE, "
-            + "`photo` BLOB, "
+            + "`photo` MEDIUMBLOB, "
             + "`radius` INT, "
             + "PRIMARY KEY (`sighting_id`, `plant_id`, `user_id`, `location_id`)"
             + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
