@@ -47,7 +47,9 @@ public class FetchSightingsServlet extends HttpServlet {
 				String description = rs.getString("description");
 				double radius = rs.getDouble("radius");
 				Date date = rs.getDate("date");
+				byte[] photo = rs.getBytes("photo");
 				Sighting curSighting = new Sighting(sightingId, plantId, userId, locationId, description, radius, date);
+				curSighting.setPhoto(photo);
 				sightings.add(curSighting);
 			}
 			rs.close();

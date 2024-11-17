@@ -120,10 +120,12 @@ function submitMarker(event) {
 	const sighting = sightingRaw !== "undefined" ? JSON.parse(sightingRaw) : null;
 	// Prepare URL-encoded data
 	const formData = new FormData();
+  
 	formData.append('sightingId', sighting ? sighting.sightingId : -1);
 	formData.append('plantId', sighting ? sighting.plantId : -1);
 	formData.append('userId', sighting ? sighting.userId : -1);
 	formData.append('locationId', sighting ? sighting.locationId : -1);
+  
 	formData.append('plantName', plantName);
 	formData.append('date', date);
 	formData.append('description', description);

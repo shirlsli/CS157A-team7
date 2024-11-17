@@ -32,8 +32,18 @@
 		Class.forName("com.mysql.jdbc.Driver");
 		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", dUser, pwd);
 		Statement statement = con.createStatement();
+		String sql = "SELECT * FROM myflorabase.user WHERE user_id=" + user.getUserId();
+		ResultSet rs = statement.executeQuery(sql);
+		if (rs.next()) {
+			int userId = rs.getInt("user_id");
+			String username = rs.getString("username");
+			String password = rs.getString("password");
+			String description = rs.getString("description");
+			boolean isAdmin = rs.getBoolean("isAdmin");
+			user = new User(userId, username, password, description, isAdmin);
+		}
 		String mapPreferenceSQL = "SELECT * FROM myflorabase.mappreference WHERE user_id=" + user.getUserId();
-		ResultSet rs = statement.executeQuery(mapPreferenceSQL);
+		rs = statement.executeQuery(mapPreferenceSQL);
 		if (rs.next()) {
 			int preferenceId = rs.getInt("preference_id");
 			int prefUserId = rs.getInt("user_id");
@@ -208,6 +218,72 @@
 			}
 		}
 		
+		// open the new filter modal
+		function newFilter(button) {
+			const modalTitle = document.getElementById('modalTitle');			
+			modalTitle.textContent = "Add a new filter"
+			
+			const modal = document.getElementById('filterModal');
+			modal.style.display = "block";
+		}
+		
+		// Close the new filter modal
+		function closeNewFilterModal() {
+			const modal = document.getElementById('filterModal');
+			modal.style.display = "none";
+			document.getElementById('filterForm').reset();
+		}	
+		
+		// Form Submission for adding new filter
+		function submitFilter(event) {
+			event.preventDefault();
+			
+			// filter name
+			const filterName = document.getElementById('filterName').value.trim();
+			
+			// selected plants
+			const selectedPlants = document.querySelectorAll('#filterForm input[type="checkbox"]:checked');
+			
+			if (filterName.length === 0){
+				alert('Please enter a filter name.');
+				return;
+			}
+			
+			if (selectedPlants.length === 0) {
+		        alert('Please select at least one plant option.');
+		        return;  // Prevent form submission if no checkbox is selected
+		    }
+			
+			
+			// Prepare URL-encoded data
+			const formData = new FormData();
+			
+			// Append the value of each checked checkbox to the FormData object
+		    selectedPlants.forEach(function(checkbox) {
+		        formData.append('selectedPlants', checkbox.value);
+		    });
+			
+			formData.append('filterName', filterName);
+			
+			 // Log each key-value pair in the FormData object
+	        for (const [key, value] of formData.entries()) {
+	            console.log(key, `:`, value);
+	        }
+						
+			// Send the data to the server
+			fetch('/myFlorabase/AddFilterServlet', {
+				method: 'POST',
+				body: formData // FormData handles setting the correct multipart/form-data header
+			})
+				.then(response => response.text())
+				.then(data => console.log('Server response:', data))
+				.catch(error => console.error('Error:', error));
+
+			// Close the new filter modal
+			closeNewFilterModal();
+		}
+		
+		
 	</script>
 	<jsp:include page="WEB-INF/components/header.jsp"></jsp:include>
 	<div id="profilePage">
@@ -248,6 +324,9 @@
 			}
 			%>
 		</div>
+		
+		<jsp:include page="WEB-INF/components/newFilter.jsp"></jsp:include>
+		
 	</div>
 </body>
 </html>

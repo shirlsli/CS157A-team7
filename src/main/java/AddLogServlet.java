@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -20,6 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import com.example.Plant;
+import com.example.User;
+
 import com.example.Plant;
 import com.example.User;
 
@@ -36,11 +40,11 @@ public class AddLogServlet extends HttpServlet {
 		double latitude = Double.parseDouble(request.getParameter("latitude"));
 		double longitude = Double.parseDouble(request.getParameter("longitude"));
 		Part photoPart = request.getPart("photo");	
-		
+
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 		int userId = user.getUserId();
-		
+
 		String locationName = getLocationName(latitude, longitude);
 		Plant plant = getPlantInformation(plantName);
 		String databaseUser = "root";
@@ -55,8 +59,9 @@ public class AddLogServlet extends HttpServlet {
 				databasePassword
 			);
 
-			int locationId = insertLocation(con, locationName, latitude, longitude);
-			int plantId = insertPlant(con, plant);
+			int locationId = getOrInsertLocation(con, locationName, latitude, longitude);
+			int plantId = getOrInsertPlant(con, plant);
+
 			plant.setPlantId(plantId);
 			byte[] photoBytes = readPhotoBytes(photoPart);
 			insertSighting(con, plantId, userId, locationId, description, date, photoBytes, radius);
@@ -148,7 +153,8 @@ public class AddLogServlet extends HttpServlet {
 				+ "}";
 
 		try {
-			URL url = new URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=" + System.getenv("GEMINI_KEY"));
+			URL url = new URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + System.getenv("GEMINI_KEY"));
+
 			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
@@ -213,45 +219,63 @@ public class AddLogServlet extends HttpServlet {
 		return plant;
 	}
 
-	private int insertLocation(java.sql.Connection con, String locationName, double latitude, double longitude) throws SQLException {
+	private int getOrInsertLocation(java.sql.Connection con, String locationName, double latitude, double longitude) throws SQLException {
 		int locationId = 0;
-		String insertLocationSQL = "INSERT INTO Location (latitude, longitude, name) VALUES (?, ?, ?)";
-		try (PreparedStatement insertLocationStatement = con.prepareStatement(insertLocationSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
-			insertLocationStatement.setDouble(1, latitude);
-			insertLocationStatement.setDouble(2, longitude);
-			insertLocationStatement.setString(3, locationName);
-			insertLocationStatement.executeUpdate();
-
-			try (ResultSet generatedKeys = insertLocationStatement.getGeneratedKeys()) {
-				if (generatedKeys.next()) {
-					locationId = generatedKeys.getInt(1);
-					System.out.println("New location inserted with ID: " + locationId);
+		String selectLocationSQL = "SELECT location_id FROM Location WHERE name = ?";
+		try (PreparedStatement selectLocationStatement = con.prepareStatement(selectLocationSQL)) {
+			selectLocationStatement.setString(1, locationName);
+			try (ResultSet resultSet = selectLocationStatement.executeQuery()) {
+				if (resultSet.next()) {
+					locationId = resultSet.getInt("location_id");
+					System.out.println("Existing location found with ID: " + locationId);
 				} else {
-					throw new SQLException("Inserting location failed, no ID obtained.");
+					String insertLocationSQL = "INSERT INTO Location (latitude, longitude, name) VALUES (?, ?, ?)";
+					try (PreparedStatement insertLocationStatement = con.prepareStatement(insertLocationSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
+						insertLocationStatement.setDouble(1, latitude);
+						insertLocationStatement.setDouble(2, longitude);
+						insertLocationStatement.setString(3, locationName);
+						insertLocationStatement.executeUpdate();
+
+						try (ResultSet generatedKeys = insertLocationStatement.getGeneratedKeys()) {
+							if (generatedKeys.next()) {
+								locationId = generatedKeys.getInt(1);
+								System.out.println("New location inserted with ID: " + locationId);
+							}
+						}
+					}
 				}
 			}
 		}
 		return locationId;
 	}
 
-	private int insertPlant(java.sql.Connection con, Plant plant) throws SQLException {
+	private int getOrInsertPlant(java.sql.Connection con, Plant plant) throws SQLException {
 		int plantId = 0;
-		String insertPlantSQL = "INSERT INTO Plant (name, scientific_name, description, poisonous, invasive, endangered) VALUES (?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement insertPlantStatement = con.prepareStatement(insertPlantSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
-			insertPlantStatement.setString(1, plant.getName());
-			insertPlantStatement.setString(2, plant.getScientificName());
-			insertPlantStatement.setString(3, plant.getDescription());
-			insertPlantStatement.setBoolean(4, plant.isPoisonous());
-			insertPlantStatement.setBoolean(5, plant.isInvasive());
-			insertPlantStatement.setBoolean(6, plant.isEndangered());
-			insertPlantStatement.executeUpdate();
-
-			try (ResultSet generatedKeys = insertPlantStatement.getGeneratedKeys()) {
-				if (generatedKeys.next()) {
-					plantId = generatedKeys.getInt(1);
-					System.out.println("New plant inserted with ID: " + plantId);
+		String selectPlantSQL = "SELECT plant_id FROM Plant WHERE name = ?";
+		try (PreparedStatement selectPlantStatement = con.prepareStatement(selectPlantSQL)) {
+			selectPlantStatement.setString(1, plant.getName());
+			try (ResultSet resultSet = selectPlantStatement.executeQuery()) {
+				if (resultSet.next()) {
+					plantId = resultSet.getInt("plant_id");
+					System.out.println("Existing plant found with ID: " + plantId);
 				} else {
-					throw new SQLException("Inserting plant failed, no ID obtained.");
+					String insertPlantSQL = "INSERT INTO Plant (name, scientific_name, description, poisonous, invasive, endangered) VALUES (?, ?, ?, ?, ?, ?)";
+					try (PreparedStatement insertPlantStatement = con.prepareStatement(insertPlantSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
+						insertPlantStatement.setString(1, plant.getName());
+						insertPlantStatement.setString(2, plant.getScientificName());
+						insertPlantStatement.setString(3, plant.getDescription());
+						insertPlantStatement.setBoolean(4, plant.isPoisonous());
+						insertPlantStatement.setBoolean(5, plant.isInvasive());
+						insertPlantStatement.setBoolean(6, plant.isEndangered());
+						insertPlantStatement.executeUpdate();
+
+						try (ResultSet generatedKeys = insertPlantStatement.getGeneratedKeys()) {
+							if (generatedKeys.next()) {
+								plantId = generatedKeys.getInt(1);
+								System.out.println("New plant inserted with ID: " + plantId);
+							}
+						}
+					}
 				}
 			}
 		}
