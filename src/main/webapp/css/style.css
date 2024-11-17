@@ -8,10 +8,10 @@
  * Optional: Makes the sample page fill the window. 
  */
 html, body {
-	height: 100%;
 	margin: 0;
 	padding: 0;
 	font-family: 'Inter', sans-serif;
+	width: 100vw;
 }
 
 header {
@@ -198,7 +198,6 @@ textarea {
 	resize: none;
 	background: #FFFFFF;
 	font-family: 'Inter', sans-serif;
-	color: #858585;
 	margin: 8px 0;
 	box-sizing: border-box;
 }
@@ -317,6 +316,7 @@ input {
 	font-size: 14px;
 	color: #858585;
 }
+
 #usernameMessage p {
 	padding: 10px 35px;
 	font-size: 18px;
@@ -365,29 +365,30 @@ input {
 }
 
 #map {
-	width: 50vw;
+	width: 80vw;
 	height: calc(100vh - 80px);
 }
 
 .pageTitle {
 	margin-block-start: 0;
+	margin-block-end: 0;
 }
 
 .sightingsPage {
 	width: 100vw;
-	height: 100vh;
+	/* height: 100vh; */
 	overflow-y: hidden;
 }
 
 .column-group {
 	display: flex;
 	gap: 40px;
-	height: 500px;
+/* 	height: 500px; */
 }
 
 .column {
 	width: 50%;
-	height: 100%;
+	/* height: 100%; */
 }
 
 .reportSightingsMap {
@@ -419,7 +420,8 @@ input {
 
 .sighting-header {
 	margin-top: 0;
-	margin-bottom: 0; font-style : normal;
+	margin-bottom: 0;
+	font-style: normal;
 	font-weight: 700;
 	font-size: 24px;
 	text-align: center;
@@ -437,6 +439,8 @@ input {
 
 .description-label {
 	font-weight: 700;
+	margin-top: 20px;
+	margin-bottom: 10px;
 }
 
 .sentence {
@@ -458,6 +462,7 @@ input {
 
 .tag-row {
 	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .tag {
@@ -483,7 +488,7 @@ input {
 }
 
 .icon-button {
-	border: none; 
+	border: none;
 	background: none;
 	width: fit-content;
 	min-width: 0;
@@ -491,18 +496,18 @@ input {
 
 #registerConfirmationPage {
 	display: flex;
-  	justify-content: center; 
-  	align-items: center;     
-  	height: 100vh;   
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
 }
 
 #registerConfirmationHeader {
 	display: flex;
-  	justify-content: center;
-  	gap: 20px;
+	justify-content: center;
+	gap: 20px;
 }
 
-#registerConfirmationMessage{
+#registerConfirmationMessage {
 	margin: auto;
 	width: max-content;
 	text-align: left;
@@ -538,13 +543,8 @@ input {
 }
 
 /*toggle psw visibility*/
-
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
+	font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
 }
 
 .psw-wrap {
@@ -563,10 +563,81 @@ input {
 	border-radius: 30px;
 	border: none;
 }
+
 .toggle-button {
 	min-width: 30px;
 	min-height: 10px;
 	padding: 0px;
-
-	
 }
+
+.sightings-title {
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 30px;
+}
+
+.sightings-component {
+	width: 400px;
+	max-width: 400px;
+	margin-bottom: 40px;
+}
+
+.sightings-column-div {
+	margin: 0 auto;
+}
+
+.header-container {
+	width: 100%;
+	max-width: 400px;
+}
+
+.popup-modal {
+	display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.popup-modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.popup-modal-message {
+	margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.popup-modal-button {
+    float: right;
+}
+
+/*filter modal*/
+.centered-column {
+	width: 55%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#filter-name-group {
+	width: 40%;
+}
+
+#filter-button-group {
+	gap: 40px;
+}
+

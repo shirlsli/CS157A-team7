@@ -23,6 +23,10 @@ html, body {
     height: calc(100vh - 80px);
 }
 
+#modalTitle {
+	margin-bottom: 20px;
+}
+
 .form-group {
     margin-bottom: 15px;
 }

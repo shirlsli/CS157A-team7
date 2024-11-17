@@ -29,37 +29,36 @@ public class ImageServlet extends HttpServlet {
 		String condition = request.getParameter("condition");
 		String conditionValue = request.getParameter("conditionValue");
 		String imageAttributeName = request.getParameter("imageAttributeName");
+		String table = request.getParameter("table");
 		String databaseUser = "root";
-		String databasePassword = "root";
+		String databasePassword = System.getenv("DB_PASSWORD");
 		try {
 			java.sql.Connection con;
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", databaseUser, databasePassword);
 
-            String sql = "SELECT " + imageAttributeName + " FROM myflorabase.user WHERE " + condition + " = ?";
+            String sql = "SELECT " + imageAttributeName + " FROM myflorabase." + table + " WHERE " + condition + " = " + conditionValue;
             try (PreparedStatement statement = con.prepareStatement(sql)) {
-            	statement.setInt(1, Integer.parseInt(conditionValue));
             	try (ResultSet rs = statement.executeQuery()) {
             		if (rs.next()) {
-                        Blob blob = rs.getBlob("profile_pic");
+                        Blob blob = rs.getBlob(imageAttributeName);
                         if (blob != null) {
                         	byte[] image = blob.getBytes(1, (int) blob.length());
                             response.setContentType("image/jpeg");
                             response.setContentLength(image.length);
-                            ServletOutputStream outputStream = response.getOutputStream();
-                            outputStream.write(image);
-                            outputStream.flush();
-                            outputStream.close();
+                            response.getOutputStream().write(image);
                         } else {
-                        	File defaultImageFile = new File("../../eclipse-workspace/myFlorabase/src/main/webapp/assets/default_profile_pic.jpg"); // need to change based on where working directory is
-                            byte[] defaultImage = Files.readAllBytes(defaultImageFile.toPath());
-                        	response.setContentType("image/jpeg");
-                            response.setContentLength(defaultImage.length);
-                            ServletOutputStream outputStream = response.getOutputStream();
-                            outputStream.write(defaultImage);
-                            outputStream.flush();
-                            outputStream.close();
+                        	System.out.println("There is no image associated with this query");
                         }
+						/*
+						 * else { File defaultImageFile = new File("rose.png"); // need to change based
+						 * on where working directory is byte[] defaultImage =
+						 * Files.readAllBytes(defaultImageFile.toPath());
+						 * response.setContentType("image/jpeg");
+						 * response.setContentLength(defaultImage.length); ServletOutputStream
+						 * outputStream = response.getOutputStream(); outputStream.write(defaultImage);
+						 * outputStream.flush(); outputStream.close(); }
+						 */
                     }
             	}
             }

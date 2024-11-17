@@ -1,14 +1,17 @@
-#logo-img {
-	width: 83px;
-	height: 109px;
+header {
+	width: calc(100vw - 80px);
 }
 
-#headerText {
+#logo-img {
+	width: 63px;
+	height: 89px;
+}
+
+.header-text {
 	font-family: 'Inter', sans-serif;
 	font-style: normal;
 	font-weight: 400;
-	font-size: 40px;
-	line-height: 40px;
+	font-size: 20px;
 	color: #000000;
 	margin-right: auto;
 }
@@ -26,28 +29,35 @@
 	font-family: 'Inter', sans-serif;
 	font-style: normal;
 	font-weight: 400;
-	font-size: 32px;
+	font-size: 20px;
 	line-height: 39px;
 	color: #858585;
-	margin: 20px;
+	margin: 30px 70px 30px 70px;
 	border: none;
 	background-color: white;
-	padding: 0px;;
+	padding: 0px;
 }
 
 /* Add an active class to highlight the current page */
-.topnav button.active {
+.topnav button.active-regular {
 	background-color: white;
 	color: black;
 	border-bottom: solid #308023 2px;
 }
 
-.hover-underline-animation {
+.topnav button.active-admin {
+	background-color: white;
+	color: black;
+	border-bottom: solid #B49C73 2px;
+}
+
+
+.hover-underline-animation-regular, .hover-underline-animation-admin {
 	display: inline-block;
 	position: relative;
 }
 
-.hover-underline-animation::after {
+.hover-underline-animation-regular::after {
 	content: '';
 	position: absolute;
 	width: 100%;
@@ -62,7 +72,22 @@
 	padding: auto;
 }
 
-.hover-underline-animation:hover::after {
+.hover-underline-animation-admin::after {
+	content: '';
+	position: absolute;
+	width: 100%;
+	transform: scaleX(0);
+	height: 2px;
+	bottom: -3px;
+	left: 0;
+	background-color:  #B49C73;
+	transform-origin: bottom right;
+	transition: transform 0.25s ease-out;
+	margin: auto;
+	padding: auto;
+}
+
+.hover-underline-animation-regular:hover::after, .hover-underline-animation-admin:hover::after {
 	transform: scaleX(1);
 	transform-origin: bottom left;
 }
@@ -70,7 +95,7 @@
 #navbar {
 	display: flex;
 	min-width: 100%;
-	min-height:100px;
+	min-height: 100px;
 }
 
 #right-Topnav {
@@ -78,27 +103,107 @@
 	float: right;
 }
 
+/*Profile pic: */
+#profile-container {
+	box-sizing: border-box;
+	width: 75px;
+	height: 85px;
+	background: none;
+	border-radius: 50px;
+}
+
+#profile-underline {
+	box-sizing: border-box;
+	width: 45px;
+	height: 100%;
+	justify-self: center;
+	position: relative;
+	left: 0px;
+	border-bottom: none;
+}
+
+#profile-underline.active-regular {
+	border-bottom: solid #308023 2px;
+}
+
+#profile-underline.active-admin {
+	border-bottom: solid #B49C73 2px;
+}
+
 #profile-button {
 	box-sizing: border-box;
+	position: relative;
 	min-width: 75px;
-	min-height: 75px;
 	max-width: 75px;
-	max-height: 75px;
+	width: 100%;
+	aspect-ratio: 1/1;
 	background: none;
-	border: 1px solid #B49C73;
-	border-radius:50px;
+	border-radius: 50px;
 	padding: 0px;
+	left: 0px;
+	top: -85px;
+}
+
+#profile-button.admin {
+	border: 3px solid #B49C73;
+}
+
+#profile-button.regular {
+	border: 3px solid #308023;
 }
 
 #profile-img {
 	box-sizing: content-box;
- 	width: 100%;
- 	height: 100%;
-	border-radius:50px;
-	padding: 0px;
+	width: 100%;
+	aspect-ratio: 1/1;
+	border-radius: 50px;
 }
 
-#profile-img.active {
-	box-sizing: border-box;
-	border: 5px solid #308023;
+/*Profile drop down menu*/
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown-content {
+	display: none;
+	background-color: #f9f9f9;
+	min-width: 100px;
+	box-shadow: 0px 8px 16px 0px #EAAC9D;
+	padding: 20px 24px;
+	position: absolute;
+	top: 60px;
+	left: -70px;
+	border-radius: 30px;
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+button {
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none; /* Standard syntax */
+	min-width: 80px;
+	min-height: 30px;
+}
+
+.dropdown-button {
+	background: #FFFFFF;
+	border: 1px solid #EAAC9D;
+	border-radius: 30px;
+	font-weight: 800;
+	text-align: center;
+	color: #EAAC9D;
+	padding: 5px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	width: 100%;
+}
+
+button.dropdown-button:hover {
+	border: 1px solid #EAAC9D;
+	background: #EAAC9D;
+	color: black;
 }

@@ -18,7 +18,7 @@ public class UpdateDescriptionServlet extends HttpServlet {
 		String description = request.getParameter("description");
         String userId = request.getParameter("userId");
 		String databaseUser = "root";
-		String databasePassword = "root";
+		String databasePassword = System.getenv("DB_PASSWORD");
 		try {
 			java.sql.Connection con;
             Class.forName("com.mysql.jdbc.Driver");
