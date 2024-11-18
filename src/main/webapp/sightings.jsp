@@ -127,7 +127,7 @@ if (request.getAttribute("mySightingActive") != null) {
         	  editIcon.src = 'assets/edit_icon.svg';
         	  editIcon.width = 20;
         	  editIcon.height = 20;
-        	  editIcon.classList.add(curUser.isAdmin ? 'icon-shown' : 'icon-hidden');
+        	  editIcon.classList.add(curUser.isAdmin || curUser.username === user.username ? 'icon-shown' : 'icon-hidden');
         	  editIcon.addEventListener('mouseover', function() {
         		  changeImage(this, 'assets/edit_icon_hover.svg');
         		});
@@ -148,7 +148,7 @@ if (request.getAttribute("mySightingActive") != null) {
         	  trashIcon.src = 'assets/trash_icon.svg';
         	  trashIcon.width = 20;
         	  trashIcon.height = 20;
-        	  trashIcon.classList.add(curUser.isAdmin ? 'icon-shown' : 'icon-hidden');
+        	  trashIcon.classList.add(curUser.isAdmin || curUser.username === user.username ? 'icon-shown' : 'icon-hidden');
         	  trashIcon.addEventListener('mouseover', function() {
         		  changeImage(this, 'assets/trash_icon_hover.svg');
         		});
