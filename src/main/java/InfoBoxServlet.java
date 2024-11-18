@@ -15,7 +15,7 @@ public class InfoBoxServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve message from query parameters
-        String message = request.getParameter("message");
+        String message = request.getParameter("infoMessage");
 
         // Set the message attribute for JSP
         request.setAttribute("infoMessage", message != null ? message : "Information have been updated");

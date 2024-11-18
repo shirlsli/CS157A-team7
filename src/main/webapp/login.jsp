@@ -5,6 +5,7 @@
 <title>Log In</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/errorBox.css">
+<!-- <link rel="stylesheet" href="css/infoBox.css"> -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -53,6 +54,8 @@
 	<!-- Include the errorBox.jsp for displaying error messages when present -->   
 	<jsp:include page="WEB-INF/components/errorBox.jsp" />
 
+	<%-- <!-- testing info messages when present -->   
+	<jsp:include page="WEB-INF/components/infoBox.jsp" /> --%>
 
 <!-- <script>
 	function togglePswVisibility() {
