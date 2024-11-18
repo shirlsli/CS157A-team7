@@ -89,13 +89,7 @@ public class LoginServlet extends HttpServlet {
 						// Password does not match
 						request.setAttribute("errorTitle", "Login Error");
 						request.setAttribute("errorMessage", "Invalid password. Please try again.");
-						
-						// Test infoBox
-						// request.setAttribute("infoMessage", "InfoBox Message in wrong Password");
-						
-						// Test confirmBox
-						// request.setAttribute("confirmMessage", "ConfirmBox Message in wrong Password");
-						// request.setAttribute("confirmMessage", "Hi, it looks like you’re about to delete this sighting. Press “delete” only if you’re sure about this decision!");
+
 						RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
 						rd.forward(request, response);
 					}
@@ -103,12 +97,6 @@ public class LoginServlet extends HttpServlet {
 					// Username not found
 					request.setAttribute("errorTitle", "Login Error");
 					request.setAttribute("errorMessage", "Username not found. Please try again.");
-					
-					// Test infoBox
-					// request.setAttribute("infoMessage", "InfoBox Message in wrong Username");
-					
-					// Test confirmBox
-					// request.setAttribute("confirmMessage", "ConfirmBox Message in wrong Username");
 					
 					RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
 					rd.forward(request, response);
