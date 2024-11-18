@@ -21,7 +21,8 @@
 				<div class="column">
 					<div id="reportSightingsMap" class="reportSightingsMap"></div>
 					<span class="button-group">
-						<button id="reportButton" class="major-button primary-button" type="submit">Report</button>
+						<button id="reportButton" class="major-button primary-button"
+							type="submit">Report</button>
 						<button class="major-button secondary-button" type="button"
 							onclick="closeModal()">Close</button>
 					</span>
@@ -44,34 +45,15 @@
 							placeholder="Try your best to describe the plant and the nearby surroundings"></textarea>
 					</div>
 					<span class="input-span">
-						<div>
-							<div class="form-group">
-								<label class="textfield-label" for="radius">Estimated
-									Radius (meters)</label> <input type="number" id="radius" name="radius"
-									min="0" placeholder="Estimated radius" required />
-							</div>
-							<div class="form-group">
-								<label class="required textfield-label" for="photo">Photo
-									of Plant</label> <input type="file" id="photo" name="photo"
-									accept="image/*" />
-							</div>
+						<div class="form-group">
+							<label class="textfield-label" for="radius">Estimated
+								Radius (meters)</label> <input type="number" id="radius" name="radius"
+								min="0" placeholder="Estimated radius" required />
 						</div>
-						<div id="specificTags" class="form-group">
-							<label class="textfield-label" for="specificTags">Based
-								on your knowledge, please indicate if this plant is poisonous,
-								invasive, and/or endangered.</label>
-							<div>
-								<label class="checkbox-label prevent-select"> <input
-									type="checkbox" value="poisonous"> <span
-									class="checkbox"></span> Poisonous
-								</label> <label class="checkbox-label prevent-select"> <input
-									type="checkbox" value="invasive"> <span
-									class="checkbox"></span> Invasive
-								</label> <label class="checkbox-label prevent-select"> <input
-									type="checkbox" value="endangered"> <span
-									class="checkbox"></span> Endangered
-								</label>
-							</div>
+						<div class="form-group">
+							<label class="required textfield-label" for="photo">Photo
+								of Plant</label> <input type="file" id="photo" name="photo"
+								accept="image/*" />
 						</div>
 					</span>
 				</div>

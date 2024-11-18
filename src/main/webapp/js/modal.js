@@ -3,35 +3,29 @@ var loc;
 // Open the modal
 function openModal(location, sighting, plant) {
 	const modalTitle = document.getElementById('modalTitle');
+	const plantName = document.getElementById('plantName');
+	const date = document.getElementById('date');
+	const description = document.getElementById('description');
+	const radius = document.getElementById('radius');
+	const reportButton = document.getElementById("reportButton");
 	if (sighting != null) {
 		modalTitle.textContent = "Edit this Sighting";
-		const plantName = document.getElementById('plantName');
 		plantName.value = plant.name;
-		const date = document.getElementById('date');
 		const dateValue = new Date(sighting.date);
 		const year = dateValue.getFullYear();
 		const month = String(dateValue.getMonth() + 1).padStart(2, '0');
 		const day = String(dateValue.getDate()).padStart(2, '0');
 		const formattedDate = `${year}-${month}-${day}`;
 		date.value = formattedDate;
-		const description = document.getElementById('description');
 		description.textContent = sighting.description;
-		const radius = document.getElementById('radius');
 		radius.value = sighting.radius;
-		const selected = document.querySelectorAll('#specificTags input[type="checkbox"]');
-		if (plant.poisonous) {
-			selected[0].checked = true;
-		}
-		if (plant.invasive) {
-			selected[1].checked = true;
-		}
-		if (plant.endangered) {
-			selected[2].checked = true;
-		}
-		const reportButton = document.getElementById("reportButton");
 		reportButton.textContent = "Save";
 	} else {
 		modalTitle.textContent = "Report a New Sighting";
+		plantName.value = "";
+		date.value = "";
+		description.textContent = "";
+		reportButton.textContent = "Report";
 	}
 	const modal = document.getElementById('markerModal');
 	const header = document.getElementById('header');
@@ -120,12 +114,12 @@ function submitMarker(event) {
 	const sighting = sightingRaw !== "undefined" ? JSON.parse(sightingRaw) : null;
 	// Prepare URL-encoded data
 	const formData = new FormData();
-  
+
 	formData.append('sightingId', sighting ? sighting.sightingId : -1);
 	formData.append('plantId', sighting ? sighting.plantId : -1);
 	formData.append('userId', sighting ? sighting.userId : -1);
 	formData.append('locationId', sighting ? sighting.locationId : -1);
-  
+
 	formData.append('plantName', plantName);
 	formData.append('date', date);
 	formData.append('description', description);
