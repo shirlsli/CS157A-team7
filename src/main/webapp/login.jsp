@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/errorBox.css">
 <!-- <link rel="stylesheet" href="css/infoBox.css"> -->
-<link rel="stylesheet" href="css/confirmBox.css">
+<!-- <link rel="stylesheet" href="css/confirmBox.css"> -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -53,13 +53,13 @@
 	</div>
 	
 	<!-- Include the errorBox.jsp for displaying error messages when present -->   
-	<%-- <jsp:include page="WEB-INF/components/errorBox.jsp" /> --%>
+	<jsp:include page="WEB-INF/components/errorBox.jsp" />
 
 	<%-- <!-- testing info messages when present -->   
 	<jsp:include page="WEB-INF/components/infoBox.jsp" /> --%>
 	
-	<!-- testing confirm messages when present -->   
-	<jsp:include page="WEB-INF/components/confirmBox.jsp" />
+	<%-- <!-- testing confirm messages when present -->   
+	<jsp:include page="WEB-INF/components/confirmBox.jsp" /> --%>
 
 <!-- <script>
 	function togglePswVisibility() {

@@ -95,7 +95,7 @@ public class LoginServlet extends HttpServlet {
 						
 						// Test confirmBox
 						// request.setAttribute("confirmMessage", "ConfirmBox Message in wrong Password");
-						request.setAttribute("confirmMessage", "Hi, it looks like you’re about to delete this sighting. Press “delete” only if you’re sure about this decision!");
+						// request.setAttribute("confirmMessage", "Hi, it looks like you’re about to delete this sighting. Press “delete” only if you’re sure about this decision!");
 						RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
 						rd.forward(request, response);
 					}
@@ -108,7 +108,7 @@ public class LoginServlet extends HttpServlet {
 					// request.setAttribute("infoMessage", "InfoBox Message in wrong Username");
 					
 					// Test confirmBox
-					request.setAttribute("confirmMessage", "ConfirmBox Message in wrong Username");
+					// request.setAttribute("confirmMessage", "ConfirmBox Message in wrong Username");
 					
 					RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
 					rd.forward(request, response);
