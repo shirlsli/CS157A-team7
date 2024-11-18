@@ -51,7 +51,7 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String databaseUser = "root";
-		String databasePassword = "root";
+		String databasePassword = System.getenv("DB_PASSWORD");
 		String uname = request.getParameter("uname");
 		String password = request.getParameter("password");
 
@@ -82,6 +82,10 @@ public class LoginServlet extends HttpServlet {
 
 						HttpSession session = request.getSession();
 						session.setAttribute("user", user);
+
+						request.setAttribute("generalSightingActive", "active"); // set "Sightings" as active tab in
+																					// header, since directing to
+																					// sightings.jsp
 
 						RequestDispatcher rd = request.getRequestDispatcher("sightings.jsp");
 						rd.forward(request, response);

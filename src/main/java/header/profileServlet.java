@@ -1,5 +1,7 @@
 package header;
 
+import com.example.*;
+
 import java.io.*;
 import javax.servlet.http.*;
 import javax.servlet.RequestDispatcher;
@@ -8,24 +10,34 @@ import javax.servlet.annotation.*;
 
 @WebServlet("/profile")
 public class profileServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public profileServlet() {super();}
+	public profileServlet() {
+		super();
+	}
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-//        response.getWriter().append("Served at: ").append(request.getContextPath());
-        request.setAttribute("profileActive", "active");
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp"); 
-        dispatcher.forward(request, response);
-        response.sendRedirect("profile.jsp"); 
-    }
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		request.setAttribute("profileActive", "active");
 
-        
-    }
+		HttpSession curSession = request.getSession(false);
+		
+		if (curSession == null || curSession.getAttribute("user") == null) {
+			request.setAttribute("errorTitle", "You were logged out!");
+			request.setAttribute("errorMessage", "Please Sign In again.");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+		} else {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
+			dispatcher.forward(request, response);
+		}
 
-    public void destroy() {
-    }
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+	}
+
+	public void destroy() {
+	}
 }

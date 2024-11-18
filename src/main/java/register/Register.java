@@ -1,4 +1,6 @@
-package com.example;
+package register;
+
+import com.example.*;
 
 import java.io.*;
 import javax.servlet.http.*;
@@ -6,15 +8,14 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.*;
 
-@WebServlet("/submitForm")
+@WebServlet("/register")
 public class Register extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     public Register() {super();}
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.getWriter().append("Served at: ").append(request.getContextPath());
-
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -28,16 +29,12 @@ public class Register extends HttpServlet {
         	request.setAttribute("dynamicContent", uname );
             RequestDispatcher dispatcher = request.getRequestDispatcher("registerConfirmation.jsp");
             dispatcher.forward(request, response);
-            response.sendRedirect("registerConfirmation.jsp");
         }
         else {
-        	request.setAttribute("uname", uname);
-//        	request.setAttribute("password", password);
-        	request.setAttribute("usrnmError", "Username '"+uname+"' already exists. Please choose another username.");
-        	request.getRequestDispatcher("userRegister.jsp").forward(request, response);
+        	request.setAttribute("errorTitle", "Sign Up Error");
+			request.setAttribute("errorMessage", "Did you sign up already? Try logging in. Otherwise, please check database/database connection and try again.");
+			request.getRequestDispatcher("userRegister.jsp").forward(request, response);
         }
-        
-
         
     }
 

@@ -25,25 +25,26 @@ public class UpdateImageServlet extends HttpServlet {
 		String condition = request.getParameter("condition");
 		String imageAttributeName = request.getParameter("imageAttributeName");
 		String conditionValue = request.getParameter("conditionValue");
+		String table = request.getParameter("table");
 		Part image = request.getPart("image");
 		
 		String databaseUser = "root";
-		String databasePassword = "root";
+		String databasePassword = System.getenv("DB_PASSWORD");
 		try {
 			java.sql.Connection con;
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", databaseUser, databasePassword);
             if (image != null) {
-            	String sql = "UPDATE myflorabase.user SET " + imageAttributeName + " = ? WHERE " + condition + " = ?";
-            	InputStream profilePicInputStream = image.getInputStream();
+            	String sql = "UPDATE myflorabase." + table + " SET " + imageAttributeName + " = ? WHERE " + condition + " = ?";
+            	InputStream imageInputStream = image.getInputStream();
                 try (PreparedStatement statement = con.prepareStatement(sql)) {
-                    statement.setBlob(1, profilePicInputStream);
+                    statement.setBlob(1, imageInputStream);
                     statement.setInt(2, Integer.parseInt(conditionValue)); 
 
                     int rowsUpdated = statement.executeUpdate(); 
                     response.getWriter().write(rowsUpdated + " row(s) updated."); 
                 }
-                profilePicInputStream.close();
+                imageInputStream.close();
             }
             con.close();
 		} catch(SQLException e) {
