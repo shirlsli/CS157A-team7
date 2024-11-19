@@ -5,11 +5,15 @@ String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
 HttpSession curSession = request.getSession(false);
 User user = (User) curSession.getAttribute("user");
 String userJson = new Gson().toJson(user);
+boolean sightingsPage = true;
+if (request.getAttribute("mySightingActive") != null) {
+	sightingsPage = false;
+}
 %>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Sightings</title>
+<title><%=sightingsPage ? "Sightings" : "My Sightings"%></title>
 <!-- Link to External CSS -->
 <link rel="icon" href="assets/myFlorabase_Logo_No_Text.svg"
 	type="image/svg">
@@ -29,7 +33,7 @@ String userJson = new Gson().toJson(user);
 			<div id="map" class="column"></div>
 			<div class="column sightings-column">
 				<div class="sightings-component sightings-column-div">
-					<span class="sightings-title"><h1 class="pageTitle">Sightings</h1>
+					<span class="sightings-title"><h1 class="pageTitle"><%=sightingsPage ? "Sightings" : "My Sightings"%></h1>
 						<img src='assets/filter_icon.svg' width="30" height="30" /> </span>
 					<div id="sightingsList"></div>
 				</div>
@@ -68,8 +72,16 @@ String userJson = new Gson().toJson(user);
         		  console.log(info);
         		  // info[0] = user, info[1] = plant, info[2] = location
         		  const curUser = <%=userJson%>;
-        		  const sightingComponent = createSighting(sighting, info[0], info[1], info[2], curUser);
-            	  sightingsListContainer.appendChild(sightingComponent);
+        		  const isSightingsPage = <%=sightingsPage%>;
+        		  if (isSightingsPage) {
+        			  const sightingComponent = createSighting(sighting, info[0], info[1], info[2], curUser);
+                	  sightingsListContainer.appendChild(sightingComponent);
+        		  } else {
+        			  if (info[0].username === curUser.username) {
+        				  const sightingComponent = createSighting(sighting, info[0], info[1], info[2], curUser);
+                    	  sightingsListContainer.appendChild(sightingComponent);
+        			  }
+        		  }
         	  })
         	  .catch(error => {
         		  console.error("Issue with fetching from FetchSightingInfo", error);
@@ -115,7 +127,7 @@ String userJson = new Gson().toJson(user);
         	  editIcon.src = 'assets/edit_icon.svg';
         	  editIcon.width = 20;
         	  editIcon.height = 20;
-        	  editIcon.classList.add(curUser.isAdmin ? 'icon-shown' : 'icon-hidden');
+        	  editIcon.classList.add(curUser.isAdmin || curUser.username === user.username ? 'icon-shown' : 'icon-hidden');
         	  editIcon.addEventListener('mouseover', function() {
         		  changeImage(this, 'assets/edit_icon_hover.svg');
         		});
@@ -136,7 +148,7 @@ String userJson = new Gson().toJson(user);
         	  trashIcon.src = 'assets/trash_icon.svg';
         	  trashIcon.width = 20;
         	  trashIcon.height = 20;
-        	  trashIcon.classList.add(curUser.isAdmin ? 'icon-shown' : 'icon-hidden');
+        	  trashIcon.classList.add(curUser.isAdmin || curUser.username === user.username ? 'icon-shown' : 'icon-hidden');
         	  trashIcon.addEventListener('mouseover', function() {
         		  changeImage(this, 'assets/trash_icon_hover.svg');
         		});
