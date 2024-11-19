@@ -7,6 +7,7 @@ let map;
 let clickedPosition;
 let AdvancedMarkerElement;
 const markersMap = new Map(); // Keeps track of markers by coordinates
+let infoWindow; // Single InfoWindow instance
 
 class PollenMapType {
 	constructor(tileSize, apiKey) {
@@ -55,11 +56,22 @@ function updatePollenMapType(map, apiKey) {
 }
 
 function attachInfoWindow(marker, content) {
-	const infoWindow = new google.maps.InfoWindow({
-		content: content
-	});
-
 	marker.addListener('click', function() {
+		// If there's an open infoWindow, close it first
+		if (infoWindow) {
+			infoWindow.close();
+		}
+
+		// Create and open new infoWindow
+		infoWindow = new google.maps.InfoWindow({
+			content: content
+		});
+
+		// Add close listener to clean up when infoWindow is closed
+		google.maps.event.addListener(infoWindow, 'closeclick', function() {
+			infoWindow = null;
+		});
+
 		infoWindow.open(map, marker);
 	});
 }
@@ -82,6 +94,14 @@ async function initMap() {
 		title: "SJSU",
 	});
 
+	attachInfoWindow(marker, 
+		`<div>
+			<h3>SJSU</h3>
+			<p>Location: San Jose State University</p>
+			<p>Reported by: Admin</p>
+		</div>`
+	);
+
 	map.addListener('click', function(event) {
 		clickedPosition = event.latLng;
 		openModal(clickedPosition);
@@ -94,68 +114,82 @@ async function initMap() {
 		return;
 	}
 
-	fetch("/myFlorabase/getSightings")
-		.then(response => response.json())
-		.then(sightings => {
-			console.log(sightings);
-			let sightingsArray = [];
-			sightings.forEach(sighting => {
-				fetch(`/myFlorabase/getSightingInfo?userId=${sighting.userId}&plantId=${sighting.plantId}&locationId=${sighting.locationId}`, {
+	try {
+		const response = await fetch("/myFlorabase/getSightings");
+		const sightings = await response.json();
+		console.log(sightings);
+		let sightingsArray = [];
+
+		for (const sighting of sightings) {
+			try {
+				const infoResponse = await fetch(`/myFlorabase/getSightingInfo?userId=${sighting.userId}&plantId=${sighting.plantId}&locationId=${sighting.locationId}`, {
 					method: 'GET',
-				})
-				.then(response => response.json())
-				.then(info => {
-					console.log(info);
-					// info[0] = user, info[1] = plant, info[2] = location
-					sightingsArray.push(info);
-
-					// Create markers with info windows for each sighting
-					const location = { lat: info[2].latitude, lng: info[2].longitude };
-					const locationKey = `${location.lat},${location.lng}`;
-					const plantName = info[1].name;
-					let infoContent = `
-						<div>
-							<h3>${plantName}</h3>
-							<p>Location: ${info[2].name}</p>
-							<p>Reported by: ${info[0].username}</p>
-						</div>`;
-
-					// If sighting has a photo, convert it to a base64 string
-					if (sighting.photo && sighting.photo.length > 0) {
-						const photoBase64 = arrayBufferToBase64(sighting.photo);
-						infoContent += `<img src="data:image/jpeg;base64,${photoBase64}" alt="Sighting Photo" style="max-width: 200px; max-height: 200px;"/>`;
-					}
-
-					// Check if a marker already exists at this location
-					if (markersMap.has(locationKey)) {
-						// If marker exists, append the new information to the existing marker
-						const existingMarker = markersMap.get(locationKey);
-						const existingContent = existingMarker.infoContent;
-						existingMarker.infoContent = existingContent + '<hr/>' + infoContent;
-						attachInfoWindow(existingMarker.marker, existingMarker.infoContent);
-					} else {
-						// If no marker exists, create a new one
-						const newMarker = new AdvancedMarkerElement({
-							map: map,
-							position: location,
-							title: plantName,
-						});
-						console.log('Marker added for:', plantName);
-
-						markersMap.set(locationKey, { marker: newMarker, infoContent: infoContent });
-						attachInfoWindow(newMarker, infoContent);
-					}
-				})
-				.catch(error => {
-					console.error("Issue with fetching from FetchSightingInfo", error);
 				});
-			});
-			console.log("Parsed Sightings Array: ", sightingsArray);
-		})
-		.catch(error => {
-			console.error("Issue with fetching from FetchSightingsServlet", error);
-		});
+				const info = await infoResponse.json();
+				console.log(info);
+				sightingsArray.push(info);
 
+				const location = { lat: info[2].latitude, lng: info[2].longitude };
+				const locationName = info[2].name.trim().toLowerCase(); // Normalize
+				const locationKey = locationName;
+				const plantName = info[1].name;
+				const sightingDescription = sighting.description;
+				const plantDescription = info[1].description;
+
+				let locationHeader = 
+					`<div>
+						<h3>Location: ${info[2].name} (Location ID: ${info[2].locationId})</h3>
+						<p>Latitude: ${info[2].latitude}, Longitude: ${info[2].longitude}</p>
+						<hr/>
+					</div>`;
+
+				let infoContent = 
+					`<div>
+						<h4>Plant Sightings:</h4>
+						<p><strong>Sighting ID:</strong> ${sighting.sightingId}</p>
+						<p><strong>Plant ID:</strong> ${info[1].plantId}</p>
+						<p><strong>Plant Name:</strong> ${plantName}</p>
+						<p><strong>Scientific Name:</strong> ${info[1].scientificName}</p>
+						<p><strong>Reported By:</strong> ${info[0].username}</p>
+						<p><strong>Sighting Description:</strong> ${sightingDescription}</p>
+						<p><strong>Plant Description:</strong> ${plantDescription}</p>
+					</div>`;
+
+				if (sighting.photo && sighting.photo.length > 0) {
+					const photoBase64 = arrayBufferToBase64(sighting.photo);
+					infoContent += `<img src="data:image/jpeg;base64,${photoBase64}" alt="Sighting Photo" style="max-width: 200px; max-height: 200px;"/>`;
+				}
+
+				if (markersMap.has(locationKey)) {
+					// If marker exists, add new sighting content to the existing marker
+					const existingMarkerData = markersMap.get(locationKey);
+					const newMarkerContent = existingMarkerData.infoContent + '<hr/>' + infoContent;
+					existingMarkerData.infoContent = newMarkerContent;
+					attachInfoWindow(existingMarkerData.marker, locationHeader + newMarkerContent);
+				} else {
+					// Create and store a new marker if one does not exist at this location
+					const newMarker = new AdvancedMarkerElement({
+						map: map,
+						position: location,
+						title: info[2].name,
+					});
+					console.log('Marker added for location:', info[2].name);
+
+					markersMap.set(locationKey, {
+						marker: newMarker,
+						infoContent: infoContent
+					});
+					attachInfoWindow(newMarker, locationHeader + infoContent);
+				}
+			} catch (error) {
+				console.error("Issue with fetching from getSightingInfo:", error);
+			}
+		}
+		console.log("Parsed Sightings Array: ", sightingsArray);
+	} catch (error) {
+		console.error("Issue with fetching from getSightings:", error);
+	}
+	
 	// Helper function to convert byte array to base64 string
 	function arrayBufferToBase64(buffer) {
 		let binary = '';
@@ -165,7 +199,7 @@ async function initMap() {
 		}
 		return btoa(binary);
 	}
-
+	
 	// Commented out the pollen-related map overlay initialization
 	// const pollenMapType = new PollenMapType(new google.maps.Size(256, 256), apiKey);
 	// map.overlayMapTypes.insertAt(0, pollenMapType);
@@ -191,5 +225,5 @@ async function initMap() {
 }
 
 window.initMap = initMap;
-console.log("BRUH MOMENT");
+console.log("Tes2t");
 initMap();
