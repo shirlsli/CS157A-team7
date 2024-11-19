@@ -191,5 +191,5 @@ async function initMap() {
 }
 
 window.initMap = initMap;
-console.log("Test 13222");
+console.log("BRUH MOMENT");
 initMap();
