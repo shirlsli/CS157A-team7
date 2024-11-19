@@ -1,0 +1,75 @@
+/* Centered modal overlay */
+.modal {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Padding around the modal */
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+}
+
+.modal-message {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px; /* Space between message and buttons */
+}
+
+/* Button container */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between buttons */
+}
+
+/* Delete button */
+.delete-button {
+    background: #EAAC9D;
+	border: 1px solid #EAAC9D;
+	border-radius: 30px;
+	text-align: center;
+	color: #000000;
+	font-weight: 700;
+	border-style: none;
+	padding: 5px;
+}
+
+/* Cancel button */
+.cancel-button {
+    background: #FFFFFF;
+	border: 1px solid #EAAC9D;
+	border-radius: 30px;
+	font-weight: 800;
+	text-align: center;
+	color: #EAAC9D;
+	padding: 5px;
+}
+
+.delete-button:hover {
+    border: 1px solid #EAAC9D;
+	background: white;
+	color: #EAAC9D;
+}
+
+.cancel-button:hover {
+    border: 1px solid #EAAC9D;
+	background: #EAAC9D;
+	color: black;
+}
