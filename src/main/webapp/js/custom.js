@@ -8,6 +8,7 @@ let clickedPosition;
 let AdvancedMarkerElement;
 const markersMap = new Map(); // Keeps track of markers by coordinates
 let infoWindow; // Single InfoWindow instance
+// let pollen = "TREE_UPI";
 
 class PollenMapType {
 	constructor(tileSize, apiKey) {
