@@ -55,7 +55,6 @@
 	<!-- Include the errorBox.jsp for displaying error messages when present -->
 	<jsp:include page="WEB-INF/components/errorBox.jsp" />
 
-
 	<!-- <script>
 	function togglePswVisibility() {
 		var x = document.getElementById("psw");
