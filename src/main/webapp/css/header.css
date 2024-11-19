@@ -174,7 +174,8 @@ header {
 	position: absolute;
 	top: 60px;
 	left: -70px;
-	border-radius: 30px;
+	border-radius: 10px;
+	border: #EAAC9D 1px solid;
 }
 
 .dropdown:hover .dropdown-content {
