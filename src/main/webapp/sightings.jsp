@@ -8,7 +8,7 @@ String userJson = new Gson().toJson(user);
 boolean sightingsPage = true;
 if (request.getAttribute("mySightingActive") != null) {
 	sightingsPage = false;
-}
+} 
 %>
 <!DOCTYPE html>
 <html>
@@ -29,8 +29,20 @@ if (request.getAttribute("mySightingActive") != null) {
 	<div id="sightingsPage" class="sightingsPage">
 		<div id="header"><jsp:include
 				page="WEB-INF/components/header.jsp"></jsp:include></div>
-		<div class="column-group">
-			<div id="map" class="column"></div>
+		<div id="sightingsDiv">
+			<div>
+				<div id="map" class="column"></div>
+				<div id="container">
+					<button class="major-button secondary-button" type="button"
+						id="tree">Tree</button>
+					<button class="major-button secondary-button" type="button"
+						id="grass">Grass</button>
+					<button class="major-button secondary-button" type="button"
+						id="weed">Weed</button>
+					<button class="major-button secondary-button" type="button"
+						id="none">None</button>
+				</div>
+			</div>
 			<div class="column sightings-column">
 				<div class="sightings-component sightings-column-div">
 					<span class="sightings-title"><h1 class="pageTitle"><%=sightingsPage ? "Sightings" : "My Sightings"%></h1>
@@ -42,12 +54,6 @@ if (request.getAttribute("mySightingActive") != null) {
 		<!-- Modal Structure -->
 		<jsp:include page="WEB-INF/components/modal.jsp"></jsp:include>
 		<div id="popupContainer"></div>
-	</div>
-	<div id="container">
-		<button type="button" id="tree">TREE</button>
-		<button type="button" id="grass">GRASS</button>
-		<button type="button" id="weed">WEED</button>
-		<button type="button" id="none">NONE</button>
 	</div>
 
 	<script src="./js/buttons.js"></script>

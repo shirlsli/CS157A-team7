@@ -52,7 +52,7 @@
 </script>
 
 <div id="filterModal" class="modal">
-	<div class="modal-content">
+	<div id="filterModalContent" class="modal-content">
 		<div class="centered-column">
 			<h1 id="modalTitle" class="pageTitle"></h1>
 			<form id="filterForm" onsubmit="submitFilter(event)" method="POST">
@@ -64,14 +64,14 @@
 					<label for="search-bar">Add Plants to the filter</label>
 					*insert search bar*
 				</div>
-				<span class="input-span">
+				<div class="input-span">
 					<%for (Plant p : plants) {%>
 						<label class="checkbox-label prevent-select"> 
 							<input type="checkbox" name="selectedPlants" value="<%=p.getName()%>"> 
 							<span class="checkbox"></span> 
 						<%=p.getName()%></label>
 					<%}%>
-				</span>
+				</div>
 				<span class="button-group" id="filter-button-group">
 					<button id="reportButton" class="major-button primary-button" type="submit">Save</button>
 					<button class="major-button secondary-button" type="button" onclick="closeNewFilterModal()">Cancel</button>

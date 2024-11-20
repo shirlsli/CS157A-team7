@@ -2,6 +2,8 @@ var clickedLocation;
 var loc;
 // Open the modal
 function openModal(location, sighting, plant) {
+	const htmlElement = document.documentElement;
+	htmlElement.style.overflowY = "hidden";
 	const modalTitle = document.getElementById('modalTitle');
 	const plantName = document.getElementById('plantName');
 	const date = document.getElementById('date');
@@ -28,6 +30,8 @@ function openModal(location, sighting, plant) {
 		reportButton.textContent = "Report";
 	}
 	const modal = document.getElementById('markerModal');
+	const sightingsPage = document.getElementById('sightingsPage');
+	sightingsPage.style.overflowY = "hidden";
 	const header = document.getElementById('header');
 	header.style.display = "hidden";
 	modal.style.display = "block";
@@ -55,6 +59,8 @@ async function loadReportSightingsMap(location) {
 
 // Close the modal
 function closeModal() {
+	const htmlElement = document.documentElement;
+	htmlElement.style.overflowY = "scroll";
 	const modal = document.getElementById('markerModal');
 	const header = document.getElementById('header');
 	header.style.display = "block";
@@ -131,6 +137,18 @@ function submitMarker(event) {
 		formData.append('photo', photoFile);
 	}
 
+	const modalContent = document.getElementById("modalContent");
+	modalContent.style.display = "none";
+	const lottieFileAnim = document.getElementById("lottieFileAnim");
+	lottieFileAnim.style.display = "flex";
+	lottieFileAnim.style.position = "fixed";
+	lottieFileAnim.style.top = 0;
+	lottieFileAnim.style.left = 0;
+	lottieFileAnim.style.justifyContent = "center";
+	lottieFileAnim.style.alignItems = "center";
+	lottieFileAnim.style.width = "100%";
+	lottieFileAnim.style.height = "100%";
+
 	let url = '/myFlorabase/AddLogServlet';
 
 	if (sighting) {
@@ -144,8 +162,11 @@ function submitMarker(event) {
 		.then(response => response.text())
 		.then(data => {
 			console.log('Successfully completed operation');
-			closeModal();
-			createPopup(sighting, (sighting) ? "Your edits have been saved." : "Thank you for your report! It's been successfully created.", "Close", "");
+			setTimeout(function() {
+				lottieFileAnim.style.display = "none";
+				closeModal();
+				createPopup(sighting, (sighting) ? "Your edits have been saved." : "Thank you for your report! It's been successfully created.", "Close", "");
+			}, 3000);
 		})
 		.catch(error => console.error('Error:', error));
 }
