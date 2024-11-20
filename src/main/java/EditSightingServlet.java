@@ -3,6 +3,8 @@ import java.io.InputStream;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -26,6 +28,7 @@ public class EditSightingServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		int sightingId = Integer.parseInt(request.getParameter("sightingId"));
 		int plantId = Integer.parseInt(request.getParameter("plantId"));
+		int userId = Integer.parseInt(request.getParameter("userId"));
 		String plantName = request.getParameter("plantName");
 		String date = request.getParameter("date");
 		String description = request.getParameter("description");
@@ -70,6 +73,15 @@ public class EditSightingServlet extends HttpServlet {
 					imageInputStream.close();
 				}
 			}
+			
+			String editSql = "INSERT INTO myflorabase.edits (user_id, sighting_id, edit_date) VALUES (?, ?, ?);";
+			try (PreparedStatement editStatement = con.prepareStatement(editSql)) {
+				editStatement.setInt(1, userId);
+				editStatement.setInt(2, sightingId);
+				editStatement.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+				editStatement.executeUpdate();
+			}
+			
 			con.close();
 		} catch (SQLException e) {
 			System.out.println("SQLException caught: " + e.getMessage());
