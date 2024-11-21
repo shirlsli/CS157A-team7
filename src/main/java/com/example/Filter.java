@@ -10,6 +10,11 @@ public class Filter {
 		this.setColor(color);
 		this.setFilterName(filterName);
 	}
+	
+	public Filter(String color, String filterName) {
+		this.setColor(color);
+		this.setFilterName(filterName);
+	}
 
 	public int getFilterId() {
 		return filterId;

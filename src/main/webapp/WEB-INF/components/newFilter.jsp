@@ -79,7 +79,7 @@
 				<div class="input-span">
 					<%for (Plant p : plants) {%>
 						<label class="checkbox-label prevent-select"> 
-							<input type="checkbox" name="selectedPlants" value="<%=p.getName()%>"> 
+							<input type="checkbox" name="selectedPlants" value="<%=p.getPlantId()%>"> 
 							<span class="checkbox"></span> 
 						<%=p.getName()%></label>
 					<%}%>
