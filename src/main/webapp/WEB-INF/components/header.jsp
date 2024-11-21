@@ -12,7 +12,7 @@
 	<span id="navbar"> <img id="logo-img"
 		src='assets/myFlorabase_Logo_No_Text.svg' />
 		<h1 id="headerText" class="header-text">myFlorabase</h1>
-		<div class="topnav" id="right-Topnav">
+		<span class="topnav" id="right-Topnav">
 			<button id="admin" onClick="adminPage()" style="display: <%=user.isAdmin() ? "inline" : "none"%>"
 				class ="${adminPageActive}-admin hover-underline-animation-admin header-text">Admin Page</button>
 			<button id="sightings" onClick="sightings()"
@@ -24,8 +24,8 @@
 				class=" ${reportSightingActive}-<%=user.isAdmin() ? "admin" : "regular"%> hover-underline-animation-<%=user.isAdmin() ? "admin" : "regular"%> header-text">Report
 				Sighting</button>
 
-		</div>
-		<div id="profile-container" class="dropdown">
+		</span>
+		<span id="profile-container" class="dropdown">
 			<div id="profile-underline" class="${profileActive}-<%=user.isAdmin() ? "admin" : "regular"%>"></div>
 
 			<div class="dropdown-content">
@@ -36,11 +36,11 @@
 				class="<%=user.isAdmin() ? "admin" : "regular"%>"
 				onClick="profile()">
 				<img id="profile-img"
-					src="/myFlorabase/getImage?condition=user_id&conditionValue=<%=user.getUserId()%>&imageAttributeName=profile_pic"
+					src="/myFlorabase/getImage?condition=user_id&conditionValue=<%=user.getUserId()%>&imageAttributeName=profile_pic&table=user"
 					alt="Profile picture">
 			</button>
 			
-		</div>
+		</span>
 
 	</span>
 

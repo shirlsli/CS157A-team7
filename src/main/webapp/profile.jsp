@@ -16,13 +16,13 @@
 <body>
 	<%
 	HttpSession curSession = request.getSession(false);
-	User user = (User) curSession.getAttribute("user"); 
+	User user = (User) curSession.getAttribute("user");
 	String dUser; // assumes database name is the same as username
 	dUser = "root";
 	String pwd = System.getenv("DB_PASSWORD");
 
 	if (pwd == null) {
-	    System.out.println("DB_PASSWORD environment variable is not set.");
+		System.out.println("DB_PASSWORD environment variable is not set.");
 	}
 
 	MapPreference mp = null;
@@ -219,9 +219,9 @@
 		}
 		
 		// open the new filter modal
-		function newFilter(button) {
+		function newFilter(button, isAllergy) {
 			const modalTitle = document.getElementById('modalTitle');			
-			modalTitle.textContent = "Add a new filter"
+			modalTitle.textContent = isAllergy ? "Add an Allergy" : "Add a New Filter";
 			
 			const modal = document.getElementById('filterModal');
 			modal.style.display = "block";
@@ -302,6 +302,21 @@
 			</span>
 			<p id="description"><%=user.getDescription()%></p>
 		</div>
+		<div id="allergyDiv">
+			<span class="section-title-with-button">
+				<h2>Allergies</h2>
+				<button class="secondary-button" onclick="newFilter(this, true)">Edit</button>
+			</span>
+			<!-- need to change these to allergies -->
+			<%
+			for (Filter f : filters) {
+			%>
+			<label class="checkbox-label prevent-select"> <input
+				type="checkbox" checked> <span class="checkbox"></span> <%=f.getFilterName()%></label>
+			<%
+			}
+			%>
+		</div>
 		<div id="zoomDiv">
 			<span class="section-title-with-button">
 				<h2>Default Zoom</h2>
@@ -313,7 +328,7 @@
 		<div id="filtersDiv">
 			<span class="section-title-with-button">
 				<h2>Filters</h2>
-				<button class="secondary-button" onclick="newFilter(this)">New</button>
+				<button class="secondary-button" onclick="newFilter(this, false)">New</button>
 			</span>
 			<%
 			for (Filter f : filters) {
@@ -324,9 +339,9 @@
 			}
 			%>
 		</div>
-		
+
 		<jsp:include page="WEB-INF/components/newFilter.jsp"></jsp:include>
-		
+
 	</div>
 </body>
 </html>
