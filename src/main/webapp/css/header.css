@@ -165,12 +165,12 @@ header {
 }
 
 /*Profile drop down menu*/
-.dropdown {
+.profile-dropdown {
 	position: relative;
 	display: inline-block;
 }
 
-.dropdown-content {
+.profile-dropdown-content {
 	display: none;
 	background-color: #f9f9f9;
 	min-width: 100px;
@@ -184,7 +184,7 @@ header {
 	z-index: 3;
 }
 
-.dropdown:hover .dropdown-content {
+.profile-dropdown:hover .profile-dropdown-content {
 	display: block;
 }
 
@@ -196,7 +196,7 @@ button {
 	min-height: 30px;
 }
 
-.dropdown-button {
+.profile-dropdown-button {
 	background: #FFFFFF;
 	border: 1px solid #EAAC9D;
 	border-radius: 30px;
@@ -209,7 +209,7 @@ button {
 	width: 100%;
 }
 
-button.dropdown-button:hover {
+button.profile-dropdown-button:hover {
 	border: 1px solid #EAAC9D;
 	background: #EAAC9D;
 	color: black;
