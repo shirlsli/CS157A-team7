@@ -243,16 +243,13 @@
 			// selected plants
 			const selectedPlants = document.querySelectorAll('#filterForm input[type="checkbox"]:checked');
 			
-			if (filterName.length === 0){
-				alert('Please enter a filter name.');
-				return;
-			}
-			
 			if (selectedPlants.length === 0) {
 		        alert('Please select at least one plant option.');
 		        return;  // Prevent form submission if no checkbox is selected
 		    }
 			
+			// filter color
+			const filterColor = document.getElementById('filterColor');
 			
 			// Prepare URL-encoded data
 			const formData = new FormData();
@@ -263,6 +260,8 @@
 		    });
 			
 			formData.append('filterName', filterName);
+			
+			formData.append('filterColor', filterColor);
 			
 			 // Log each key-value pair in the FormData object
 	        for (const [key, value] of formData.entries()) {
