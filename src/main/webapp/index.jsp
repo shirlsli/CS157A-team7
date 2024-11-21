@@ -53,6 +53,7 @@
 			+ "`filter_id` INT AUTO_INCREMENT NOT NULL,"
 			+ "`color` varchar(45) DEFAULT NULL,"
 			+ "`filter_name` varchar(255) NOT NULL,"
+			+ "`active` tinyint NOT NULL DEFAULT '1',"
 			+ "PRIMARY KEY (`filter_id`)"
 			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 	String createReportsTableSQL = "CREATE TABLE `Reports` ("

@@ -52,13 +52,18 @@
 			mp = new MapPreference(preferenceId, zoom);
 		}
 
-		String filtersSQL = "SELECT uf.filter_id, color, filter_name FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '" + user.getUserId() + "'";
+		String filtersSQL = "SELECT uf.filter_id, color, filter_name, active FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '" + user.getUserId() + "'";
 		rs = statement.executeQuery(filtersSQL);
 		while (rs.next()) {
 			int filterId = rs.getInt("filter_id");
 			String color = rs.getString("color");
 			String filterName = rs.getString("filter_name");
-			Filter filter = new Filter(filterId, color, filterName);
+			int active = rs.getInt("active");
+			boolean isActive = false;
+			if (active == 1){
+				isActive = true;
+			}
+			Filter filter = new Filter(filterId, color, filterName, isActive);
 			filters.add(filter);
 		}
 
@@ -279,6 +284,9 @@
 
 			// Close the new filter modal
 			closeNewFilterModal();
+			
+			// FIXME: couldn't figure out how to get the page to reload
+			window.location.reload();
 		}
 		
 		
@@ -332,7 +340,7 @@
 			for (Filter f : filters) {
 			%>
 			<label class="checkbox-label prevent-select"> <input
-				type="checkbox" checked> <span class="checkbox"></span> <%=f.getFilterName()%></label>
+				type="checkbox" <%=f.isActive() ? "checked" : "" %>> <span class="checkbox"></span> <%=f.getFilterName()%></label>
 			<%
 			}
 			%>
