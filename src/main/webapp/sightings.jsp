@@ -8,7 +8,7 @@ String userJson = new Gson().toJson(user);
 boolean sightingsPage = true;
 if (request.getAttribute("mySightingActive") != null) {
 	sightingsPage = false;
-} 
+}
 %>
 <!DOCTYPE html>
 <html>
@@ -176,9 +176,30 @@ if (request.getAttribute("mySightingActive") != null) {
         		  deleteSighting(sighting);
         		});
         	  trashButton.appendChild(trashIcon);
+        	  
+        	  const flagButton = document.createElement('button');
+        	  flagButton.classList.add('icon-button');
+        	  const flagIcon = document.createElement('img');
+        	  flagIcon.src = 'assets/flag_icon.svg';
+        	  flagIcon.width = 20;
+        	  flagIcon.height = 20;
+        	  flagIcon.addEventListener('mouseover', function() {
+        		  changeImage(this, 'assets/flag_icon_hover.svg');
+        		});
+
+        		flagIcon.addEventListener('mouseout', function() {
+        		  changeImage(this, 'assets/flag_icon.svg');
+        		});
+
+        		flagIcon.addEventListener('click', function() {
+        		  changeImage(this, 'assets/flag_icon_hover.svg');
+        		  flagSighting(sighting, curUser);
+        		});
+        	  flagButton.appendChild(flagIcon);
 
         	  iconRow.appendChild(editButton);
         	  iconRow.appendChild(trashButton);
+        	  iconRow.appendChild(flagButton);
 
         	  headerRow.appendChild(headerTitle);
         	  headerRow.appendChild(iconRow);
@@ -317,7 +338,13 @@ if (request.getAttribute("mySightingActive") != null) {
         				window.location.reload();
         			})
         			.catch(error => console.error('Error:', error)); 
-    		});
+    		}, false);
+    	}
+    	
+    	function flagSighting(sighting, curUser) {
+    		createPopup(sighting, "Submit a reason for flagging this sighting", "Flag", "Cancel", function(flagReason) {
+    			console.log(flagReason);
+    		}, true, curUser);
     	}
     </script>
 
