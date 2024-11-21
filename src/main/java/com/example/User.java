@@ -20,6 +20,14 @@ public class User {
 		this.setLocation_id(location_id);
 	}
 	
+	public User(int userId, String username, String password, String description, boolean isAdmin) {
+		this.setUserId(userId);
+		this.setUsername(username);
+		this.setPassword(password);
+		this.setDescription(description != null ? description : username + " has not described themself yet.");
+		this.setAdmin(isAdmin);
+	}
+	
 	public User(String username, String password, boolean isAdmin) {
 		this.setUserId(userId);
 		this.setUsername(username);
