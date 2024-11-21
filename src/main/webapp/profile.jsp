@@ -249,7 +249,7 @@
 		    }
 			
 			// filter color
-			const filterColor = document.getElementById('filterColor');
+			const filterColor = document.getElementById('filterColor').value;
 			
 			// Prepare URL-encoded data
 			const formData = new FormData();
