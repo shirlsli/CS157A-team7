@@ -275,10 +275,12 @@
 				.catch(error => console.error('Error:', error));
 
 			// Close the new filter modal
+						
 			closeNewFilterModal();
-			
-			// FIXME: couldn't figure out how to get the page to reload
-			window.location.reload();
+
+			setTimeout(function() {
+			    location.reload();
+			}, 3000);
 		}
 		
 		// activate/deactivate filters
@@ -320,8 +322,27 @@
 				.then(response => response.text())
 				.then(data => console.log('Server response:', data))
 				.catch(error => console.error('Error:', error));
+			
 	    }
 	 
+		// delete filter
+		function deleteFilter(filter_id) {
+			fetch('/myFlorabase/DeleteFilterServlet', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'filter_id=' + encodeURIComponent(filter_id)
+            })
+	            .then(response => response.text())
+				.then(data => console.log('Server response:', data))
+				.catch(error => console.error('Error:', error));
+			
+			setTimeout(function() {
+			    location.reload();
+			}, 3000);
+		}
+		
 
 
 		
@@ -378,7 +399,7 @@
 			<label class="checkbox-label prevent-select"> 
 			<input
 				type="checkbox" value="<%=f.getFilterId()%>" class="filters-checkbox" <%=f.isActive() ? "checked" : "" %> onchange="updateActiveFilters()"> 
-				<span class="checkbox"></span> <%=f.getFilterName()%></label>
+				<span class="checkbox"></span> <%=f.getFilterName()%> <%=f.getFilterId() != 1 ? "<button class=\"icon-button\"> <img id=\"trash-icon\" onclick=\"deleteFilter(" + f.getFilterId()+ ")\" src=\"assets/trash_icon.svg\" width=\"20\" height=\"20\" class=\"icon-shown\"></button>" :"" %></label>
 			<%
 			}
 			%>
