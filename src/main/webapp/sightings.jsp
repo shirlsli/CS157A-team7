@@ -18,7 +18,6 @@ if (request.getAttribute("mySightingActive") != null) {
 <link rel="icon" href="assets/myFlorabase_Logo_No_Text.svg"
 	type="image/svg">
 <link rel="stylesheet" type="text/css" href="./css/modals.css">
-<link rel="stylesheet" type="text/css" href="./css/searchBar.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
@@ -31,12 +30,7 @@ if (request.getAttribute("mySightingActive") != null) {
 		<div id="header"><jsp:include
 				page="WEB-INF/components/header.jsp"></jsp:include></div>
 				
-			<!-- Search Bar -->
-		<div class="search-bar-container">
-		    <input type="text" id="searchInput" class="search-bar" placeholder="Search for a specific plant...">
-		    <ul id="searchDropdown" class="dropdown"></ul>
-		</div>
-		
+        
 		<div id="sightingsDiv">
 			<div>
 				<div id="map" class="column"></div>
@@ -55,12 +49,35 @@ if (request.getAttribute("mySightingActive") != null) {
 				<div class="sightings-component sightings-column-div">
 					<span class="sightings-title"><h1 class="pageTitle"><%=sightingsPage ? "Sightings" : "My Sightings"%></h1>
 						<img src='assets/filter_icon.svg' width="30" height="30" /> </span>
+					<!-- Search bar -->
+					<div class="search-container">
+					    <form action="SearchBarServlet" method="get">
+					        <span>
+					        	<input 
+					            type="text" 
+					            name="searchQuery" 
+					            id="searchQuery" 
+					            placeholder="Search for a specific plant"
+					            oninput="handleInputSanitization()" 
+					            required />
+						        <button type="submit" class="search-button">
+						            <img src='assets/search_icon.svg' alt='Search' width="30" height="30"/>
+						        </button>
+					        </span>
+					        
+					    </form>
+					</div>
 					<div id="sightingsList"></div>
 				</div>
+				
+				
+				
 			</div>
 		</div>
 		<!-- Modal Structure -->
 		<jsp:include page="WEB-INF/components/modal.jsp"></jsp:include>
+		<!-- Error Box to handle Search -->
+		<jsp:include page="WEB-INF/components/errorBox.jsp" />
 		<div id="popupContainer"></div>
 	</div>
 
@@ -335,50 +352,5 @@ if (request.getAttribute("mySightingActive") != null) {
 
 	<!-- Link to External JavaScript -->
 	<script src="./js/custom.js"></script>
-	
-	<!-- Search Bar -->
-	<script>
-	    document.getElementById("searchInput").addEventListener("input", function() {
-	        const query = this.value.trim();
-	        if (query) {
-	            fetch(`/myFlorabase/searchPlants?query=${query}`)
-	                .then(response => response.json())
-	                .then(results => {
-	                    const dropdown = document.getElementById("searchDropdown");
-	                    dropdown.innerHTML = "";
-	                    if (results.length > 0) {
-	                        results.forEach(plant => {
-	                            const item = document.createElement("li");
-	                            item.textContent = plant.name + " (" + plant.scientificName + ")";
-	                            item.addEventListener("click", () => {
-	                                displayPlantDetails(plant);
-	                            });
-	                            dropdown.appendChild(item);
-	                        });
-	                    } else {
-	                        const noResults = document.createElement("li");
-	                        noResults.textContent = "NO RESULTS";
-	                        dropdown.appendChild(noResults);
-	                    }
-	                })
-	                .catch(error => console.error("Error fetching search results:", error));
-	        } else {
-	            document.getElementById("searchDropdown").innerHTML = "";
-	        }
-	    });
-	    
-	    function displayPlantDetails(plant) {
-	        // Fetch plant details and render below the search bar
-	        fetch(`/myFlorabase/getPlantDetails?plantId=${plant.plantId}`)
-	            .then(response => response.json())
-	            .then(data => {
-	                const sightingsList = document.getElementById("sightingsList");
-	                sightingsList.innerHTML = ""; // Clear previous results
-	                const plantComponent = createSighting(data.sighting, data.user, data.plant, data.location);
-	                sightingsList.appendChild(plantComponent);
-	            })
-	            .catch(error => console.error("Error fetching plant details:", error));
-	    }
-	</script>
 </body>
 </html>
