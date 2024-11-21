@@ -7,6 +7,8 @@ public class User {
 	private byte[] profilePic;
 	private String description;
 	private boolean isAdmin;
+	private int preference_id;
+	private int location_id;
 	
 	public User(int userId, String username, String password, String description, boolean isAdmin) {
 		this.setUserId(userId);
@@ -70,5 +72,21 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public int getPreference_id() {
+		return preference_id;
+	}
+
+	public void setPreference_id(int preference_id) {
+		this.preference_id = preference_id;
+	}
+
+	public int getLocation_id() {
+		return location_id;
+	}
+
+	public void setLocation_id(int location_id) {
+		this.location_id = location_id;
 	}
 }
