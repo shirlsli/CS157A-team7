@@ -10,12 +10,14 @@ public class User {
 	private int preference_id;
 	private int location_id;
 	
-	public User(int userId, String username, String password, String description, boolean isAdmin) {
+	public User(int userId, String username, String password, String description, boolean isAdmin, int preference_id, int location_id) {
 		this.setUserId(userId);
 		this.setUsername(username);
 		this.setPassword(password);
 		this.setDescription(description != null ? description : username + " has not described themself yet.");
 		this.setAdmin(isAdmin);
+		this.setPreference_id(preference_id);
+		this.setLocation_id(location_id);
 	}
 	
 	public User(String username, String password, boolean isAdmin) {
