@@ -25,7 +25,6 @@
 		System.out.println("DB_PASSWORD environment variable is not set.");
 	}
 
-	MapPreference mp = null;
 	List<Filter> filters = new ArrayList<>();
 	try {
 		java.sql.Connection con;
@@ -40,16 +39,9 @@
 			String password = rs.getString("password");
 			String description = rs.getString("description");
 			boolean isAdmin = rs.getBoolean("isAdmin");
-			int preference_id = rs.getInt("preference_id");
-			int location_id = rs.getInt("location_id");
-			user = new User(userId, username, password, description, isAdmin, preference_id, location_id);
-		}
-		String mapPreferenceSQL = "SELECT * FROM myflorabase.mappreference WHERE preference_id=" + user.getPreference_id();
-		rs = statement.executeQuery(mapPreferenceSQL);
-		if (rs.next()) {
-			int preferenceId = rs.getInt("preference_id");
 			int zoom = rs.getInt("zoom");
-			mp = new MapPreference(preferenceId, zoom);
+			int location_id = rs.getInt("location_id");
+			user = new User(userId, username, password, description, isAdmin, zoom, location_id);
 		}
 
 		String filtersSQL = "SELECT uf.filter_id, color, filter_name, active FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '" + user.getUserId() + "'";
@@ -372,7 +364,7 @@
 				<h2>Default Zoom</h2>
 				<button class="secondary-button" onclick="editFilter(this)">Edit</button>
 			</span>
-			<p id="zoom"><%=mp.getZoom()%>%
+			<p id="zoom"><%=user.getZoom()%>%
 			</p>
 		</div>
 		<div id="filtersDiv">

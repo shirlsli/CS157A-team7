@@ -35,7 +35,7 @@ public class UpdateMapPreferenceServlet extends HttpServlet {
             // creating a new MapPreference
             // only updating individual attributes
             if (zoom != null) {
-            	String sql = "UPDATE myflorabase.user SET preference_id = (SELECT preference_id FROM myflorabase.mappreference WHERE zoom=?) WHERE user_id = ?;";
+            	String sql = "UPDATE myflorabase.user SET zoom = ? WHERE user_id = ?;";
                 try (PreparedStatement statement = con.prepareStatement(sql)) {
                     statement.setInt(1, Integer.parseInt(zoom));
                     statement.setInt(2,user.getUserId()); 

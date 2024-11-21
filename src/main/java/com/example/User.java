@@ -7,16 +7,16 @@ public class User {
 	private byte[] profilePic;
 	private String description;
 	private boolean isAdmin;
-	private int preference_id;
+	private int zoom;
 	private int location_id;
 	
-	public User(int userId, String username, String password, String description, boolean isAdmin, int preference_id, int location_id) {
+	public User(int userId, String username, String password, String description, boolean isAdmin, int zoom, int location_id) {
 		this.setUserId(userId);
 		this.setUsername(username);
 		this.setPassword(password);
 		this.setDescription(description != null ? description : username + " has not described themself yet.");
 		this.setAdmin(isAdmin);
-		this.setPreference_id(preference_id);
+		this.setZoom(zoom);
 		this.setLocation_id(location_id);
 	}
 	
@@ -84,12 +84,12 @@ public class User {
 		this.password = password;
 	}
 
-	public int getPreference_id() {
-		return preference_id;
+	public int getZoom() {
+		return zoom;
 	}
 
-	public void setPreference_id(int preference_id) {
-		this.preference_id = preference_id;
+	public void setZoom(int zoom) {
+		this.zoom = zoom;
 	}
 
 	public int getLocation_id() {

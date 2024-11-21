@@ -41,13 +41,8 @@
 			+ "`profile_pic` MEDIUMBLOB DEFAULT NULL, "
 			+ "`description` VARCHAR(500) DEFAULT NULL, "
 			+ "`isAdmin` TINYINT(1) DEFAULT 0,"
-			+ "`preference_id` int NOT NULL DEFAULT '4',"
+			+ "`zoom` int NOT NULL DEFAULT 100,"
 			+ "`location_id` int NOT NULL DEFAULT '1'"
-			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
-	String createMapPreferenceTableSQL = "CREATE TABLE `MapPreference` ("
-			+ "`preference_id` INT AUTO_INCREMENT,"
-			+ "`zoom` double DEFAULT 100,"
-			+ "PRIMARY KEY (`preference_id`)"
 			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 	String createFilterTableSQL = "CREATE TABLE `Filter` ("
 			+ "`filter_id` INT AUTO_INCREMENT NOT NULL,"
@@ -109,7 +104,6 @@
 
 
 			statement.executeUpdate(createUserTableSQL);
-			statement.executeUpdate(createMapPreferenceTableSQL);
 			statement.executeUpdate(createFilterTableSQL);
 			statement.executeUpdate(createLocationTableSQL);
 			statement.executeUpdate(createSightingTableSQL);
@@ -129,15 +123,6 @@
 			statement.executeUpdate("INSERT INTO myflorabase.filter (color, filter_name) VALUES ('green', 'All')");
 			
 			statement.executeUpdate("INSERT INTO myflorabase.location (latitude, longitude, name) VALUES ('37.3352', '121.8811', 'SJSU')");
-			
-			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (25)");
-			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (50)");
-			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (75)");
-			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (100)");
-			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (125)");
-			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (150)");
-			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (175)");
-			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (200)");
 			
 			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (1, 1, 1, 1, 'Roses are red, violets are blue', '2024-11-11', null, 2)");
 			
