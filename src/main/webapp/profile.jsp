@@ -289,6 +289,50 @@
 			window.location.reload();
 		}
 		
+		// activate/deactivate filters
+	    function updateActiveFilters() {
+	    	
+	    	const filterCheckboxes = document.querySelectorAll('.filters-checkbox');
+	      	const activeFilters = [];
+	      	const inactiveFilters = [];
+	        filterCheckboxes.forEach(checkbox => {
+	        	if (checkbox.checked) {
+	        		activeFilters.push(checkbox.value);  // Store checked values
+	        	} else {
+	        		inactiveFilters.push(checkbox.value); // Store unchecked values
+	        	}
+	        }); 
+	     	// Prepare URL-encoded data
+			const formData = new FormData();
+			
+			// Append the value of each checked checkbox to the FormData object
+		    activeFilters.forEach(value => {
+		        formData.append('activeFilters', value);
+		    });
+			
+			// Append the value of each unchecked checkbox to the FormData object
+		    inactiveFilters.forEach(value => {
+		        formData.append('inactiveFilters', value);
+		    });
+		    
+		 	// Log each key-value pair in the FormData object
+	        for (const [key, value] of formData.entries()) {
+	            console.log(key, `:`, value);
+	        }
+						
+			// Send the data to the server
+			fetch('/myFlorabase/EditActiveFilterServlet', {
+				method: 'POST',
+				body: formData // FormData handles setting the correct multipart/form-data header
+			})
+				.then(response => response.text())
+				.then(data => console.log('Server response:', data))
+				.catch(error => console.error('Error:', error));
+	    }
+	 
+
+
+		
 		
 	</script>
 	<jsp:include page="WEB-INF/components/header.jsp"></jsp:include>
@@ -339,8 +383,10 @@
 			<%
 			for (Filter f : filters) {
 			%>
-			<label class="checkbox-label prevent-select"> <input
-				type="checkbox" <%=f.isActive() ? "checked" : "" %>> <span class="checkbox"></span> <%=f.getFilterName()%></label>
+			<label class="checkbox-label prevent-select"> 
+			<input
+				type="checkbox" value="<%=f.getFilterId()%>" class="filters-checkbox" <%=f.isActive() ? "checked" : "" %> onchange="updateActiveFilters()"> 
+				<span class="checkbox"></span> <%=f.getFilterName()%></label>
 			<%
 			}
 			%>
