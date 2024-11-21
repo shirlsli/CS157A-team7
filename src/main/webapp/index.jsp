@@ -40,15 +40,14 @@
 			+ "`password` VARCHAR(45) DEFAULT NULL, "
 			+ "`profile_pic` MEDIUMBLOB DEFAULT NULL, "
 			+ "`description` VARCHAR(500) DEFAULT NULL, "
-			+ "`isAdmin` TINYINT(1) DEFAULT 0"
+			+ "`isAdmin` TINYINT(1) DEFAULT 0,"
+			+ "`preference_id` int NOT NULL DEFAULT '4',"
+			+ "`location_id` int NOT NULL DEFAULT '1'"
 			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 	String createMapPreferenceTableSQL = "CREATE TABLE `MapPreference` ("
 			+ "`preference_id` INT AUTO_INCREMENT,"
-			+ "`user_id` int NOT NULL,"
-			+ "`filter_id` int NOT NULL,"
-			+ "`location_id` int NOT NULL,"
 			+ "`zoom` double DEFAULT 100,"
-			+ "PRIMARY KEY (`preference_id`,`user_id`,`filter_id`,`location_id`)"
+			+ "PRIMARY KEY (`preference_id`)"
 			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 	String createFilterTableSQL = "CREATE TABLE `Filter` ("
 			+ "`filter_id` INT AUTO_INCREMENT NOT NULL,"
@@ -79,6 +78,11 @@
 			+ "`filter_id` int NOT NULL,"
 			+ "PRIMARY KEY (`plant_id`, `filter_id`)"
 			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
+	String createUser_FilterTableSQL = "CREATE TABLE `user_filter` ("
+			+ "`user_id` int NOT NULL,"
+			+ "`filter_id` int NOT NULL,"
+			+ "PRIMARY KEY (`user_id`,`filter_id`)"
+			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 
 	Connection con = null;
 	try {
@@ -100,6 +104,8 @@
 			statement.executeUpdate("DROP TABLE IF EXISTS Allergic");
 			statement.executeUpdate("DROP TABLE IF EXISTS Edits");
 			statement.executeUpdate("DROP TABLE IF EXISTS Within");
+			statement.executeUpdate("DROP TABLE IF EXISTS User_Filter");
+
 
 			statement.executeUpdate(createUserTableSQL);
 			statement.executeUpdate(createMapPreferenceTableSQL);
@@ -111,6 +117,7 @@
 			statement.executeUpdate(createAllergicTableSQL);
 			statement.executeUpdate(createEditsTableSQL);
 			statement.executeUpdate(createWithinTableSQL);
+			statement.executeUpdate(createUser_FilterTableSQL);
 
 			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
 					+ "VALUES ('user1', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', true);");
@@ -119,11 +126,27 @@
 			out.println("Initial entries in table \"myFlorabase\": <br/>");
 
 			statement.executeUpdate("INSERT INTO myflorabase.filter (color, filter_name) VALUES ('green', 'All')");
+			
 			statement.executeUpdate("INSERT INTO myflorabase.location (latitude, longitude, name) VALUES ('37.3352', '121.8811', 'SJSU')");
-			statement.executeUpdate("INSERT INTO myflorabase.mappreference (user_id, filter_id, location_id, zoom) VALUES ('1', '1', 1, 125)");
+			
+			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (25)");
+			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (50)");
+			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (75)");
+			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (100)");
+			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (125)");
+			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (150)");
+			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (175)");
+			statement.executeUpdate("INSERT INTO myflorabase.mappreference (zoom) VALUES (200)");
+			
 			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (1, 1, 1, 1, 'Roses are red, violets are blue', '2024-11-11', null, 2)");
+			
 			statement.executeUpdate("INSERT INTO myflorabase.plant (plant_id, name, scientific_name, description, poisonous, invasive, endangered) VALUES (1, 'Rose', 'Rosa rubiginosa', null, true, true, true)");
+			
 			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (2, 1, 2, 1, 'Found more roses', '2024-11-12', null, 2)");
+			
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 1)");
+			
 			out.println("Initial entries in table \"myFlorabase\": <br/>");
 
 			ResultSet rs = statement.executeQuery("SELECT * FROM User");
