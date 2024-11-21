@@ -74,6 +74,13 @@ String dbUrl = "jdbc:mysql://localhost:3306/myFlorabase?autoReconnect=true&useSS
 			+ "`filter_id` int NOT NULL,"
 			+ "PRIMARY KEY (`plant_id`, `filter_id`)"
 			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
+	String createFlagTableSQL = "CREATE TABLE `Flag` (" 
+			+ "`flag_id` INT AUTO_INCREMENT NOT NULL,"
+			+ "`user_id` int NOT NULL," 
+			+ "`sighting_id` int NOT NULL," 
+			+ "`reason` VARCHAR(500) DEFAULT NULL,"
+			+ "PRIMARY KEY (`flag_id`)" 
+			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 	String createUser_FilterTableSQL = "CREATE TABLE `user_filter` ("
 			+ "`user_id` int NOT NULL,"
 			+ "`filter_id` int NOT NULL,"
@@ -100,6 +107,7 @@ try {
 			statement.executeUpdate("DROP TABLE IF EXISTS Allergic");
 			statement.executeUpdate("DROP TABLE IF EXISTS Edits");
 			statement.executeUpdate("DROP TABLE IF EXISTS Within");
+			statement.executeUpdate("DROP TABLE IF EXISTS Flag");
 			statement.executeUpdate("DROP TABLE IF EXISTS User_Filter");
 
 
@@ -112,6 +120,7 @@ try {
 			statement.executeUpdate(createAllergicTableSQL);
 			statement.executeUpdate(createEditsTableSQL);
 			statement.executeUpdate(createWithinTableSQL);
+			statement.executeUpdate(createFlagTableSQL);
 			statement.executeUpdate(createUser_FilterTableSQL);
 
 		statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
