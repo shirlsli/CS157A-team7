@@ -40,20 +40,19 @@
 			String password = rs.getString("password");
 			String description = rs.getString("description");
 			boolean isAdmin = rs.getBoolean("isAdmin");
-			user = new User(userId, username, password, description, isAdmin);
+			int preference_id = rs.getInt("preference_id");
+			int location_id = rs.getInt("location_id");
+			user = new User(userId, username, password, description, isAdmin, preference_id, location_id);
 		}
-		String mapPreferenceSQL = "SELECT * FROM myflorabase.mappreference WHERE user_id=" + user.getUserId();
+		String mapPreferenceSQL = "SELECT * FROM myflorabase.mappreference WHERE preference_id=" + user.getPreference_id();
 		rs = statement.executeQuery(mapPreferenceSQL);
 		if (rs.next()) {
 			int preferenceId = rs.getInt("preference_id");
-			int prefUserId = rs.getInt("user_id");
-			int prefFilterId = rs.getInt("filter_id");
-			int prefLocationId = rs.getInt("location_id");
 			int zoom = rs.getInt("zoom");
-			mp = new MapPreference(preferenceId, prefUserId, prefFilterId, prefLocationId, zoom);
+			mp = new MapPreference(preferenceId, zoom);
 		}
 
-		String filtersSQL = "SELECT * FROM myflorabase.filter WHERE filter_id=" + mp.getFilterId();
+		String filtersSQL = "SELECT uf.filter_id, color, filter_name FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '" + user.getUserId() + "'";
 		rs = statement.executeQuery(filtersSQL);
 		while (rs.next()) {
 			int filterId = rs.getInt("filter_id");
