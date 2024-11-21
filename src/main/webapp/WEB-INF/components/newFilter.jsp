@@ -58,7 +58,7 @@
 			<form id="filterForm" onsubmit="submitFilter(event)" method="POST">
 				<div class="form-group" id="filter-name-group">
 					<label class="required textfield-label" for="filterName">Filter Name</label> 
-					<input type="text" id="filterName" name="filterName" placeholder="Give this filter a name" />
+					<input type="text" id="filterName" name="filterName" placeholder="Give this filter a name" required/>
 				</div>
 				<div class="form-group">
 					<label class="required" for="filterColor">Filter Color</label> 
