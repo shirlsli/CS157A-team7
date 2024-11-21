@@ -68,19 +68,20 @@ public class RegisterDao {
                 if (resultSet.next()) {
                 	int userId = resultSet.getInt("user_id");
                 	user.setUserId(userId);
+                	// add default filter 
+                    String user_filterSQL = "INSERT INTO myflorabase.user_filter(user_id, filter_id) VALUES(?,?)";
+                    try {
+                    	PreparedStatement ps3 = con.prepareStatement(user_filterSQL);
+                    	ps3.setInt(1, user.getUserId());
+                    	ps3.setInt(2, 1); // default filter
+                    	ps3.executeUpdate();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        result=false;
+                    }
                 }
                 
-                // add default filter 
-                String user_filterSQL = "INSERT INTO myflorabase.user_filter(user_id, filter_id) VALUES(?,?)";
-                try {
-                	PreparedStatement ps3 = con.prepareStatement(user_filterSQL);
-                	ps3.setInt(1, user.getUserId());
-                	ps3.setInt(2, 1);
-                	ps3.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    result=false;
-                }
+                
             } catch (SQLException e) {
                 e.printStackTrace();
                 result=false;
