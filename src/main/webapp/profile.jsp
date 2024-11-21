@@ -191,7 +191,7 @@
 			                    headers: {
 			                        'Content-Type': 'application/x-www-form-urlencoded',
 			                    },
-			                    body: 'zoom=' + encodeURIComponent(newZoom) + '&preferenceId=' + <%=mp.getPreferenceId()%>
+			                    body: 'zoom=' + encodeURIComponent(newZoom)<%--  + '&preferenceId=' + <%=mp.getPreferenceId()%> --%>
 			                })
 			                .then(response => response.text())
 			                .then(data => {
