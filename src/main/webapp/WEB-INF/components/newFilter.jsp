@@ -61,6 +61,18 @@
 					<input type="text" id="filterName" name="filterName" placeholder="Give this filter a name" />
 				</div>
 				<div class="form-group">
+					<label class="required" for="filterColor">Filter Color</label> 
+					<select id="filterColor" name="filterColor" required>
+						<option value="">--Please choose a color--</option>
+						<option value="red">Red</option>
+						<option value="orange">Orange</option>
+						<option value="yellow">Yellow</option>
+						<option value="green">Green</option>
+						<option value="blue">Blue</option>
+						<option value="purple">Purple</option>
+					</select>
+				</div>
+				<div class="form-group">
 					<label for="search-bar">Add Plants to the filter</label>
 					*insert search bar*
 				</div>
