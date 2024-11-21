@@ -1,9 +1,9 @@
-<%@ page import="java.sql.*, java.io.IOException" %>
+<%@ page import="java.sql.*, java.io.IOException"%>
 <%
-	// Getting database credentials from environment variables
-	String dbUser = "root";
-	String dbPassword = System.getenv("DB_PASSWORD");
-	String dbUrl = "jdbc:mysql://localhost:3306/myFlorabase?autoReconnect=true&useSSL=false";
+// Getting database credentials from environment variables
+String dbUser = "root";
+String dbPassword = System.getenv("DB_PASSWORD");
+String dbUrl = "jdbc:mysql://localhost:3306/myFlorabase?autoReconnect=true&useSSL=false";
 
 	// SQL statements for creating tables
 	String createLocationTableSQL = "CREATE TABLE `Location` ("
@@ -80,14 +80,14 @@
 			+ "PRIMARY KEY (`user_id`,`filter_id`)"
 			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 
-	Connection con = null;
-	try {
-		Class.forName("com.mysql.cj.jdbc.Driver");
-		con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-		try (Statement statement = con.createStatement()) {
-			statement.executeUpdate("DROP SCHEMA IF EXISTS myFlorabase");
-			statement.executeUpdate("CREATE SCHEMA myFlorabase");
-			statement.executeUpdate("USE myFlorabase");
+Connection con = null;
+try {
+	Class.forName("com.mysql.cj.jdbc.Driver");
+	con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+	try (Statement statement = con.createStatement()) {
+		statement.executeUpdate("DROP SCHEMA IF EXISTS myFlorabase");
+		statement.executeUpdate("CREATE SCHEMA myFlorabase");
+		statement.executeUpdate("USE myFlorabase");
 
 			statement.executeUpdate("DROP TABLE IF EXISTS Member");
 			statement.executeUpdate("DROP TABLE IF EXISTS Users");
@@ -114,11 +114,11 @@
 			statement.executeUpdate(createWithinTableSQL);
 			statement.executeUpdate(createUser_FilterTableSQL);
 
-			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
-					+ "VALUES ('user1', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', true);");
-			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
-					+ "VALUES ('user2', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', false);");
-			out.println("Initial entries in table \"myFlorabase\": <br/>");
+		statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+		+ "VALUES ('user1', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', true);");
+		statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+		+ "VALUES ('user2', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', false);");
+		out.println("Initial entries in table \"myFlorabase\": <br/>");
 
 			statement.executeUpdate("INSERT INTO myflorabase.filter (color, filter_name) VALUES ('green', 'All')");
 			
@@ -135,34 +135,34 @@
 			
 			out.println("Initial entries in table \"myFlorabase\": <br/>");
 
-			ResultSet rs = statement.executeQuery("SELECT * FROM User");
-			while (rs.next()) {
-				out.println("<tr>" + "<td>" + rs.getString(1) + "</td>" + "<td>" + rs.getString(3) + "</td>" + "<td>"
-						+ rs.getString(4) + "</td>" + "</tr>");
-			}
-			rs.close();
-			statement.close();
-			con.close();
+		ResultSet rs = statement.executeQuery("SELECT * FROM User");
+		while (rs.next()) {
+	out.println("<tr>" + "<td>" + rs.getString(1) + "</td>" + "<td>" + rs.getString(3) + "</td>" + "<td>"
+			+ rs.getString(4) + "</td>" + "</tr>");
 		}
-	} catch (SQLException e) {
-		out.println("SQLException caught: " + e.getMessage());
-	} catch (ClassNotFoundException e) {
-		out.println("<p>MySQL JDBC Driver not found: " + e.getMessage() + "</p>");
-		e.printStackTrace();
-	} finally {
-		if (con != null) {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				out.println("<p>Failed to close the connection: " + e.getMessage() + "</p>");
-			}
+		rs.close();
+		statement.close();
+		con.close();
+	}
+} catch (SQLException e) {
+	out.println("SQLException caught: " + e.getMessage());
+} catch (ClassNotFoundException e) {
+	out.println("<p>MySQL JDBC Driver not found: " + e.getMessage() + "</p>");
+	e.printStackTrace();
+} finally {
+	if (con != null) {
+		try {
+	con.close();
+		} catch (SQLException e) {
+	out.println("<p>Failed to close the connection: " + e.getMessage() + "</p>");
 		}
 	}
+}
 %>
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Database Setup</title>
+<title>Database Setup</title>
 </head>
 <body>
 	<h1>Database Initialization</h1>
