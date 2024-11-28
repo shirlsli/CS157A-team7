@@ -29,6 +29,8 @@ if (request.getAttribute("mySightingActive") != null) {
 	<div id="sightingsPage" class="sightingsPage">
 		<div id="header"><jsp:include
 				page="WEB-INF/components/header.jsp"></jsp:include></div>
+				
+        
 		<div id="sightingsDiv">
 			<div>
 				<div id="map" class="column"></div>
@@ -47,12 +49,35 @@ if (request.getAttribute("mySightingActive") != null) {
 				<div class="sightings-component sightings-column-div">
 					<span class="sightings-title"><h1 class="pageTitle"><%=sightingsPage ? "Sightings" : "My Sightings"%></h1>
 						<img src='assets/filter_icon.svg' width="30" height="30" /> </span>
+					<!-- Search bar -->
+					<div class="search-container">
+					    <form action="SearchBarServlet" method="get">
+					        <span>
+					        	<input 
+					            type="text" 
+					            name="searchQuery" 
+					            id="searchQuery" 
+					            placeholder="Search for a specific plant"
+					            oninput="handleInputSanitization()" 
+					            required />
+						        <button type="submit" class="search-button">
+						            <img src='assets/search_icon.svg' alt='Search' width="30" height="30"/>
+						        </button>
+					        </span>
+					        
+					    </form>
+					</div>
 					<div id="sightingsList"></div>
 				</div>
+				
+				
+				
 			</div>
 		</div>
 		<!-- Modal Structure -->
 		<jsp:include page="WEB-INF/components/modal.jsp"></jsp:include>
+		<!-- Error Box to handle Search -->
+		<jsp:include page="WEB-INF/components/errorBox.jsp" />
 		<div id="popupContainer"></div>
 	</div>
 
