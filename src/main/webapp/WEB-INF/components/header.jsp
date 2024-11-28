@@ -28,9 +28,9 @@
 		<span id="profile-container" class="dropdown">
 			<div id="profile-underline" class="${profileActive}-<%=user.isAdmin() ? "admin" : "regular"%>"></div>
 
-			<div class="dropdown-content">
-				<button class="dropdown-button" onClick="profile()">Profile</button>
-				<button class="dropdown-button" onClick="logOut()">Log Out</button>
+			<div class="profile-dropdown-content">
+				<button class="profile-dropdown-button" onClick="profile()">Profile</button>
+				<button class="profile-dropdown-button" onClick="logOut()">Log Out</button>
 			</div>
 			<button id="profile-button"
 				class="<%=user.isAdmin() ? "admin" : "regular"%>"
