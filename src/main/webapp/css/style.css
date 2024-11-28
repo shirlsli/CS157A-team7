@@ -685,3 +685,7 @@ input {
 .loading-text {
 	text-align: center;
 }
+
+select#filterColor {
+	width: 40%;
+}
