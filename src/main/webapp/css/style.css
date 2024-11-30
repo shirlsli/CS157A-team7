@@ -49,9 +49,9 @@ header {
 	gap: 10px;
 }
 
-#profilePage {
-	margin-left: 20vw;
-	margin-right: 20vw;
+#profilePage, .adminPage {
+	margin-left: 15vw;
+	margin-right: 15vw;
 	margin-bottom: 40px;
 }
 
@@ -688,4 +688,8 @@ input {
 
 select#filterColor {
 	width: 40%;
+}
+
+#flaggedSightingsTitle {
+	margin-bottom: 20px;
 }

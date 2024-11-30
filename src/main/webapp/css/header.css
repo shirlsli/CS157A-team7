@@ -146,7 +146,7 @@ header {
 	border-radius: 50px;
 	padding: 0px;
 	left: 0px;
-	top: -85px;
+	/* top: -85px; */
 }
 
 #profile-button.admin {
