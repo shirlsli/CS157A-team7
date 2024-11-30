@@ -20,10 +20,6 @@
 			<button id="mySightings" onClick="mySightings()"
 				class="${mySightingActive}-<%=user.isAdmin() ? "admin" : "regular"%> hover-underline-animation-<%=user.isAdmin() ? "admin" : "regular"%> header-text">My
 				Sightings</button>
-			<button id="reportSightings" onClick="reportSightings()"
-				class=" ${reportSightingActive}-<%=user.isAdmin() ? "admin" : "regular"%> hover-underline-animation-<%=user.isAdmin() ? "admin" : "regular"%> header-text">Report
-				Sighting</button>
-
 		</span>
 		<span id="profile-container" class="dropdown">
 			<div id="profile-underline" class="${profileActive}-<%=user.isAdmin() ? "admin" : "regular"%>"></div>
@@ -49,7 +45,7 @@
 <script>
 
 	function adminPage() {
-		window.location = 'adminpage'; // TODO: create servlet to load the correct page
+		window.location = 'admin'; // TODO: create servlet to load the correct page
 	}
 	function sightings() {
 		window.location = 'sightings';
