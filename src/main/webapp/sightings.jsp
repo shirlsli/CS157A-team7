@@ -29,8 +29,8 @@ if (request.getAttribute("mySightingActive") != null) {
 	<div id="sightingsPage" class="sightingsPage">
 		<div id="header"><jsp:include
 				page="WEB-INF/components/header.jsp"></jsp:include></div>
-				
-        
+
+
 		<div id="sightingsDiv">
 			<div>
 				<div id="map" class="column"></div>
@@ -50,28 +50,28 @@ if (request.getAttribute("mySightingActive") != null) {
 					<span class="sightings-title"><h1 class="pageTitle"><%=sightingsPage ? "Sightings" : "My Sightings"%></h1>
 						<img src='assets/filter_icon.svg' width="30" height="30" /> </span>
 					<!-- Search bar -->
+					<%
+					if (sightingsPage) {
+					%>
 					<div class="search-container">
-					    <form action="SearchBarServlet" method="get">
-					        <span>
-					        	<input 
-					            type="text" 
-					            name="searchQuery" 
-					            id="searchQuery" 
-					            placeholder="Search for a specific plant"
-					            oninput="handleInputSanitization()" 
-					            required />
-						        <button type="submit" class="search-button">
-						            <img src='assets/search_icon.svg' alt='Search' width="30" height="30"/>
-						        </button>
-					        </span>
-					        
-					    </form>
+						<form action="SearchBarServlet" method="get">
+							<input id="searchBar" type="text" class="icon" name="searchQuery"
+								id="searchQuery" placeholder="Search for a specific plant"
+								oninput="handleInputSanitization()" required />
+						</form>
 					</div>
+					<%
+					} else {
+					%>
+					<div class="spacer"></div>
+					<%
+					}
+					%>
 					<div id="sightingsList"></div>
 				</div>
-				
-				
-				
+
+
+
 			</div>
 		</div>
 		<!-- Modal Structure -->
@@ -85,7 +85,8 @@ if (request.getAttribute("mySightingActive") != null) {
 	<script src="./js/modal.js"></script>
 	<script>
 	window.addEventListener("load", function() {
-        var sightingsListContainer = document.getElementById('sightingsList');
+		const isSightingsPage = <%=sightingsPage%>;
+		const sightingsListContainer = document.getElementById('sightingsList');
         fetch("/myFlorabase/getSightings")
         .then(response => {
           return response.json();
@@ -103,7 +104,6 @@ if (request.getAttribute("mySightingActive") != null) {
         		  console.log(info);
         		  // info[0] = user, info[1] = plant, info[2] = location
         		  const curUser = <%=userJson%>;
-        		  const isSightingsPage = <%=sightingsPage%>;
         		  if (isSightingsPage) {
         			  const sightingComponent = createSighting(sighting, info[0], info[1], info[2], curUser);
                 	  sightingsListContainer.appendChild(sightingComponent);
