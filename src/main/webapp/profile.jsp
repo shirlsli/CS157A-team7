@@ -348,10 +348,8 @@
 	    }
 	 
 		// delete filter confirmation box
-		function deleteFilterConfirmation(filter_id){
-			/* const modal = document.getElementById('filterModal');
-			modal.style.display = "block"; */
-			createFilterPopup(filter_id, "Are you sure you want to delete this filter?", "Cancel", "Delete", false);
+		function deleteFilterConfirmation(filter_id, filter_name){
+			createFilterPopup(filter_id, "Are you sure you want to delete '" + filter_name + "'?", "Cancel", "Delete", false);
 		}
 		
 		// delete filter
@@ -434,11 +432,6 @@
 				
 			} else {
 				
-				const modal = document.getElementById('filterModal');
-				modal.style.display = "block";
-				const modalContent = document.getElementById('filterModalContent');
-				modalContent.style.display = "none";
-				
 				const primaryButton = document.createElement("button");
 				primaryButton.classList.add("primary-button", "popup-modal-button");
 				primaryButton.textContent = primaryButtonText;
@@ -510,8 +503,8 @@
 				class="filters-checkbox" <%=f.isActive() ? "checked" : ""%>
 				onchange="updateActiveFilters()"> <span class="checkbox"></span>
 				<%=f.getFilterName()%> <%=f.getFilterId() != 1
-				? "<button class=\"icon-button\"> <img id=\"trash-icon\" onclick=\"deleteFilterConfirmation(" + f.getFilterId()
-						+ ")\" src=\"assets/trash_icon.svg\" width=\"20\" height=\"20\" class=\"icon-shown\"></button>"
+				? "<button class=\"icon-button\"> <img id=\"trash-icon\" onclick=\'deleteFilterConfirmation(" + f.getFilterId()
+						+ ", \"" + f.getFilterName() + "\")\' src=\"assets/trash_icon.svg\" width=\"20\" height=\"20\" class=\"icon-shown\"></button>"
 				: ""%></label>
 			<%
 			}
