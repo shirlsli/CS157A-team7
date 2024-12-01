@@ -58,6 +58,8 @@ public class FilterDao {
 		loadDriver(dbdriver);
 		Connection con = getConnection();
 
+		String successLog = "";
+
 		try {
 
 			// checking the values:
@@ -71,58 +73,72 @@ public class FilterDao {
 
 			Filter filter = new Filter(filterColor, filterName);
 
+			con.setAutoCommit(false);
+
 			// add new entry into filter
 			String insertNewFilterSQL = "INSERT INTO myflorabase.filter (color, filter_name) VALUES (?, ?);";
+
 			try {
 				PreparedStatement ps = con.prepareStatement(insertNewFilterSQL);
 				ps.setString(1, filter.getColor());
 				ps.setString(2, filter.getFilterName());
-				ps.executeUpdate();
+				int filter_row = ps.executeUpdate();
 
 				// get filter_id
 				String getFilterId = "SELECT LAST_INSERT_ID();";
+				
+				int user_filter_row = 0;
 
-				try {
-					PreparedStatement ps2 = con.prepareStatement(getFilterId);
-					ResultSet resultSet = ps2.executeQuery();
-					if (resultSet.next()) {
-						int filterId = resultSet.getInt("LAST_INSERT_ID()");
-						filter.setFilterId(filterId);
+				PreparedStatement ps2 = con.prepareStatement(getFilterId);
+				ResultSet resultSet = ps2.executeQuery();
+				if (resultSet.next()) {
+					int filterId = resultSet.getInt("LAST_INSERT_ID()");
+					filter.setFilterId(filterId);
 
-						try {
-							// add to user_filter,
-							String addUserFilterSQL = "INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (?,?);";
-							PreparedStatement ps3 = con.prepareStatement(addUserFilterSQL);
-							ps3.setInt(1, user.getUserId());
-							ps3.setInt(2, filter.getFilterId());
-							ps3.executeUpdate();
+					// add to user_filter,
+					String addUserFilterSQL = "INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (?,?);";
+					PreparedStatement ps3 = con.prepareStatement(addUserFilterSQL);
+					ps3.setInt(1, user.getUserId());
+					ps3.setInt(2, filter.getFilterId());
+					user_filter_row = ps3.executeUpdate();
 
-							// add entries to within (filter and plants)
-							String addPlantsToFilter = "INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (?,?);";
-							PreparedStatement ps4 = con.prepareStatement(addPlantsToFilter);
-							ps4.setInt(1, filter.getFilterId());
-							for (String value : selectedValues) {
-								ps4.setInt(2, Integer.parseInt(value));
-								ps4.executeUpdate();
-							}
-						} catch (SQLException e) {
-							System.out.println("SQLException caught: " + e.getMessage());
-							e.printStackTrace();
-							return e.getMessage();
+					// add entries to within (filter and plants)
+					String addPlantsToFilter = "INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (?,?);";
+					PreparedStatement ps4 = con.prepareStatement(addPlantsToFilter);
+					ps4.setInt(1, filter.getFilterId());
+					for (String value : selectedValues) {
+						ps4.setInt(2, Integer.parseInt(value));
+						int within_rows = ps4.executeUpdate();
+						if(within_rows == 0) {
+							throw new SQLException();
 						}
 					}
-				} catch (SQLException e) {
-					System.out.println("SQLException caught: " + e.getMessage());
-					e.printStackTrace();
-					return e.getMessage();
 
 				}
-			} catch (SQLException e) {
-				System.out.println("SQLException caught: " + e.getMessage());
-				e.printStackTrace();
-				return e.getMessage();
 
+				// ensure all operation successful
+				if (user_filter_row == 1 && filter_row == 1) {
+					// If successful, commit the transaction
+					con.commit();
+					successLog = "Added new filter successfully.";
+
+				} else {
+					// If any operation fails, rollback the transaction
+					con.rollback();
+					successLog = "Adding new filter failed. Rolling back changes.";
+
+				}
+
+			} catch (SQLException e) {
+				con.rollback();
+				System.out.println("Error adding new filter: " + e.getMessage());
+				successLog = e.getMessage();
 			}
+
+		} catch (SQLException e) {
+			System.out.println("SQLException caught: " + e.getMessage());
+			e.printStackTrace();
+			successLog = e.getMessage();
 
 		} finally {
 			if (con != null) {
@@ -130,11 +146,11 @@ public class FilterDao {
 					con.close();
 				} catch (SQLException e) {
 					System.out.println("Failed to close the connection: " + e.getMessage());
-					return e.getMessage();
+					successLog = e.getMessage();
 				}
 			}
 		}
-		return "New filter added successfully!";
+		return successLog;
 	}
 
 	public String deleteFilter(User user, String filter_id) {
@@ -253,8 +269,7 @@ public class FilterDao {
 						updatedRows += ps2.executeUpdate();
 					}
 				}
-				
-				
+
 				// ensure all operation successful
 				if (updatedRows > 0) {
 					// If successful, commit the transaction
