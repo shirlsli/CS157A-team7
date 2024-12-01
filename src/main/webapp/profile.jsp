@@ -170,7 +170,7 @@
 			}
 		}
 		
-		function editFilter(button) {
+		function editZoom(button) {
 			secondaryButtonClick(button);
 			button.style.display = "none";
 			const zoomDiv = document.getElementById("zoomDiv");
@@ -200,7 +200,7 @@
 			                    headers: {
 			                        'Content-Type': 'application/x-www-form-urlencoded',
 			                    },
-			                    body: 'zoom=' + encodeURIComponent(newZoom)<%--  + '&preferenceId=' + <%=mp.getPreferenceId()%> --%>
+			                    body: 'zoom=' + encodeURIComponent(newZoom)
 			                })
 			                .then(response => response.text())
 			                .then(data => {
@@ -242,6 +242,7 @@
 			const filterModalLabel = document.getElementById('filterModalLabel');
 			const filterName = document.getElementById('filterName');
 			const colorSelectGroup = document.getElementById('colorSelectGroup');
+			const filterColor = document.getElementById('filterColor');
 			const filterModalPlantCheckboxes = document.getElementById('filterModalPlantCheckboxes');
 			const searchBar = document.getElementById("searchBar");
 			const tagList = document.getElementById("tagList");
@@ -253,14 +254,18 @@
 			if (isAllergy) {
 				filterModalPlantCheckboxes.style.display = "none";
 				filterModalLabel.style.display = "none";
+				filterName.removeAttribute('required');
 				colorSelectGroup.style.display = "none";
+				filterColor.removeAttribute('required');
 				filterName.style.display = "none";
 				filterForm.onsubmit = function(event) {
 					  submitAllergy(event);
 				};
 			} else {
 				colorSelectGroup.style.display = "block";
+				filterName.setAttribute('required', "true");
 				filterModalLabel.style.display = "block";
+				filterColor.setAttribute('required', "true");
 				colorSelectGroup.style.display = "block";
 				filterName.style.display = "block";
 				filterModalPlantCheckboxes.style.display = "block";
@@ -302,6 +307,9 @@
 			  });
 			const modal = document.getElementById('filterModal');
 			modal.style.display = "block";
+			
+			const modalContent = document.getElementById('filterModalContent');
+			modalContent.style.display = "block";
 		}
 		
 		function submitAllergy(event) {
@@ -378,6 +386,7 @@
 		function submitFilter(event) {
 			event.preventDefault();
 			
+			
 			// filter name
 			const filterName = document.getElementById('filterName').value.trim();
 			
@@ -408,23 +417,41 @@
 	        for (const [key, value] of formData.entries()) {
 	            console.log(key, `:`, value);
 	        }
-						
+					
+			// loading screen
+			const modalContent = document.getElementById("filterModalContent");
+			modalContent.style.display = "none";
+			const lottieFileAnim = document.getElementById("lottieFileAnim");
+			lottieFileAnim.style.display = "flex";
+			lottieFileAnim.style.position = "fixed";
+			lottieFileAnim.style.top = 0;
+			lottieFileAnim.style.left = 0;
+			lottieFileAnim.style.justifyContent = "center";
+			lottieFileAnim.style.alignItems = "center";
+			lottieFileAnim.style.width = "100%";
+			lottieFileAnim.style.height = "100%";
+            document.getElementById("filter-loading-text").textContent = "Saving your filter...";
+			 
 			// Send the data to the server
 			fetch('/myFlorabase/AddFilterServlet', {
 				method: 'POST',
 				body: formData // FormData handles setting the correct multipart/form-data header
 			})
 				.then(response => response.text())
-				.then(data => console.log('Server response:', data))
+				/* .then(data => console.log('Server response:', data)) */
+				
+				
+				.then(data => {
+					console.log('Successfully completed operation');
+					setTimeout(function() {
+						lottieFileAnim.style.display = "none";
+						closeNewFilterModal();
+						createFilterPopup(null, "Your new filter has been successfully created!", "Close", "", false);
+					}, 2000);
+				})
+				
 				.catch(error => console.error('Error:', error));
 
-			// Close the new filter modal
-						
-			closeNewFilterModal();
-
-			setTimeout(function() {
-			    location.reload();
-			}, 3000);
 		}
 		
 		// activate/deactivate filters
@@ -469,8 +496,26 @@
 			
 	    }
 	 
+		
+		
 		// delete filter
 		function deleteFilter(filter_id) {
+			// loading screen
+			const modal = document.getElementById('filterModal');
+			modal.style.display = "block";
+			const modalContent = document.getElementById("filterModalContent");
+			modalContent.style.display = "none";
+			const lottieFileAnim = document.getElementById("lottieFileAnim");
+			lottieFileAnim.style.display = "flex";
+			lottieFileAnim.style.position = "fixed";
+			lottieFileAnim.style.top = 0;
+			lottieFileAnim.style.left = 0;
+			lottieFileAnim.style.justifyContent = "center";
+			lottieFileAnim.style.alignItems = "center";
+			lottieFileAnim.style.width = "100%";
+			lottieFileAnim.style.height = "100%";
+            document.getElementById("filter-loading-text").textContent = "Deleting your filter...";
+			
 			fetch('/myFlorabase/DeleteFilterServlet', { 
                 method: 'POST',
                 headers: {
@@ -479,16 +524,79 @@
                 body: 'filter_id=' + encodeURIComponent(filter_id)
             })
 	            .then(response => response.text())
-				.then(data => console.log('Server response:', data))
+				.then(data => {
+					console.log('Successfully completed operation');
+					setTimeout(function() {
+						lottieFileAnim.style.display = "none";
+						closeNewFilterModal();
+						createFilterPopup(filter_id, "Your filter has been successfully deleted!", "Close", "", false);
+					}, 3000);
+				})
 				.catch(error => console.error('Error:', error));
-			
-			setTimeout(function() {
-			    location.reload();
-			}, 3000);
 		}
 		
+		function createFilterPopup(filter_id, message, primaryButtonText, secondaryButtonText, primaryCallback) {
+			
+			const popupContainer = document.getElementById("popupContainer");
+			popupContainer.style.display = "flex";
+			popupContainer.classList.add('popup-modal');
+			
+			const popup = document.createElement('div');
+			popup.classList.add('popup-modal-content');
+						
+			const popupMessage = document.createElement('p');
+			popupMessage.textContent = message;
+			popupMessage.classList.add('popup-modal-message');
 
+			popup.appendChild(popupMessage);
 
+			if (secondaryButtonText !== "") {
+				
+				const primaryButton = document.createElement("button");
+				primaryButton.setAttribute("id", "primaryButton");
+				const secondaryButton = document.createElement("button");
+
+				primaryButton.setAttribute("class", "primary-button");
+				secondaryButton.setAttribute("class", "secondary-button");
+
+				primaryButton.textContent = primaryButtonText;
+				secondaryButton.textContent = secondaryButtonText;
+
+				const buttonGroup = document.createElement("span");
+				buttonGroup.setAttribute("id", "buttonGroup");
+
+				buttonGroup.appendChild(primaryButton);
+				buttonGroup.appendChild(secondaryButton);
+
+				primaryButton.addEventListener("click", function() {
+					window.location.reload();
+				}); 
+				secondaryButton.addEventListener("click", function() {
+					popupContainer.style.display = "none";
+					popup.style.display = "none";
+					deleteFilter(filter_id);
+				});
+				
+				popup.appendChild(buttonGroup);
+				
+			} else {
+				
+				const primaryButton = document.createElement("button");
+				primaryButton.classList.add("primary-button", "popup-modal-button");
+				primaryButton.textContent = primaryButtonText;
+				
+				primaryButton.addEventListener("click", function() {
+					window.location.reload();
+				});
+				popup.appendChild(primaryButton);
+			}
+			
+
+			popupContainer.appendChild(popup);
+		}
+
+		
+		
 		
 		
 	</script>
@@ -540,7 +648,7 @@
 		<div id="zoomDiv">
 			<span class="section-title-with-button">
 				<h2>Default Zoom</h2>
-				<button class="secondary-button" onclick="editFilter(this)">Edit</button>
+				<button class="secondary-button" onclick="editZoom(this)">Edit</button>
 			</span>
 			<p id="zoom"><%=user.getZoom()%>%
 			</p>
@@ -553,24 +661,177 @@
 			<%
 			for (Filter f : filters) {
 			%>
-			<label class="checkbox-label prevent-select"> <input
-				type="checkbox" value="<%=f.getFilterId()%>"
+			<label id="filter-checkbox-row" class="checkbox-label prevent-select">
+				<input type="checkbox" value="<%=f.getFilterId()%>"
 				class="filters-checkbox" <%=f.isActive() ? "checked" : ""%>
 				onchange="updateActiveFilters()"> <span class="checkbox"></span>
-				<%=f.getFilterName()%> <%=f.getFilterId() != 1
-				? "<button class='icon-button'> <img id='trash-icon' onclick='deleteFilter(" + f.getFilterId() + ")' "
-						+ "src='assets/trash_icon.svg' width='15' height='15' "
-						+ "onmouseover=\"this.src='assets/trash_icon_hover.svg'\" "
-						+ "onmouseout=\"this.src='assets/trash_icon.svg'\" " + "class='icon-shown'></button>"
-				: ""%>
-			</label>
+				<%=f.getFilterName()%> 
+				<span class="icon-row">
+					<%=f.getFilterId() != 1
+					? "<button id='editButton' class='icon-button'><img onmouseover='editMouseover(this)' onmouseout='editMouseout(this)' onclick='editClick(" 
+							+ f.getFilterId() 
+							+ ", \"" 
+							+ f.getFilterName()
+							+ "\", \"" 
+							+ f.getColor()
+							+ "\")' src='assets/edit_icon.svg' width='20' height='20' class='icon-shown'> </button>	<button class='icon-button'> <img id='trash-icon' onmouseover='trashMouseover(this)' onmouseout='trashMouseout(this)' onclick='deleteFilterConfirmation(" 
+							+ f.getFilterId()
+							+ ", \"" 
+							+ f.getFilterName()
+							+ "\")' src='assets/trash_icon.svg' width='20' height='20' class='icon-shown'></button>"
+					: ""%>
+				</span>
+			</label> 
 			<%
 			}
 			%>
 		</div>
 
-		<jsp:include page="WEB-INF/components/newFilter.jsp"></jsp:include>
+		<div><jsp:include page="WEB-INF/components/newFilter.jsp"></jsp:include></div>
+		
+		<div id="popupContainer"></div>
 
 	</div>
 </body>
+<script>
+	
+
+	function editMouseover(img){
+		img.src='assets/edit_icon_hover.svg';
+	}
+	
+	function editMouseout(img){
+		img.src='assets/edit_icon.svg';
+	}
+	
+	function editClick(filter_id, filter_name, filter_color){
+		const filterForm = document.getElementById('filterForm');
+		filterForm.setAttribute("onsubmit", "editFilter(event, "+ filter_id + ")");
+		
+		const modal = document.getElementById('filterModal');
+		modal.style.display = "block";
+		
+		const modalContent = document.getElementById('filterModalContent');
+		modalContent.style.display = "block";
+		
+		const filterName = document.getElementById('filterName');
+		const filterColor =  document.getElementById('filterColor');
+		//const plants = document.getElementById('');
+		// TODO: load the plants that should be checked
+		fetch("/myFlorabase/EditFilterServlet?filter_id=" + filter_id, {
+			method: 'GET',
+		})
+		.then(response => {
+			return response.json();
+		})
+		.then(info => {
+			console.log(info);
+			// set the checks?
+			info.forEach(filterNum => {
+				console.log(filterNum);
+				document.getElementById('plantId'+ filterNum).checked = true;
+			});
+			
+		})
+		.catch(error => {
+        		  console.error("Issue with fetching from EditFilterServlet", error);
+        });
+		
+		if (filter_id != null){
+			const modalTitle = document.getElementById('modalTitle');			
+			modalTitle.textContent = "Edit Filter";
+			
+			filterName.value = filter_name;
+			filterColor.value = filter_color;
+		}
+	}
+	
+	// Form Submission for editing filter
+	function editFilter(event, filter_id) {
+		event.preventDefault();
+		
+		// filter name
+		const filterName = document.getElementById('filterName').value.trim();
+		
+		// selected plants
+		const selectedPlants = document.querySelectorAll('#filterForm input[type="checkbox"]:checked');
+		
+		if (selectedPlants.length === 0) {
+	        alert('Please select at least one plant option.');
+	        return;  // Prevent form submission if no checkbox is selected
+	    }
+		
+		// filter color
+		const filterColor = document.getElementById('filterColor').value;
+		
+		// Prepare URL-encoded data
+		const formData = new FormData();
+		
+		// Append the value of each checked checkbox to the FormData object
+	    selectedPlants.forEach(function(checkbox) {
+	        formData.append('selectedPlants', checkbox.value);
+	    });
+		
+		formData.append('filterName', filterName);
+		
+		formData.append('filterColor', filterColor);
+		
+		formData.append('filterId', filter_id);
+		
+		 // Log each key-value pair in the FormData object
+        for (const [key, value] of formData.entries()) {
+            console.log(key, `:`, value);
+        }
+				
+		// loading screen
+		const modalContent = document.getElementById("filterModalContent");
+		modalContent.style.display = "none";
+		const lottieFileAnim = document.getElementById("lottieFileAnim");
+		lottieFileAnim.style.display = "flex";
+		lottieFileAnim.style.position = "fixed";
+		lottieFileAnim.style.top = 0;
+		lottieFileAnim.style.left = 0;
+		lottieFileAnim.style.justifyContent = "center";
+		lottieFileAnim.style.alignItems = "center";
+		lottieFileAnim.style.width = "100%";
+		lottieFileAnim.style.height = "100%";
+        document.getElementById("filter-loading-text").textContent = "Saving your filter...";
+		 
+		// Send the data to the server
+		fetch('/myFlorabase/EditFilterServlet', {
+			method: 'POST',
+			body: formData // FormData handles setting the correct multipart/form-data header
+		})
+			.then(response => response.text())
+			
+			.then(data => {
+				console.log('Successfully completed operation');
+				setTimeout(function() {
+					lottieFileAnim.style.display = "none";
+					closeNewFilterModal();
+					createFilterPopup(null, "Your filter has been successfully edited!", "Close", "", false);
+				}, 3000);
+			})
+			
+			.catch(error => console.error('Error:', error));
+
+	}
+	
+	
+	
+	function trashMouseover(img){
+		img.src='assets/trash_icon_hover.svg';
+	}
+	
+	function trashMouseout(img){
+		img.src='assets/trash_icon.svg';	
+	}
+
+	// delete filter confirmation box, trash img onclick
+	function deleteFilterConfirmation(filter_id, filter_name){
+		createFilterPopup(filter_id, "Are you sure you want to delete '" + filter_name + "'?", "Cancel", "Delete", false);
+	}
+
+
+</script>
 </html>

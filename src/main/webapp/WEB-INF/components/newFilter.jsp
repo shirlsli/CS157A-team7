@@ -9,6 +9,10 @@
 	href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script
+	src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+	type="module">
+</script>
 </head>
 <%
 HttpSession curSession = request.getSession(false);
@@ -51,6 +55,7 @@ try {
 %>
 
 <div id="filterModal" class="modal">
+	<div class="modal-content">
 	<div id="filterModalContent" class="modal-content">
 		<div class="centered-column">
 			<h1 id="modalTitle" class="pageTitle"></h1>
@@ -60,6 +65,7 @@ try {
 						for="filterName"></label> <input
 						type="text" id="filterName" name="filterName" placeholder=""
 						 />
+          <label class="invalid" id="filterNameStatus"></label>
 				</div>
 				<div id="colorSelectGroup" class="form-group">
 					<label id="filterModalColorLabel" class="required textfield-label"
@@ -90,7 +96,7 @@ try {
 					for (Plant p : plants) {
 					%>
 					<label class="checkbox-label prevent-select"> <input
-						type="checkbox" name="selectedPlants" value="<%=p.getPlantId()%>">
+						type="checkbox" name="selectedPlants" id='plantId<%=p.getPlantId()%>' value="<%=p.getPlantId()%>">
 						<span class="checkbox"></span> <%=p.getName()%></label>
 					<%
 					}
@@ -99,10 +105,61 @@ try {
 				<span class="button-group" id="filter-button-group">
 					<button id="filterSaveButton" class="major-button primary-button"
 						type="submit">Save</button>
-					<button id="filterCancelButton" class="major-button secondary-button" type="button">Cancel</button>
+					<button id="filterCancelButton" class="major-button secondary-button" onclick='closeNewFilterModal()' type="button">Cancel</button>
 				</span>
 			</form>
 		</div>
+		</div>
+		<div id="lottieFileAnim">
+				<div>
+					<dotlottie-player
+						src="https://lottie.host/ef3e6c56-1ce6-4207-a1a6-cd173d29c63a/YfDwlnXv51.json"
+						background="transparent" speed="1"
+						style="width: 200px; height: 200px" loop autoplay></dotlottie-player>
+					<p id="filter-loading-text" class="loading-text"></p>
+				</div>
+			</div>
 	</div>
 </div>
+
+<script>
+//checks if the filter_name is unique, gives live error message
+document.getElementById("filterName").addEventListener("input", function() {
+		var filterName = this.value.toString().trim();
+		var statusElement = document.getElementById("filterNameStatus");
+
+		if (filterName.length == 0){
+			document.getElementById("filterName").setCustomValidity('Please enter at least one non-whitespace character for your name');
+		}
+		else if (filterName.length > 0) { 
+
+			// Create the AJAX request
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", "FilterNameCheckServlet?filterName=" + encodeURIComponent(filterName), true);
+
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+					var response = JSON.parse(xhr.responseText);
+					if (response.available) {
+						statusElement.textContent = "";
+						document.getElementById("filterName").setCustomValidity('');
+					} else {
+						statusElement.textContent = "You already have a filter with this name! Please enter a different name.";
+						document.getElementById("filterName").setCustomValidity('Please enter a different filter name');
+					}
+				} else {
+					console.error("Error checking filterName availability");
+				}
+			};
+
+			xhr.onerror = function() {
+				console.error("Request failed");
+			};
+
+			xhr.send();
+		} else {
+			statusElement.textContent = "";
+		}
+	});
+</script>
 </html>
