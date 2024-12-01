@@ -682,7 +682,8 @@
 			%>
 		</div>
 
-		<jsp:include page="WEB-INF/components/newFilter.jsp"></jsp:include>
+		<div><jsp:include page="WEB-INF/components/newFilter.jsp"></jsp:include></div>
+		
 		<div id="popupContainer"></div>
 
 	</div>

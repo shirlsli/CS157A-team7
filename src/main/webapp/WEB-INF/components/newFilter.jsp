@@ -55,6 +55,7 @@ try {
 %>
 
 <div id="filterModal" class="modal">
+	<div class="modal-content">
 	<div id="filterModalContent" class="modal-content">
 		<div class="centered-column">
 			<h1 id="modalTitle" class="pageTitle"></h1>
@@ -63,7 +64,7 @@ try {
 					<label id="filterModalLabel" class="required textfield-label"
 						for="filterName"></label> <input
 						type="text" id="filterName" name="filterName" placeholder=""
-						 />
+						 required/>
           <label class="invalid" id="filterNameStatus"></label>
 				</div>
 				<div id="colorSelectGroup" class="form-group">
@@ -95,7 +96,7 @@ try {
 					for (Plant p : plants) {
 					%>
 					<label class="checkbox-label prevent-select"> <input
-						type="checkbox" name="selectedPlants" value="<%=p.getPlantId()%>">
+						type="checkbox" name="selectedPlants" id='plantId<%=p.getPlantId()%>' value="<%=p.getPlantId()%>">
 						<span class="checkbox"></span> <%=p.getName()%></label>
 					<%
 					}
@@ -104,9 +105,10 @@ try {
 				<span class="button-group" id="filter-button-group">
 					<button id="filterSaveButton" class="major-button primary-button"
 						type="submit">Save</button>
-					<button id="filterCancelButton" class="major-button secondary-button" type="button">Cancel</button>
+					<button id="filterCancelButton" class="major-button secondary-button" onclick='closeNewFilterModal()' type="button">Cancel</button>
 				</span>
 			</form>
+		</div>
 		</div>
 		<div id="lottieFileAnim">
 				<div>
@@ -117,7 +119,7 @@ try {
 					<p id="filter-loading-text" class="loading-text"></p>
 				</div>
 			</div>
-	</div>
+	
 </div>
 
 <script>
