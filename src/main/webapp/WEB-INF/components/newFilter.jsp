@@ -82,8 +82,8 @@ try {
 						</select>
 					</div>
 					<div class="form-group">
-						<label class="required" for="search-bar">Add Plants to the filter</label> *insert
-						search bar*
+						<label class="required" for="search-bar">Add Plants to the filter</label> <p>*insert
+						search bar here*</p>
 					</div>
 					<div class="input-span">
 						<%
