@@ -125,12 +125,10 @@ document.getElementById("filterName").addEventListener("input", function() {
 		var filterName = this.value.toString().trim();
 		var statusElement = document.getElementById("filterNameStatus");
 
-		console.log(filterName, filterName.length);
 		if (filterName.length == 0){
 			document.getElementById("filterName").setCustomValidity('Please enter at least one non-whitespace character for your name');
 		}
 		else if (filterName.length > 0) { 
-			document.getElementById("filterName").setCustomValidity('');
 
 			// Create the AJAX request
 			var xhr = new XMLHttpRequest();
