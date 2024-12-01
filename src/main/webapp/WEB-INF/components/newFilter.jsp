@@ -64,13 +64,13 @@ try {
 					<label id="filterModalLabel" class="required textfield-label"
 						for="filterName"></label> <input
 						type="text" id="filterName" name="filterName" placeholder=""
-						 required/>
+						 />
           <label class="invalid" id="filterNameStatus"></label>
 				</div>
 				<div id="colorSelectGroup" class="form-group">
 					<label id="filterModalColorLabel" class="required textfield-label"
 						for="filterColor">Filter Color</label> <select id="filterColor"
-						name="filterColor" required>
+						name="filterColor">
 						<option value="">--Please choose a color--</option>
 						<option value="red">Red</option>
 						<option value="orange">Orange</option>
@@ -119,7 +119,7 @@ try {
 					<p id="filter-loading-text" class="loading-text"></p>
 				</div>
 			</div>
-	
+	</div>
 </div>
 
 <script>

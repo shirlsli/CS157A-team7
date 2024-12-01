@@ -242,6 +242,7 @@
 			const filterModalLabel = document.getElementById('filterModalLabel');
 			const filterName = document.getElementById('filterName');
 			const colorSelectGroup = document.getElementById('colorSelectGroup');
+			const filterColor = document.getElementById('filterColor');
 			const filterModalPlantCheckboxes = document.getElementById('filterModalPlantCheckboxes');
 			const searchBar = document.getElementById("searchBar");
 			const tagList = document.getElementById("tagList");
@@ -253,14 +254,18 @@
 			if (isAllergy) {
 				filterModalPlantCheckboxes.style.display = "none";
 				filterModalLabel.style.display = "none";
+				filterName.removeAttribute('required');
 				colorSelectGroup.style.display = "none";
+				filterColor.removeAttribute('required');
 				filterName.style.display = "none";
 				filterForm.onsubmit = function(event) {
 					  submitAllergy(event);
 				};
 			} else {
 				colorSelectGroup.style.display = "block";
+				filterName.setAttribute('required', "true");
 				filterModalLabel.style.display = "block";
+				filterColor.setAttribute('required', "true");
 				colorSelectGroup.style.display = "block";
 				filterName.style.display = "block";
 				filterModalPlantCheckboxes.style.display = "block";
