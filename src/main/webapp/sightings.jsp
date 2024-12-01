@@ -48,7 +48,26 @@ if (request.getAttribute("mySightingActive") != null) {
 			<div class="column sightings-column">
 				<div class="sightings-component sightings-column-div">
 					<span class="sightings-title"><h1 class="pageTitle"><%=sightingsPage ? "Sightings" : "My Sightings"%></h1>
-						<img src='assets/filter_icon.svg' width="30" height="30" /> </span>
+						<div>
+							<img src='assets/filter_icon.svg' width="30" height="30"
+								onclick="showFilterDropdown()" /> <span id="filterDropdown">
+								<div>
+									<label class="checkbox-label prevent-select"> <input
+										id="mostRecentCheckbox" type="checkbox"
+										onchange="dropdownSubmit(this)"> <span
+										class="checkbox"></span> Most Recent
+									</label> <label class="checkbox-label prevent-select"> <input
+										id="oldestCheckbox" type="checkbox"
+										onchange="dropdownSubmit(this)"> <span
+										class="checkbox"></span> Oldest
+									</label> <span id="filterDropdownCloseButton">
+										<button class="major-button secondary-button" type="button"
+											onclick="hideFilterDropdown()">Close</button>
+									</span>
+								</div>
+
+							</span>
+						</div> </span>
 					<!-- Search bar -->
 					<%
 					if (sightingsPage) {
@@ -84,6 +103,7 @@ if (request.getAttribute("mySightingActive") != null) {
 	<script src="./js/buttons.js"></script>
 	<script src="./js/modal.js"></script>
 	<script>
+	
 	window.addEventListener("load", function() {
 		const isSightingsPage = <%=sightingsPage%>;
 		const sightingsListContainer = document.getElementById('sightingsList');
@@ -124,6 +144,43 @@ if (request.getAttribute("mySightingActive") != null) {
         });
     })
 		
+    	function showFilterDropdown() {
+		const dropdownContainer = document.getElementById("filterDropdown");
+		dropdownContainer.style.display = "block";
+	}
+	
+	function hideFilterDropdown() {
+		const dropdownContainer = document.getElementById("filterDropdown");
+		dropdownContainer.style.display = "none";
+	}
+	
+	function dropdownSubmit(checkbox) {
+		const label = checkbox.closest('label');
+		const labelText = label.textContent.trim();
+		// check if another checkbox is checked, if so must uncheck it
+		const mostRecentCheckbox = document.getElementById("mostRecentCheckbox");
+		const oldestCheckbox = document.getElementById("oldestCheckbox");
+		if (labelText === "Oldest" && mostRecentCheckbox.checked) {
+			mostRecentCheckbox.checked = false;
+		} else if (labelText === "Most Recent" && oldestCheckbox.checked) {
+			oldestCheckbox.checked = false;
+		}
+		const sightingsList = document.getElementById("sightingsList");
+		const sightingsArr = Array.from(sightingsList.children);
+		sightingsArr.sort((a, b) => {
+		    const textA = a.childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[1].childNodes[2].childNodes[0].data.trim().slice(3);
+		    const textB = b.childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[1].childNodes[2].childNodes[0].data.trim().slice(3);
+			const dateA = new Date(textA);
+			const dateB = new Date(textB);
+			if (labelText === "Most Recent") {
+		        return dateB - dateA;
+		    } 
+			return dateA - dateB;
+		});
+		console.log(sightingsArr);
+		sightingsList.replaceChildren(...sightingsArr);
+		hideFilterDropdown();
+	}
         
         function createSighting(sighting, user, plant, location, curUser) {
         	const sightingComponent = document.createElement('div');

@@ -121,7 +121,7 @@ button.secondary-button:hover {
 input[type="text"], input[type="password"], input[type="date"], input[type="number"]
 	{
 	height: 45px;
-/* 	background: #FFFFFF; */
+	/* 	background: #FFFFFF; */
 	border: 1px solid #308023;
 	border-radius: 10px;
 	font-family: Inter, serif-sans;
@@ -586,7 +586,8 @@ input {
 	width: 100%;
 	justify-content: space-between;
 	align-items: center;
-/* 	margin-bottom: 30px; */
+	margin-top: 10px;
+	/* 	margin-bottom: 30px; */
 }
 
 .spacer {
@@ -606,7 +607,7 @@ input {
 .column-group {
 	display: flex;
 	gap: 50px;
-/* 	height: 500px; */
+	/* 	height: 500px; */
 }
 
 .report-sighting-column {
@@ -686,14 +687,15 @@ select#filterColor {
 }
 
 #flaggedSightingsTitle {
+	margin-top: 10px;
 	margin-bottom: 20px;
 }
 
 .icon {
-  padding-left: 40px;
-  background: url("../assets/search_icon.svg") no-repeat left;
-  background-position: 15px center;
-  background-size: 15px;
+	padding-left: 40px;
+	background: url("../assets/search_icon.svg") no-repeat left;
+	background-position: 15px center;
+	background-size: 15px;
 }
 
 .search-container {
@@ -705,4 +707,22 @@ select#filterColor {
 	font-size: 16px;
 	height: 50px;
 	border-radius: 30px;
+}
+
+#filterDropdown {
+	display: none;
+	background-color: #ffffff;
+	width: 350px;
+	padding: 20px 24px;
+	position: absolute;
+	top: 60px;
+	right: 70px;
+	border-radius: 10px;
+	border: #858585 1px solid;
+	z-index: 3;
+}
+
+#filterDropdownCloseButton {
+	display: flex;
+	justify-content: flex-end;
 }
