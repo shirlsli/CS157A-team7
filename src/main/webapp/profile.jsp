@@ -44,7 +44,8 @@
 			user = new User(userId, username, password, description, isAdmin, zoom, location_id);
 		}
 
-		String filtersSQL = "SELECT uf.filter_id, color, filter_name, active FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '" + user.getUserId() + "'";
+		String filtersSQL = "SELECT uf.filter_id, color, filter_name, active FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '"
+		+ user.getUserId() + "'";
 		rs = statement.executeQuery(filtersSQL);
 		while (rs.next()) {
 			int filterId = rs.getInt("filter_id");
@@ -52,8 +53,8 @@
 			String filterName = rs.getString("filter_name");
 			int active = rs.getInt("active");
 			boolean isActive = false;
-			if (active == 1){
-				isActive = true;
+			if (active == 1) {
+		isActive = true;
 			}
 			Filter filter = new Filter(filterId, color, filterName, isActive);
 			filters.add(filter);
@@ -264,23 +265,41 @@
 	        for (const [key, value] of formData.entries()) {
 	            console.log(key, `:`, value);
 	        }
-						
+					
+			// loading screen
+			const modalContent = document.getElementById("filterModalContent");
+			modalContent.style.display = "none";
+			const lottieFileAnim = document.getElementById("lottieFileAnim");
+			lottieFileAnim.style.display = "flex";
+			lottieFileAnim.style.position = "fixed";
+			lottieFileAnim.style.top = 0;
+			lottieFileAnim.style.left = 0;
+			lottieFileAnim.style.justifyContent = "center";
+			lottieFileAnim.style.alignItems = "center";
+			lottieFileAnim.style.width = "100%";
+			lottieFileAnim.style.height = "100%";
+            document.getElementById("filter-loading-text").textContent = "Saving your filter...";
+			 
 			// Send the data to the server
 			fetch('/myFlorabase/AddFilterServlet', {
 				method: 'POST',
 				body: formData // FormData handles setting the correct multipart/form-data header
 			})
 				.then(response => response.text())
-				.then(data => console.log('Server response:', data))
+				/* .then(data => console.log('Server response:', data)) */
+				
+				
+				.then(data => {
+					console.log('Successfully completed operation');
+					setTimeout(function() {
+						lottieFileAnim.style.display = "none";
+						closeNewFilterModal();
+						createFilterPopup("Your new filter has been successfully created!", "Close");
+					}, 2000);
+				})
+				
 				.catch(error => console.error('Error:', error));
 
-			// Close the new filter modal
-						
-			closeNewFilterModal();
-
-			setTimeout(function() {
-			    location.reload();
-			}, 3000);
 		}
 		
 		// activate/deactivate filters
@@ -327,6 +346,22 @@
 	 
 		// delete filter
 		function deleteFilter(filter_id) {
+			// loading screen
+			const modal = document.getElementById('filterModal');
+			modal.style.display = "block";
+			const modalContent = document.getElementById("filterModalContent");
+			modalContent.style.display = "none";
+			const lottieFileAnim = document.getElementById("lottieFileAnim");
+			lottieFileAnim.style.display = "flex";
+			lottieFileAnim.style.position = "fixed";
+			lottieFileAnim.style.top = 0;
+			lottieFileAnim.style.left = 0;
+			lottieFileAnim.style.justifyContent = "center";
+			lottieFileAnim.style.alignItems = "center";
+			lottieFileAnim.style.width = "100%";
+			lottieFileAnim.style.height = "100%";
+            document.getElementById("filter-loading-text").textContent = "Deleting your filter...";
+			
 			fetch('/myFlorabase/DeleteFilterServlet', { 
                 method: 'POST',
                 headers: {
@@ -335,12 +370,15 @@
                 body: 'filter_id=' + encodeURIComponent(filter_id)
             })
 	            .then(response => response.text())
-				.then(data => console.log('Server response:', data))
+				.then(data => {
+					console.log('Successfully completed operation');
+					setTimeout(function() {
+						lottieFileAnim.style.display = "none";
+						closeNewFilterModal();
+						createFilterPopup("Your filter has been successfully deleted!", "Close");
+					}, 2000);
+				})
 				.catch(error => console.error('Error:', error));
-			
-			setTimeout(function() {
-			    location.reload();
-			}, 3000);
 		}
 		
 
@@ -396,16 +434,21 @@
 			<%
 			for (Filter f : filters) {
 			%>
-			<label class="checkbox-label prevent-select"> 
-			<input
-				type="checkbox" value="<%=f.getFilterId()%>" class="filters-checkbox" <%=f.isActive() ? "checked" : "" %> onchange="updateActiveFilters()"> 
-				<span class="checkbox"></span> <%=f.getFilterName()%> <%=f.getFilterId() != 1 ? "<button class=\"icon-button\"> <img id=\"trash-icon\" onclick=\"deleteFilter(" + f.getFilterId()+ ")\" src=\"assets/trash_icon.svg\" width=\"20\" height=\"20\" class=\"icon-shown\"></button>" :"" %></label>
+			<label class="checkbox-label prevent-select"> <input
+				type="checkbox" value="<%=f.getFilterId()%>"
+				class="filters-checkbox" <%=f.isActive() ? "checked" : ""%>
+				onchange="updateActiveFilters()"> <span class="checkbox"></span>
+				<%=f.getFilterName()%> <%=f.getFilterId() != 1
+				? "<button class=\"icon-button\"> <img id=\"trash-icon\" onclick=\"deleteFilter(" + f.getFilterId()
+						+ ")\" src=\"assets/trash_icon.svg\" width=\"20\" height=\"20\" class=\"icon-shown\"></button>"
+				: ""%></label>
 			<%
 			}
 			%>
 		</div>
 
 		<jsp:include page="WEB-INF/components/newFilter.jsp"></jsp:include>
+		<div id="popupContainer"></div>
 
 	</div>
 </body>
