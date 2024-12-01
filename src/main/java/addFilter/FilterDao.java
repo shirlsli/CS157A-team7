@@ -5,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.Filter;
+import com.example.Sighting;
 import com.example.User;
 
 public class FilterDao {
@@ -86,7 +89,7 @@ public class FilterDao {
 
 				// get filter_id
 				String getFilterId = "SELECT LAST_INSERT_ID();";
-				
+
 				int user_filter_row = 0;
 
 				PreparedStatement ps2 = con.prepareStatement(getFilterId);
@@ -109,7 +112,7 @@ public class FilterDao {
 					for (String value : selectedValues) {
 						ps4.setInt(2, Integer.parseInt(value));
 						int within_rows = ps4.executeUpdate();
-						if(within_rows == 0) {
+						if (within_rows == 0) {
 							throw new SQLException();
 						}
 					}
@@ -303,6 +306,51 @@ public class FilterDao {
 				}
 			}
 		}
+		return successLog;
+	}
+
+	public String[] getAFiltersPlants(String filter_id) {
+		loadDriver(dbdriver);
+		Connection con = getConnection();
+		List<String> plants = new ArrayList<>();
+
+		try {
+			String getFilterPlants = "SELECT plant_id FROM myflorabase.within WHERE filter_id = '" + filter_id + "';";
+			PreparedStatement ps = con.prepareStatement(getFilterPlants); 
+			ResultSet resultSet = ps.executeQuery();
+			while (resultSet.next()) {
+				String plantId =  resultSet.getInt("plant_id") + "";
+				plants.add(plantId);
+			}
+			
+
+		} catch (SQLException e) {
+			System.out.println("SQLException caught: " + e.getMessage());
+			e.printStackTrace();
+			
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					System.out.println("Failed to close the connection: " + e.getMessage());
+				}
+			}
+		}
+
+		return (String[]) plants.toArray(new String[0]);
+	}
+
+	public String editFilter(User user, String filterId, String filterName, String[] selectedValues, String filterColor) {
+		loadDriver(dbdriver);
+		Connection con = getConnection();
+		String successLog = "";
+		
+		String deleteSuccess = deleteFilter(user, filterId);
+		String addSuccess = addNewFilter(user, filterName, selectedValues, filterColor); // inc filter id, too lazy to actually edit
+		
+		successLog = deleteSuccess + addSuccess;
+		
 		return successLog;
 	}
 

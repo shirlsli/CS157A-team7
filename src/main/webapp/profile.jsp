@@ -217,6 +217,10 @@
 		
 		// open the new filter modal
 		function newFilter(button, isAllergy) {
+			
+			const filterForm = document.getElementById('filterForm');
+			filterForm.setAttribute("onsubmit", "submitFilter(event)");
+			
 			const modalTitle = document.getElementById('modalTitle');			
 			modalTitle.textContent = isAllergy ? "Add an Allergy" : "Add a New Filter";
 			
@@ -237,6 +241,7 @@
 		// Form Submission for adding new filter
 		function submitFilter(event) {
 			event.preventDefault();
+			
 			
 			// filter name
 			const filterName = document.getElementById('filterName').value.trim();
@@ -347,10 +352,7 @@
 			
 	    }
 	 
-		// delete filter confirmation box
-		function deleteFilterConfirmation(filter_id, filter_name){
-			createFilterPopup(filter_id, "Are you sure you want to delete '" + filter_name + "'?", "Cancel", "Delete", false);
-		}
+		
 		
 		// delete filter
 		function deleteFilter(filter_id) {
@@ -449,7 +451,8 @@
 			popupContainer.appendChild(popup);
 		}
 
-
+		
+		
 		
 		
 	</script>
@@ -501,14 +504,28 @@
 			<%
 			for (Filter f : filters) {
 			%>
-			<label class="checkbox-label prevent-select"> <input
-				type="checkbox" value="<%=f.getFilterId()%>"
+			<label id="filter-checkbox-row" class="checkbox-label prevent-select">
+				<input type="checkbox" value="<%=f.getFilterId()%>"
 				class="filters-checkbox" <%=f.isActive() ? "checked" : ""%>
 				onchange="updateActiveFilters()"> <span class="checkbox"></span>
-				<%=f.getFilterName()%> <%=f.getFilterId() != 1
-				? "<button class=\"icon-button\"> <img id=\"trash-icon\" onclick=\'deleteFilterConfirmation(" + f.getFilterId()
-						+ ", \"" + f.getFilterName() + "\")\' src=\"assets/trash_icon.svg\" width=\"20\" height=\"20\" class=\"icon-shown\"></button>"
-				: ""%></label>
+				<%=f.getFilterName()%> 
+				<span class="icon-row">
+					<%=f.getFilterId() != 1
+					? "<button id='editButton' class='icon-button'><img onmouseover='editMouseover(this)' onmouseout='editMouseout(this)' onclick='editClick(" 
+							+ f.getFilterId() 
+							+ ", \"" 
+							+ f.getFilterName()
+							+ "\", \"" 
+							+ f.getColor()
+							+ "\")' src='assets/edit_icon.svg' width='20' height='20' class='icon-shown'> </button>	<button class='icon-button'> <img id='trash-icon' onmouseover='trashMouseover(this)' onmouseout='trashMouseout(this)' onclick='deleteFilterConfirmation(" 
+							+ f.getFilterId()
+							+ ", \"" 
+							+ f.getFilterName()
+							+ "\")' src='assets/trash_icon.svg' width='20' height='20' class='icon-shown'></button>"
+					: ""%>
+				</span>
+			</label> 
+
 			<%
 			}
 			%>
@@ -519,4 +536,145 @@
 
 	</div>
 </body>
+<script>
+	
+
+	function editMouseover(img){
+		img.src='assets/edit_icon_hover.svg';
+	}
+	
+	function editMouseout(img){
+		img.src='assets/edit_icon.svg';
+	}
+	
+	function editClick(filter_id, filter_name, filter_color){
+		const filterForm = document.getElementById('filterForm');
+		filterForm.setAttribute("onsubmit", "editFilter(event, "+ filter_id + ")");
+		
+		const modal = document.getElementById('filterModal');
+		modal.style.display = "block";
+		
+		const modalContent = document.getElementById('filterModalContent');
+		modalContent.style.display = "block";
+		
+		const filterName = document.getElementById('filterName');
+		const filterColor =  document.getElementById('filterColor');
+		//const plants = document.getElementById('');
+		// TODO: load the plants that should be checked
+		fetch("/myFlorabase/EditFilterServlet?filter_id=" + filter_id, {
+			method: 'GET',
+		})
+		.then(response => {
+			return response.json();
+		})
+		.then(info => {
+			console.log(info);
+			// set the checks?
+			info.forEach(filterNum => {
+				console.log(filterNum);
+				document.getElementById('plantId'+ filterNum).checked = true;
+			});
+			
+		})
+		.catch(error => {
+        		  console.error("Issue with fetching from EditFilterServlet", error);
+        });
+		
+		if (filter_id != null){
+			const modalTitle = document.getElementById('modalTitle');			
+			modalTitle.textContent = "Edit Filter";
+			
+			filterName.value = filter_name;
+			filterColor.value = filter_color;
+		}
+	}
+	
+	// Form Submission for editing filter
+	function editFilter(event, filter_id) {
+		event.preventDefault();
+		
+		// filter name
+		const filterName = document.getElementById('filterName').value.trim();
+		
+		// selected plants
+		const selectedPlants = document.querySelectorAll('#filterForm input[type="checkbox"]:checked');
+		
+		if (selectedPlants.length === 0) {
+	        alert('Please select at least one plant option.');
+	        return;  // Prevent form submission if no checkbox is selected
+	    }
+		
+		// filter color
+		const filterColor = document.getElementById('filterColor').value;
+		
+		// Prepare URL-encoded data
+		const formData = new FormData();
+		
+		// Append the value of each checked checkbox to the FormData object
+	    selectedPlants.forEach(function(checkbox) {
+	        formData.append('selectedPlants', checkbox.value);
+	    });
+		
+		formData.append('filterName', filterName);
+		
+		formData.append('filterColor', filterColor);
+		
+		formData.append('filterId', filter_id);
+		
+		 // Log each key-value pair in the FormData object
+        for (const [key, value] of formData.entries()) {
+            console.log(key, `:`, value);
+        }
+				
+		// loading screen
+		const modalContent = document.getElementById("filterModalContent");
+		modalContent.style.display = "none";
+		const lottieFileAnim = document.getElementById("lottieFileAnim");
+		lottieFileAnim.style.display = "flex";
+		lottieFileAnim.style.position = "fixed";
+		lottieFileAnim.style.top = 0;
+		lottieFileAnim.style.left = 0;
+		lottieFileAnim.style.justifyContent = "center";
+		lottieFileAnim.style.alignItems = "center";
+		lottieFileAnim.style.width = "100%";
+		lottieFileAnim.style.height = "100%";
+        document.getElementById("filter-loading-text").textContent = "Saving your filter...";
+		 
+		// Send the data to the server
+		fetch('/myFlorabase/EditFilterServlet', {
+			method: 'POST',
+			body: formData // FormData handles setting the correct multipart/form-data header
+		})
+			.then(response => response.text())
+			
+			.then(data => {
+				console.log('Successfully completed operation');
+				setTimeout(function() {
+					lottieFileAnim.style.display = "none";
+					closeNewFilterModal();
+					createFilterPopup(null, "Your filter has been successfully edited!", "Close", "", false);
+				}, 3000);
+			})
+			
+			.catch(error => console.error('Error:', error));
+
+	}
+	
+	
+	
+	function trashMouseover(img){
+		img.src='assets/trash_icon_hover.svg';
+	}
+	
+	function trashMouseout(img){
+		img.src='assets/trash_icon.svg';	
+	}
+
+	// delete filter confirmation box, trash img onclick
+	function deleteFilterConfirmation(filter_id, filter_name){
+		createFilterPopup(filter_id, "Are you sure you want to delete '" + filter_name + "'?", "Cancel", "Delete", false);
+	}
+
+
+</script>
 </html>
