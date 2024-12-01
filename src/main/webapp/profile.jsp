@@ -83,7 +83,6 @@
 	%>
 
 	<script defer>
-
 		function changeProfilePic(curProfilePicElement) {
 			const fileUpload = document.getElementById('fileUpload');
 			fileUpload.click();
@@ -233,6 +232,9 @@
 		
 		// open the new filter modal
 		function newFilter(button, isAllergy) {
+			document.documentElement.scrollTop = 0;
+			document.body.scrollTop = 0;
+			document.body.style.overflowY = "hidden";
 			const filterModal = document.getElementById('filterModal');
 			const noPlantErrorMsg = document.getElementById("noPlantErrorMsg");
 			noPlantErrorMsg.style.display = "none";
@@ -377,6 +379,7 @@
 		
 		// Close the new filter modal
 		function closeNewFilterModal() {
+			document.body.style.overflowY = "scroll";
 			const modal = document.getElementById('filterModal');
 			modal.style.display = "none";
 			document.getElementById('filterForm').reset();
@@ -665,30 +668,22 @@
 				<input type="checkbox" value="<%=f.getFilterId()%>"
 				class="filters-checkbox" <%=f.isActive() ? "checked" : ""%>
 				onchange="updateActiveFilters()"> <span class="checkbox"></span>
-				<%=f.getFilterName()%> 
-				<span class="icon-row">
-					<%=f.getFilterId() != 1
-					? "<button id='editButton' class='icon-button'><img onmouseover='editMouseover(this)' onmouseout='editMouseout(this)' onclick='editClick(" 
-							+ f.getFilterId() 
-							+ ", \"" 
-							+ f.getFilterName()
-							+ "\", \"" 
-							+ f.getColor()
-							+ "\")' src='assets/edit_icon.svg' width='20' height='20' class='icon-shown'> </button>	<button class='icon-button'> <img id='trash-icon' onmouseover='trashMouseover(this)' onmouseout='trashMouseout(this)' onclick='deleteFilterConfirmation(" 
-							+ f.getFilterId()
-							+ ", \"" 
-							+ f.getFilterName()
-							+ "\")' src='assets/trash_icon.svg' width='20' height='20' class='icon-shown'></button>"
-					: ""%>
-				</span>
-			</label> 
+				<%=f.getFilterName()%> <span class="icon-row"> <%=f.getFilterId() != 1
+		? "<button id='editButton' class='icon-button'><img onmouseover='editMouseover(this)' onmouseout='editMouseout(this)' onclick='editClick("
+				+ f.getFilterId() + ", \"" + f.getFilterName() + "\", \"" + f.getColor()
+				+ "\")' src='assets/edit_icon.svg' width='20' height='20' class='icon-shown'> </button>	<button class='icon-button'> <img id='trash-icon' onmouseover='trashMouseover(this)' onmouseout='trashMouseout(this)' onclick='deleteFilterConfirmation("
+				+ f.getFilterId() + ", \"" + f.getFilterName()
+				+ "\")' src='assets/trash_icon.svg' width='20' height='20' class='icon-shown'></button>"
+		: ""%>
+			</span>
+			</label>
 			<%
 			}
 			%>
 		</div>
 
 		<div><jsp:include page="WEB-INF/components/newFilter.jsp"></jsp:include></div>
-		
+
 		<div id="popupContainer"></div>
 
 	</div>
