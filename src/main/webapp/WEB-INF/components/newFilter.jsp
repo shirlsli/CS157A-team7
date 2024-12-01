@@ -53,9 +53,7 @@ try {
 	System.out.println("SQLException caught: " + e.getMessage());
 }
 %>
-<script defer>
 
-</script>
 
 <div id="filterModal" class="modal">
 	<div class="modal-content">
@@ -65,8 +63,11 @@ try {
 				<form id="filterForm" onsubmit="submitFilter(event)" method="POST">
 					<div class="form-group" id="filter-name-group">
 						<label class="required textfield-label" for="filterName">Filter
-							Name</label> <input type="text" id="filterName" name="filterName"
+							Name</label> 
+							<input type="text" id="filterName" name="filterName"
 							placeholder="Give this filter a name" required />
+							
+							<label class="invalid" id="filterNameStatus"></label>
 					</div>
 					<div class="form-group">
 						<label class="required" for="filterColor">Filter Color</label> <select
@@ -81,7 +82,7 @@ try {
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="search-bar">Add Plants to the filter</label> *insert
+						<label class="required" for="search-bar">Add Plants to the filter</label> *insert
 						search bar*
 					</div>
 					<div class="input-span">
@@ -117,4 +118,47 @@ try {
 			</div>
 	</div>
 </div>
+
+<script>
+//checks if the filter_name is unique, gives live error message
+document.getElementById("filterName").addEventListener("input", function() {
+		var filterName = this.value.toString().trim();
+		var statusElement = document.getElementById("filterNameStatus");
+
+		console.log(filterName, filterName.length);
+		if (filterName.length == 0){
+			document.getElementById("filterName").setCustomValidity('Please enter at least one non-whitespace character for your name');
+		}
+		else if (filterName.length > 0) { 
+			document.getElementById("filterName").setCustomValidity('');
+
+			// Create the AJAX request
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", "FilterNameCheckServlet?filterName=" + encodeURIComponent(filterName), true);
+
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+					var response = JSON.parse(xhr.responseText);
+					if (response.available) {
+						statusElement.textContent = "";
+						document.getElementById("filterName").setCustomValidity('');
+					} else {
+						statusElement.textContent = "You already have a filter with this name! Please enter a different name.";
+						document.getElementById("filterName").setCustomValidity('Please enter a different filter name');
+					}
+				} else {
+					console.error("Error checking filterName availability");
+				}
+			};
+
+			xhr.onerror = function() {
+				console.error("Request failed");
+			};
+
+			xhr.send();
+		} else {
+			statusElement.textContent = "";
+		}
+	});
+</script>
 </html>
