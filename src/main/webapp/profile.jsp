@@ -393,12 +393,15 @@
 			
 			const popupContainer = document.getElementById("popupContainer");
 			popupContainer.style.display = "flex";
-			
 			popupContainer.classList.add('popup-modal');
+			
 			const popup = document.createElement('div');
 			popup.classList.add('popup-modal-content');
+						
 			const popupMessage = document.createElement('p');
 			popupMessage.textContent = message;
+			popupMessage.classList.add('popup-modal-message');
+
 			popup.appendChild(popupMessage);
 
 			if (secondaryButtonText !== "") {
