@@ -184,7 +184,7 @@
 			                    headers: {
 			                        'Content-Type': 'application/x-www-form-urlencoded',
 			                    },
-			                    body: 'zoom=' + encodeURIComponent(newZoom)<%--  + '&preferenceId=' + <%=mp.getPreferenceId()%> --%>
+			                    body: 'zoom=' + encodeURIComponent(newZoom)
 			                })
 			                .then(response => response.text())
 			                .then(data => {
@@ -222,6 +222,9 @@
 			
 			const modal = document.getElementById('filterModal');
 			modal.style.display = "block";
+			
+			const modalContent = document.getElementById('filterModalContent');
+			modalContent.style.display = "block";
 		}
 		
 		// Close the new filter modal
@@ -294,7 +297,7 @@
 					setTimeout(function() {
 						lottieFileAnim.style.display = "none";
 						closeNewFilterModal();
-						createFilterPopup("Your new filter has been successfully created!", "Close");
+						createFilterPopup(null, "Your new filter has been successfully created!", "Close", "", false);
 					}, 2000);
 				})
 				
@@ -344,6 +347,13 @@
 			
 	    }
 	 
+		// delete filter confirmation box
+		function deleteFilterConfirmation(filter_id){
+			/* const modal = document.getElementById('filterModal');
+			modal.style.display = "block"; */
+			createFilterPopup(filter_id, "Are you sure you want to delete this filter?", "Cancel", "Delete", false);
+		}
+		
 		// delete filter
 		function deleteFilter(filter_id) {
 			// loading screen
@@ -375,12 +385,73 @@
 					setTimeout(function() {
 						lottieFileAnim.style.display = "none";
 						closeNewFilterModal();
-						createFilterPopup("Your filter has been successfully deleted!", "Close");
-					}, 2000);
+						createFilterPopup(filter_id, "Your filter has been successfully deleted!", "Close", "", false);
+					}, 3000);
 				})
 				.catch(error => console.error('Error:', error));
 		}
 		
+		function createFilterPopup(filter_id, message, primaryButtonText, secondaryButtonText, primaryCallback) {
+			
+			const popupContainer = document.getElementById("popupContainer");
+			popupContainer.style.display = "flex";
+			
+			popupContainer.classList.add('popup-modal');
+			const popup = document.createElement('div');
+			popup.classList.add('popup-modal-content');
+			const popupMessage = document.createElement('p');
+			popupMessage.textContent = message;
+			popup.appendChild(popupMessage);
+
+			if (secondaryButtonText !== "") {
+				
+				const primaryButton = document.createElement("button");
+				primaryButton.setAttribute("id", "primaryButton");
+				const secondaryButton = document.createElement("button");
+
+				primaryButton.setAttribute("class", "primary-button");
+				secondaryButton.setAttribute("class", "secondary-button");
+
+				primaryButton.textContent = primaryButtonText;
+				secondaryButton.textContent = secondaryButtonText;
+
+				const buttonGroup = document.createElement("span");
+				buttonGroup.setAttribute("id", "buttonGroup");
+
+				buttonGroup.appendChild(primaryButton);
+				buttonGroup.appendChild(secondaryButton);
+
+				primaryButton.addEventListener("click", function() {
+					window.location.reload();
+				}); 
+				secondaryButton.addEventListener("click", function() {
+					popupContainer.style.display = "none";
+					popup.style.display = "none";
+					deleteFilter(filter_id);
+				});
+				
+				popup.appendChild(buttonGroup);
+				
+			} else {
+				
+				const modal = document.getElementById('filterModal');
+				modal.style.display = "block";
+				const modalContent = document.getElementById('filterModalContent');
+				modalContent.style.display = "none";
+				
+				const primaryButton = document.createElement("button");
+				primaryButton.classList.add("primary-button", "popup-modal-button");
+				primaryButton.textContent = primaryButtonText;
+				
+				primaryButton.addEventListener("click", function() {
+					window.location.reload();
+				});
+				popup.appendChild(primaryButton);
+			}
+			
+
+			popupContainer.appendChild(popup);
+		}
 
 
 		
@@ -439,7 +510,7 @@
 				class="filters-checkbox" <%=f.isActive() ? "checked" : ""%>
 				onchange="updateActiveFilters()"> <span class="checkbox"></span>
 				<%=f.getFilterName()%> <%=f.getFilterId() != 1
-				? "<button class=\"icon-button\"> <img id=\"trash-icon\" onclick=\"deleteFilter(" + f.getFilterId()
+				? "<button class=\"icon-button\"> <img id=\"trash-icon\" onclick=\"deleteFilterConfirmation(" + f.getFilterId()
 						+ ")\" src=\"assets/trash_icon.svg\" width=\"20\" height=\"20\" class=\"icon-shown\"></button>"
 				: ""%></label>
 			<%

@@ -54,26 +54,7 @@ try {
 }
 %>
 <script defer>
-	function createFilterPopup(message, primaryButtonText) {
-		const popupContainer = document.getElementById("popupContainer");
-		popupContainer.classList.add('popup-modal');
-		const popup = document.createElement('div');
-		popup.classList.add('popup-modal-content');
-		const popupMessage = document.createElement('p');
-		popupMessage.textContent = message;
-		popup.appendChild(popupMessage);
 
-		const primaryButton = document.createElement("button");
-		primaryButton.classList.add("primary-button", "popup-modal-button");
-		primaryButton.textContent = primaryButtonText;
-
-		primaryButton.addEventListener("click", function() {
-			window.location.reload();
-		});
-		popup.appendChild(primaryButton);
-
-		popupContainer.appendChild(popup);
-	}
 </script>
 
 <div id="filterModal" class="modal">
