@@ -170,7 +170,7 @@
 			}
 		}
 		
-		function editFilter(button) {
+		function editZoom(button) {
 			secondaryButtonClick(button);
 			button.style.display = "none";
 			const zoomDiv = document.getElementById("zoomDiv");
@@ -648,7 +648,7 @@
 		<div id="zoomDiv">
 			<span class="section-title-with-button">
 				<h2>Default Zoom</h2>
-				<button class="secondary-button" onclick="editFilter(this)">Edit</button>
+				<button class="secondary-button" onclick="editZoom(this)">Edit</button>
 			</span>
 			<p id="zoom"><%=user.getZoom()%>%
 			</p>
