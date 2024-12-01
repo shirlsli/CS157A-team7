@@ -54,58 +54,59 @@ try {
 }
 %>
 
-
 <div id="filterModal" class="modal">
-	<div class="modal-content">
-		<div id="filterModalContent" class="modal-content">
-			<div class="centered-column">
-				<h1 id="modalTitle" class="pageTitle"></h1>
-				<form id="filterForm" onsubmit="submitFilter(event)" method="POST">
-					<div class="form-group" id="filter-name-group">
-						<label class="required textfield-label" for="filterName">Filter
-							Name</label> 
-							<input type="text" id="filterName" name="filterName"
-							placeholder="Give this filter a name" required />
-							
-							<label class="invalid" id="filterNameStatus"></label>
+	<div id="filterModalContent" class="modal-content">
+		<div class="centered-column">
+			<h1 id="modalTitle" class="pageTitle"></h1>
+			<form id="filterForm" method="POST">
+				<div class="form-group" id="filter-name-group">
+					<label id="filterModalLabel" class="required textfield-label"
+						for="filterName"></label> <input
+						type="text" id="filterName" name="filterName" placeholder=""
+						 />
+          <label class="invalid" id="filterNameStatus"></label>
+				</div>
+				<div id="colorSelectGroup" class="form-group">
+					<label id="filterModalColorLabel" class="required textfield-label"
+						for="filterColor">Filter Color</label> <select id="filterColor"
+						name="filterColor" required>
+						<option value="">--Please choose a color--</option>
+						<option value="red">Red</option>
+						<option value="orange">Orange</option>
+						<option value="yellow">Yellow</option>
+						<option value="green">Green</option>
+						<option value="blue">Blue</option>
+						<option value="purple">Purple</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label id="filterModalPlantLabel" class="textfield-label"
+						for="search-bar"></label>
+					<div class="search-container">
+						<!-- need to change action -->
+						<input id="searchBar" type="text" class="icon" name="searchQuery"
+							id="searchQuery" placeholder="Search for a specific plant" />
+						<span id="tagList"></span>
+						<p id="noPlantErrorMsg">One of these plant(s) have not been reported. Please redo your selection.</p>
 					</div>
-					<div class="form-group">
-						<label class="required" for="filterColor">Filter Color</label> <select
-							id="filterColor" name="filterColor" required>
-							<option value="">--Please choose a color--</option>
-							<option value="red">Red</option>
-							<option value="orange">Orange</option>
-							<option value="yellow">Yellow</option>
-							<option value="green">Green</option>
-							<option value="blue">Blue</option>
-							<option value="purple">Purple</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<label class="required" for="search-bar">Add Plants to the filter</label> <p>*insert
-						search bar here*</p>
-					</div>
-					<div class="input-span">
-						<%
-						for (Plant p : plants) {
-						%>
-						<label class="checkbox-label prevent-select"> <input
-							type="checkbox" name="selectedPlants" id='plantId<%=p.getPlantId()%>' value="<%=p.getPlantId()%>">
-							<span class="checkbox"></span> <%=p.getName()%></label>
-						<%
-						}
-						%>
-					</div>
-					<span class="button-group" id="filter-button-group">
-						<button id="reportButton" class="major-button primary-button"
-							type="submit">Save</button>
-						<button class="major-button secondary-button" type="button"
-							onclick="closeNewFilterModal()">Cancel</button>
-					</span>
-				</form>
-			</div>
-
-			
+				</div>
+				<div id="filterModalPlantCheckboxes" class="input-span">
+					<%
+					for (Plant p : plants) {
+					%>
+					<label class="checkbox-label prevent-select"> <input
+						type="checkbox" name="selectedPlants" value="<%=p.getPlantId()%>">
+						<span class="checkbox"></span> <%=p.getName()%></label>
+					<%
+					}
+					%>
+				</div>
+				<span class="button-group" id="filter-button-group">
+					<button id="filterSaveButton" class="major-button primary-button"
+						type="submit">Save</button>
+					<button id="filterCancelButton" class="major-button secondary-button" type="button">Cancel</button>
+				</span>
+			</form>
 		</div>
 		<div id="lottieFileAnim">
 				<div>

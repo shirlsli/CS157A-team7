@@ -1,5 +1,5 @@
 <%@ page
-	import="java.sql.*, com.example.User, com.example.MapPreference, com.example.Filter, java.util.List, java.util.ArrayList"%>
+	import="java.sql.*, com.example.User, com.example.MapPreference, com.example.Filter, com.example.Plant, java.util.List, java.util.ArrayList"%>
 <html>
 <head>
 <title>Profile</title>
@@ -26,6 +26,7 @@
 	}
 
 	List<Filter> filters = new ArrayList<>();
+	List<Plant> plantsAllergicTo = new ArrayList<>();
 	try {
 		java.sql.Connection con;
 		Class.forName("com.mysql.jdbc.Driver");
@@ -59,7 +60,20 @@
 			Filter filter = new Filter(filterId, color, filterName, isActive);
 			filters.add(filter);
 		}
-
+		String allergiesSQL = "SELECT * FROM myflorabase.allergic a JOIN myflorabase.plant p ON a.user_id="
+		+ user.getUserId() + " AND p.plant_id = a.plant_id";
+		rs = statement.executeQuery(allergiesSQL);
+		while (rs.next()) {
+			int plantId = rs.getInt("plant_id");
+			String name = rs.getString("name");
+			String scientificName = rs.getString("scientific_name");
+			String description = rs.getString("description");
+			boolean poisonous = rs.getBoolean("poisonous");
+			boolean invasive = rs.getBoolean("invasive");
+			boolean endangered = rs.getBoolean("endangered");
+			Plant plant = new Plant(plantId, name, scientificName, description, poisonous, invasive, endangered);
+			plantsAllergicTo.add(plant);
+		}
 		rs.close();
 		statement.close();
 		con.close();
@@ -94,6 +108,7 @@
 	                .then(response => response.text())  
 	                .then(data => {
 	                    console.log("File uploaded successfully:", data);
+	                    window.location.reload();
 	                })
 	                .catch(error => {
 	                    console.error("Error uploading file:", error);
@@ -112,6 +127,7 @@
 				descriptionDiv.removeChild(description);
 				const textField = document.createElement("textarea");
 				textField.setAttribute("id", "descriptionEditBox");
+				textField.value = temp;
 				descriptionDiv.appendChild(textField);
 				textField.focus();
 				createSaveCancelButtons(descriptionDiv, "Save", "Cancel",
@@ -217,18 +233,141 @@
 		
 		// open the new filter modal
 		function newFilter(button, isAllergy) {
-			
+			const filterModal = document.getElementById('filterModal');
+			const noPlantErrorMsg = document.getElementById("noPlantErrorMsg");
+			noPlantErrorMsg.style.display = "none";
 			const filterForm = document.getElementById('filterForm');
-			filterForm.setAttribute("onsubmit", "submitFilter(event)");
-			
 			const modalTitle = document.getElementById('modalTitle');			
 			modalTitle.textContent = isAllergy ? "Add an Allergy" : "Add a New Filter";
-			
+			const filterModalLabel = document.getElementById('filterModalLabel');
+			const filterName = document.getElementById('filterName');
+			const colorSelectGroup = document.getElementById('colorSelectGroup');
+			const filterModalPlantCheckboxes = document.getElementById('filterModalPlantCheckboxes');
+			const searchBar = document.getElementById("searchBar");
+			const tagList = document.getElementById("tagList");
+			const filterCancelButton = document.getElementById("filterCancelButton");
+			filterCancelButton.addEventListener('click', function() {
+				tagList.innerHTML = '';
+				closeNewFilterModal();
+			});
+			if (isAllergy) {
+				filterModalPlantCheckboxes.style.display = "none";
+				filterModalLabel.style.display = "none";
+				colorSelectGroup.style.display = "none";
+				filterName.style.display = "none";
+				filterForm.onsubmit = function(event) {
+					  submitAllergy(event);
+				};
+			} else {
+				colorSelectGroup.style.display = "block";
+				filterModalLabel.style.display = "block";
+				colorSelectGroup.style.display = "block";
+				filterName.style.display = "block";
+				filterModalPlantCheckboxes.style.display = "block";
+				filterModalLabel.textContent = "Filter Name";
+				filterName.placeholder = "Give this filter a name";
+				filterForm.onsubmit = function(event) {
+					  submitFilter(event);
+				};
+			}
+			const filterModalPlantLabel = document.getElementById('filterModalPlantLabel');
+			filterModalPlantLabel.textContent = "Note: Only plants that have been reported will be saved";
+			filterForm.addEventListener('keydown', function(event) {
+				if (event.key === 'Enter') {
+				   event.preventDefault(); 
+				}
+			});
+			searchBar.addEventListener('keydown', function(event) {
+				const plantName = searchBar.value;
+			    if (event.key === 'Enter' && plantName != "") {
+			      const tag = document.createElement("div");
+			      tag.classList.add("tag");
+			      const temp = document.createElement("span");
+			      const tagText = document.createElement("p");
+			      tagText.textContent = plantName;
+			      temp.appendChild(tagText);
+			      const xIcon = document.createElement("img");
+			      xIcon.style.verticalAlign = "middle";
+			      xIcon.src = 'assets/x_icon.svg';
+			      xIcon.addEventListener('click', function() {
+			    	  const tagListTemp = document.getElementById("tagList");
+			    	  const curTag = this.parentElement.parentElement;
+			    	  tagListTemp.removeChild(curTag);
+			      });
+			      temp.appendChild(xIcon);
+			      tag.appendChild(temp);
+			      tagList.appendChild(tag);
+			      searchBar.value = "";
+			    }
+			  });
 			const modal = document.getElementById('filterModal');
 			modal.style.display = "block";
 			
 			const modalContent = document.getElementById('filterModalContent');
 			modalContent.style.display = "block";
+		}
+		
+		function submitAllergy(event) {
+			event.preventDefault();
+			const tagList = document.getElementById("tagList");
+			const tagArr = Array.from(tagList.children);
+			tagArr.forEach((tag) => {
+				const plantName = tag.children[0].children[0].textContent.trim();
+				fetch("/myFlorabase/getPlant?plantName=" + plantName, {
+		  		  method: 'GET',
+		  		})
+		  	  .then(response => {
+		  		  return response.json();
+		  	  })
+		  	  .then(plant => {
+		  		fetch('/myFlorabase/addAllergy', { 
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/x-www-form-urlencoded',
+	                },
+	                body: 'userId=' + <%=user.getUserId()%> + "&plantId=" + plant[0].plantId
+	            })
+		            .then(response => response.text())
+					.then(data => {
+						tagList.innerHTML = '';
+						closeNewFilterModal();
+						window.location.reload();
+					})
+					.catch(error => console.error('Error:', error));
+		  	  })
+		  	  .catch(error => { 
+		  		  console.log("One of these plant(s) have not been reported");
+		  		  const noPlantErrorMsg = document.getElementById("noPlantErrorMsg");
+		  		noPlantErrorMsg.style.display = "block";
+		  		  })
+			});
+		}
+		
+		function deleteAllergy(trashIcon) {
+			const plantName = trashIcon.closest('label').textContent.trim();
+			this.src = 'assets/trash_icon_hover.svg';
+			console.log(plantName);
+			fetch("/myFlorabase/getPlant?plantName=" + plantName, {
+		  		  method: 'GET',
+		  		})
+		  	  .then(response => {
+		  		  return response.json();
+		  	  })
+		  	  .then(plant => {
+		  		  console.log(plant);
+		  		fetch('/myFlorabase/deleteAllergy', { 
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/x-www-form-urlencoded',
+	                },
+	                body: 'userId=' + <%=user.getUserId()%> + "&plantId=" + plant[0].plantId
+	            })
+		            .then(response => response.text())
+					.then(data => {
+						window.location.reload();
+					})
+					.catch(error => console.error('Error:', error));
+		  	  })
 		}
 		
 		// Close the new filter modal
@@ -478,12 +617,25 @@
 				<h2>Allergies</h2>
 				<button class="secondary-button" onclick="newFilter(this, true)">Edit</button>
 			</span>
-			<!-- need to change these to allergies -->
 			<%
-			for (Filter f : filters) {
+			if (plantsAllergicTo.size() < 1) {
 			%>
-			<label class="checkbox-label prevent-select"> <input
-				type="checkbox" checked> <span class="checkbox"></span> <%=f.getFilterName()%></label>
+			<p>You have not listed any allergies.</p>
+			<%
+			}
+			for (Plant p : plantsAllergicTo) {
+			%>
+
+
+			<label class="checkbox-label prevent-select"> <%=p.getName()%>
+				<button class="icon-button">
+					<img id="trash-icon" onclick="deleteAllergy(this)"
+						onmouseover="this.src='assets/trash_icon_hover.svg'"
+						onmouseout="this.src='assets/trash_icon.svg'"
+						src="assets/trash_icon.svg" width="15" height="15"
+						class="icon-shown">
+				</button>
+			</label>
 			<%
 			}
 			%>
@@ -525,7 +677,6 @@
 					: ""%>
 				</span>
 			</label> 
-
 			<%
 			}
 			%>

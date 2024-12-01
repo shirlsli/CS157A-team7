@@ -112,7 +112,6 @@ if (request.getAttribute("mySightingActive") != null) {
           return response.json();
         })
         .then(sightings => {
-          console.log(sightings);  
           sightings.forEach(sighting => {
         	  fetch("/myFlorabase/getSightingInfo?userId=" + sighting.userId + "&plantId=" + sighting.plantId + "&locationId=" + sighting.locationId, {
         		  method: 'GET',
@@ -137,7 +136,7 @@ if (request.getAttribute("mySightingActive") != null) {
         	  .catch(error => {
         		  console.error("Issue with fetching from FetchSightingInfo", error);
         	  });
-          })
+          });
         })
         .catch(error => {
           console.error("Issue with fetching from FetchSightingsServlet", error);

@@ -50,6 +50,7 @@ select {
 }
 
 #filterModalContent {
+	min-height: 100%;
 	height: fit-content;
 	margin-bottom: 40px;
 }
