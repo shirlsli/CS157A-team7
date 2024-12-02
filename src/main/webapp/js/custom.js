@@ -145,6 +145,13 @@ async function initMap() {
 					continue;
 				}
 
+				let locationHeader = 
+					`<div>
+						<h3>Location: ${info[2].name} (Location ID: ${info[2].locationId})</h3>
+						<p>Latitude: ${info[2].latitude}, Longitude: ${info[2].longitude}</p>
+						<hr/>
+					</div>`;
+
 				let infoContent = 
 					`<div>
 						<h3>Plant Name: ${plantName}</h3>
@@ -162,10 +169,13 @@ async function initMap() {
 				// Combine and remove existing marker if there's already one at this location
 				if (markersMap.has(locationKey)) {
 					const existingMarkerData = markersMap.get(locationKey);
+					// Combine the existing content with the new sighting content without repeating locationHeader
 					const combinedContent = existingMarkerData.infoContent + '<hr/>' + infoContent;
 					existingMarkerData.marker.setMap(null); // Remove old marker
 					markersMap.delete(locationKey); // Delete old marker entry
 					infoContent = combinedContent; // Update infoContent to combined content
+				} else {
+					infoContent = locationHeader + infoContent; // Add location header for new markers
 				}
 
 				// Create and store a new marker

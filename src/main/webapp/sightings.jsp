@@ -76,7 +76,6 @@
 					        <input id="searchBar" type="text" class="icon" name="searchQuery"
 					            placeholder="Search for a specific plant"
 					            oninput="handleInputSanitization()" required />
-					        <button type="submit">Search</button>
 					    </form>
 					</div>
 					<%
