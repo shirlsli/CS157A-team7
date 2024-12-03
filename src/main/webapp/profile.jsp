@@ -249,12 +249,13 @@
 			const searchBar = document.getElementById("searchBar");
 			const tagList = document.getElementById("tagList");
 			const filterCancelButton = document.getElementById("filterCancelButton");
+			const filterModalPlantLabel = document.getElementById('filterModalPlantLabel');
 			filterCancelButton.addEventListener('click', function() {
 				tagList.innerHTML = '';
 				closeNewFilterModal();
 			});
 			if (isAllergy) {
-				const filterModalPlantLabel = document.getElementById('filterModalPlantLabel');
+				filterModalPlantLabel.style.display = "block";
 				filterModalPlantLabel.textContent = "Note: Only plants that have been reported will be saved";
 				filterModalPlantCheckboxes.style.display = "none";
 				filterModalLabel.style.display = "none";
@@ -269,6 +270,7 @@
 				filterName.setAttribute('required', "true");
 				filterModalLabel.style.display = "block";
 				filterName.style.display = "block";
+				filterModalPlantLabel.style.display = "none";
 				filterModalPlantCheckboxes.style.display = "block";
 				filterModalLabel.textContent = "Filter Name";
 				filterName.placeholder = "Give this filter a name";
@@ -702,9 +704,14 @@
 		document.body.style.overflowY = "hidden";
 		const filterForm = document.getElementById('filterForm');
 		filterForm.setAttribute("onsubmit", "editFilter(event, "+ filter_id + ")");
+		const searchBar = document.getElementById('searchBar');
+		searchBar.style.display = "none";
 		
 		const modal = document.getElementById('filterModal');
 		modal.style.display = "block";
+		
+		const filterModalPlantLabel = document.getElementById('filterModalPlantLabel');
+		filterModalPlantLabel.style.display = "none";
 		
 		const modalContent = document.getElementById('filterModalContent');
 		modalContent.style.display = "block";
@@ -738,7 +745,7 @@
 			modalTitle.textContent = "Edit Filter";
 			filterModalLabel.textContent = "Filter Name";
 			filterName.value = filter_name;
-			filterColor.value = filter_color;
+			/* filterColor.value = filter_color; */
 		}
 	}
 	
