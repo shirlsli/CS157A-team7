@@ -697,6 +697,9 @@
 	}
 	
 	function editClick(filter_id, filter_name, filter_color){
+		document.documentElement.scrollTop = 0;
+		document.body.scrollTop = 0;
+		document.body.style.overflowY = "hidden";
 		const filterForm = document.getElementById('filterForm');
 		filterForm.setAttribute("onsubmit", "editFilter(event, "+ filter_id + ")");
 		
@@ -755,7 +758,7 @@
 	    }
 		
 		// filter color
-		const filterColor = document.getElementById('filterColor').value;
+		const filterColor = "red";
 		
 		// Prepare URL-encoded data
 		const formData = new FormData();
