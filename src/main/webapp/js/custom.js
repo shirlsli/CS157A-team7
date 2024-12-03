@@ -120,6 +120,15 @@ async function updateMapWithSightings() {
 		console.log(sightings);
 		let sightingsArray = [];
 
+		let filterArray = [];
+		if (!searchQuery) {
+			const filterResponse = await fetch("/myFlorabase/GetFilterServlet", {
+				method: 'GET'
+			});
+			filterArray = await filterResponse.json();
+			console.log(filterArray);
+		}
+						
 		// Remove any existing markers from the map
 		markersMap.forEach(markerData => {
 			markerData.marker.setMap(null);
@@ -144,6 +153,11 @@ async function updateMapWithSightings() {
 
 				// Filter based on search query
 				if (searchQuery && !plantName.toLowerCase().includes(searchQuery.toLowerCase())) {
+					continue;
+				}
+				
+				if (!searchQuery && filterArray.length > 0 && filterArray.includes(plantName)) {
+					console.log(`Filtered out plant: ${plantName}`);
 					continue;
 				}
 
@@ -247,5 +261,5 @@ function arrayBufferToBase64(buffer) {
 }
 
 window.initMap = initMap;
-console.log("bru2h");
+console.log("bruh1");
 initMap();
