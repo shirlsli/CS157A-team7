@@ -254,21 +254,20 @@
 				closeNewFilterModal();
 			});
 			if (isAllergy) {
+				const filterModalPlantLabel = document.getElementById('filterModalPlantLabel');
+				filterModalPlantLabel.textContent = "Note: Only plants that have been reported will be saved";
 				filterModalPlantCheckboxes.style.display = "none";
 				filterModalLabel.style.display = "none";
+				searchBar.style.display = "block";
 				filterName.removeAttribute('required');
-				colorSelectGroup.style.display = "none";
-				filterColor.removeAttribute('required');
 				filterName.style.display = "none";
 				filterForm.onsubmit = function(event) {
 					  submitAllergy(event);
 				};
 			} else {
-				colorSelectGroup.style.display = "block";
+				searchBar.style.display = "none";
 				filterName.setAttribute('required', "true");
 				filterModalLabel.style.display = "block";
-				filterColor.setAttribute('required', "true");
-				colorSelectGroup.style.display = "block";
 				filterName.style.display = "block";
 				filterModalPlantCheckboxes.style.display = "block";
 				filterModalLabel.textContent = "Filter Name";
@@ -277,8 +276,6 @@
 					  submitFilter(event);
 				};
 			}
-			const filterModalPlantLabel = document.getElementById('filterModalPlantLabel');
-			filterModalPlantLabel.textContent = "Note: Only plants that have been reported will be saved";
 			filterForm.addEventListener('keydown', function(event) {
 				if (event.key === 'Enter') {
 				   event.preventDefault(); 
@@ -402,7 +399,7 @@
 		    }
 			
 			// filter color
-			const filterColor = document.getElementById('filterColor').value;
+			const filterColor = "red";
 			
 			// Prepare URL-encoded data
 			const formData = new FormData();
@@ -711,6 +708,7 @@
 		
 		const filterName = document.getElementById('filterName');
 		const filterColor =  document.getElementById('filterColor');
+		const filterModalLabel = document.getElementById('filterModalLabel');
 		//const plants = document.getElementById('');
 		// TODO: load the plants that should be checked
 		fetch("/myFlorabase/EditFilterServlet?filter_id=" + filter_id, {
@@ -735,7 +733,7 @@
 		if (filter_id != null){
 			const modalTitle = document.getElementById('modalTitle');			
 			modalTitle.textContent = "Edit Filter";
-			
+			filterModalLabel.textContent = "Filter Name";
 			filterName.value = filter_name;
 			filterColor.value = filter_color;
 		}
