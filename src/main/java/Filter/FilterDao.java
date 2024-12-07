@@ -1,4 +1,4 @@
-package addFilter;
+package Filter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
