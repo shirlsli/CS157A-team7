@@ -46,9 +46,8 @@
 			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 	String createFilterTableSQL = "CREATE TABLE `Filter` ("
 			+ "`filter_id` INT AUTO_INCREMENT NOT NULL,"
-			+ "`color` varchar(45) DEFAULT NULL,"
+			// + "`color` varchar(45) DEFAULT NULL,"
 			+ "`filter_name` varchar(255) NOT NULL,"
-			+ "`active` tinyint NOT NULL DEFAULT '1',"
 			+ "PRIMARY KEY (`filter_id`)"
 			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 	String createReportsTableSQL = "CREATE TABLE `Reports` ("
@@ -84,6 +83,7 @@
 	String createUser_FilterTableSQL = "CREATE TABLE `user_filter` ("
 			+ "`user_id` int NOT NULL,"
 			+ "`filter_id` int NOT NULL,"
+			+ "`active` tinyint NOT NULL DEFAULT '1',"
 			+ "PRIMARY KEY (`user_id`,`filter_id`)"
 			+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 
@@ -126,14 +126,79 @@
 				+ "VALUES ('user1', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', true);");
 			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
 				+ "VALUES ('user2', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
-
-			statement.executeUpdate("INSERT INTO myflorabase.filter (color, filter_name) VALUES ('green', 'All')");
-			statement.executeUpdate("INSERT INTO myflorabase.location (latitude, longitude, name) VALUES ('37.3352', '121.8811', 'SJSU')");
-			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (1, 1, 1, 1, 'Roses are red, violets are blue', '2024-11-11', null, 2)");
-			statement.executeUpdate("INSERT INTO myflorabase.plant (plant_id, name, scientific_name, description, poisonous, invasive, endangered) VALUES (1, 'Rose', 'Rosa rubiginosa', null, true, true, true)");
-			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (2, 1, 2, 1, 'Found more roses', '2024-11-12', null, 2)");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user3', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user4', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user5', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user6', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user7', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user8', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user9', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user10', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user11', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user12', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user13', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user14', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+				+ "VALUES ('user15', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+			
+			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('All')");
+			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Trees')");
+			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Flowers')");
+			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Allergies')");
+			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Filter')");
+			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Tree')");
+			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Sunflower')");
+			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Flowers')");
+			
+			// default filter 'All'
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 1)");			
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (3, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (4, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (5, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (6, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (7, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (8, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (9, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (10, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (11, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (12, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (13, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (14, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (15, 1)");
+			
+			// custom filters
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 2)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 5)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 6)");
+			
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 3)");			
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 7)");
+			
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (3, 4)");
+			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (3, 8)");
+			
+			// locations
+			statement.executeUpdate("INSERT INTO myflorabase.location (latitude, longitude, name) VALUES ('37.3352', '121.8811', 'SJSU')");
+			
+			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (1, 1, 1, 1, 'Roses are red, violets are blue', '2024-11-11', null, 2)");
+			
+			statement.executeUpdate("INSERT INTO myflorabase.plant (plant_id, name, scientific_name, description, poisonous, invasive, endangered) VALUES (1, 'Rose', 'Rosa rubiginosa', null, true, true, true)");
+			
+			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (2, 1, 2, 1, 'Found more roses', '2024-11-12', null, 2)");
+
 
 			out.println("Initial entries in table \"myFlorabase\": <br/>");
 
