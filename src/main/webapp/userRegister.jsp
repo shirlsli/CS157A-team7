@@ -17,6 +17,9 @@
 
 </head>
 <body>
+ 	<div id="header"><jsp:include
+				page="WEB-INF/components/header.jsp"></jsp:include></div>
+
 	<div id="signUpPage">
 		<div>
 			<span id="signUpPageHeader" class="prevent-select"> <img
