@@ -344,15 +344,90 @@ public class FilterDao {
 		return (String[]) plants.toArray(new String[0]);
 	}
 
-	public String editFilter(User user, String filterId, String filterName, String[] selectedValues, String filterColor) {
+	public String editFilter(User user, String filter_id, String filterName, String[] selectedValues, String filterColor) {
 		loadDriver(dbdriver);
 		Connection con = getConnection();
 		String successLog = "";
 		
-		String deleteSuccess = deleteFilter(user, filterId);
-		String addSuccess = addNewFilter(user, filterName, selectedValues); // inc filter id, too lazy to actually edit
-		
-		successLog = deleteSuccess + addSuccess;
+		try {
+
+			con.setAutoCommit(false);
+
+			try {
+				// update the name
+				String updateFilterSQL = "UPDATE myflorabase.filter SET filter_name=? WHERE filter_id=?;";
+				PreparedStatement ps = con.prepareStatement(updateFilterSQL);
+				ps.setString(1, filterName);
+				ps.setInt(2, Integer.parseInt(filter_id));
+				int filter_rows = ps.executeUpdate();
+
+				if (filter_rows > 0) {
+					System.out.println("Record(s) found in `user_filter` with user_id= " + user.getUserId()
+							+ " and filter_id=" + Integer.parseInt(filter_id) + " updated sucessfully.");
+				} else {
+					System.out.println("No record found in `user_filter` with user_id= " + user.getUserId()
+							+ " and filter_id=" + Integer.parseInt(filter_id));
+				}
+
+				// remove from within
+				String deleteWithinSQL = "DELETE FROM myflorabase.within WHERE filter_id=?;";
+				PreparedStatement ps3 = con.prepareStatement(deleteWithinSQL);
+				ps3.setInt(1, Integer.parseInt(filter_id));
+				int deleted_within_rows = ps3.executeUpdate();
+
+				if (deleted_within_rows > 0) {
+					System.out.println("Record(s) found in `within` with filter_id=" + Integer.parseInt(filter_id)
+							+ " deleted sucessfully.");
+				} else {
+					System.out.println("No record found in `within` with filter_id=" + Integer.parseInt(filter_id));
+				}
+				
+
+				// add entries to within (filter and plants)
+				String addPlantsToFilter = "INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (?,?);";
+				PreparedStatement ps4 = con.prepareStatement(addPlantsToFilter);
+				ps4.setInt(1, Integer.parseInt(filter_id));
+				for (String value : selectedValues) {
+					ps4.setInt(2, Integer.parseInt(value));
+					int added_within_rows = ps4.executeUpdate();
+					if (added_within_rows == 0) {
+						throw new SQLException();
+					}
+				}
+
+				// ensure all operation successful
+				if (filter_rows == 1 && deleted_within_rows > 0) {
+					// If successful, commit the transaction
+					con.commit();
+					successLog = "Update filter successful.";
+
+				} else {
+					// If any operation fails, rollback the transaction
+					con.rollback();
+					successLog = "Update filter failed. Rolling back changes.";
+
+				}
+
+			} catch (SQLException e) {
+				con.rollback();
+				System.out.println("Error updating filter: " + e.getMessage());
+				return e.getMessage();
+			}
+
+		} catch (SQLException e) {
+			System.out.println("SQLException caught: " + e.getMessage());
+			e.printStackTrace();
+			return e.getMessage();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					System.out.println("Failed to close the connection: " + e.getMessage());
+					return e.getMessage();
+				}
+			}
+		}
 		
 		return successLog;
 	}
