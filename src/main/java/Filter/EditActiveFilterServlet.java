@@ -37,6 +37,9 @@ public class EditActiveFilterServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		
+		HttpSession session = request.getSession(false);
+		User user = (User) session.getAttribute("user");
 
 		String[] activeFilters = request.getParameterValues("activeFilters");
 		String[] inactiveFilters = request.getParameterValues("inactiveFilters");
@@ -54,7 +57,7 @@ public class EditActiveFilterServlet extends HttpServlet {
 		}
 
 		FilterDao fDao = new FilterDao();
-		String successLog = fDao.editActiveFilters(activeFilters, inactiveFilters);
+		String successLog = fDao.editActiveFilters(user, activeFilters, inactiveFilters);
 
 		response.setContentType("text/plain");
 		response.setCharacterEncoding("UTF-8");

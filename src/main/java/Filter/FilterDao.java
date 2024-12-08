@@ -241,11 +241,14 @@ public class FilterDao {
 		return successLog;
 	}
 
-	public String editActiveFilters(String[] activeFilters, String[] inactiveFilters) {
+	public String editActiveFilters(User user, String[] activeFilters, String[] inactiveFilters) {
 		loadDriver(dbdriver);
 		Connection con = getConnection();
 
 		String successLog = "active filters updated";
+		
+		int user_id = user.getUserId();
+		System.out.println("userid " + user_id);
 
 		try {
 			con.setAutoCommit(false);
@@ -253,20 +256,22 @@ public class FilterDao {
 			try {
 
 				int updatedRows = 0;
-				String activateFiltersSQL = "UPDATE myflorabase.filter SET active=1 WHERE filter_id = ?;";
+				String activateFiltersSQL = "UPDATE myflorabase.user_filter SET active=1 WHERE user_id=? AND filter_id=?;";
 				PreparedStatement ps = con.prepareStatement(activateFiltersSQL);
 				if (activeFilters != null) {
 					for (String value : activeFilters) {
-						ps.setInt(1, Integer.parseInt(value));
+						ps.setInt(1, user_id);
+						ps.setInt(2, Integer.parseInt(value));
 						updatedRows += ps.executeUpdate();
 					}
 				}
 
-				String deactivateFiltersSQL = "UPDATE myflorabase.filter SET active=0 WHERE filter_id = ?;";
+				String deactivateFiltersSQL = "UPDATE myflorabase.user_filter SET active=0 WHERE user_id=? AND filter_id=?;";
 				PreparedStatement ps2 = con.prepareStatement(deactivateFiltersSQL);
 				if (inactiveFilters != null) {
 					for (String value : inactiveFilters) {
-						ps2.setInt(1, Integer.parseInt(value));
+						ps2.setInt(1, user_id);
+						ps2.setInt(2, Integer.parseInt(value));
 						updatedRows += ps2.executeUpdate();
 					}
 				}
