@@ -107,6 +107,14 @@
 
 	var myInput2 = document.getElementById("psw2");
 	var match = document.getElementById("match");
+	
+	// prevent paste
+	window.onload = () => {
+		myInput.oncopy = e => e.preventDefault();
+		myInput.onpaste = e => e.preventDefault();
+		myInput2.oncopy = e => e.preventDefault();
+		myInput2.onpaste = e => e.preventDefault();
+	}
 
 	// checks if the username is unique, gives live error message
 	document.getElementById("username").addEventListener("input", function() {
