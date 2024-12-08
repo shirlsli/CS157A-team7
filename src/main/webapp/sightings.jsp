@@ -20,38 +20,34 @@ if (pwd == null) {
 }
 
 List<Filter> filters = new ArrayList<>();
-List<Plant> plantsAllergicTo = new ArrayList<>();
-try {
-	java.sql.Connection con;
-	Class.forName("com.mysql.jdbc.Driver");
-	con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", dUser, pwd);
-	Statement statement = con.createStatement();
+if (user != null){
+	try {
+		java.sql.Connection con;
+		Class.forName("com.mysql.jdbc.Driver");
+		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", dUser, pwd);
+		Statement statement = con.createStatement();
 
-	String filtersSQL = "SELECT uf.filter_id, filter_name, active FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '"
-	+ user.getUserId() + "'";
-	ResultSet rs = statement.executeQuery(filtersSQL);
-	while (rs.next()) {
-		int filterId = rs.getInt("filter_id");
-		String filterName = rs.getString("filter_name");
-		int active = rs.getInt("active");
-		boolean isActive = false;
-		if (active == 1) {
-	isActive = true;
+		String filtersSQL = "SELECT uf.filter_id, filter_name, active FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '"
+		+ user.getUserId() + "'";
+		ResultSet rs = statement.executeQuery(filtersSQL);
+		while (rs.next()) {
+			int filterId = rs.getInt("filter_id");
+			String filterName = rs.getString("filter_name");
+			int active = rs.getInt("active");
+			boolean isActive = false;
+			if (active == 1) {
+		isActive = true;
+			}
+			Filter filter = new Filter(filterId, filterName, isActive);
+			filters.add(filter);
 		}
-		Filter filter = new Filter(filterId, filterName, isActive);
-		filters.add(filter);
+		rs.close();
+		statement.close();
+		con.close();
+	} catch (SQLException e) {
+		System.out.println("SQLException caught: " + e.getMessage());
 	}
-	rs.close();
-	statement.close();
-	con.close();
-} catch (SQLException e) {
-	System.out.println("SQLException caught: " + e.getMessage());
 }
-
-
-
-
-
 
 %>
 <!DOCTYPE html>
@@ -110,6 +106,7 @@ try {
 										<span class="section-title-with-button">
 											<h2>My Custom Filters</h2>
 										</span>
+										
 										<%
 										for (Filter f : filters) {
 										%>
@@ -565,10 +562,19 @@ try {
 				.then(data => {
 					console.log('Server response:', data)
 					updateMapWithSightings();
+					updateListWithSightings();
 				})
 				.catch(error => console.error('Error:', error));
 			
 	    }
+		
+	    function updateListWithSightings() {
+	    	// TODO: figure out how to update the list with custom filters
+			
+		}
+	    
+	    
+	    
 	</script>
 
 	<!-- Load the Google Maps JavaScript API -->
