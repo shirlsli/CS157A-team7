@@ -273,6 +273,14 @@ public class AddLogServlet extends HttpServlet {
 							if (generatedKeys.next()) {
 								plantId = generatedKeys.getInt(1);
 								System.out.println("New plant inserted with ID: " + plantId);
+								
+								// insert into default filter (All)
+								String addPlantToFilter = "INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (1, ?);";
+								try (PreparedStatement updateFilter = con.prepareStatement(addPlantToFilter)){
+									updateFilter.setInt(1, plantId);
+									updateFilter.executeUpdate();
+								}
+								
 							}
 						}
 					}
