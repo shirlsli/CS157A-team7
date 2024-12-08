@@ -7,6 +7,12 @@
 	<%
 	HttpSession curSession = request.getSession(false);
 	User user = (User) curSession.getAttribute("user");
+	
+	if (user == null){
+		if (request.getAttribute("loginHeaderButton") == null && request.getAttribute("registerHeaderButton") == null){
+			request.setAttribute("generalSightingActive", "active");
+		}
+	}
 	%>
 
 	<span id="navbar"> 
