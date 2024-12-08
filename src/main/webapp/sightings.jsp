@@ -102,6 +102,7 @@ if (user != null){
 									</label> 
 									
 									<!--  -->
+									<%if (user != null) { %>
 									<div id="filtersDiv">
 										<span class="section-title-with-button">
 											<h2>My Custom Filters</h2>
@@ -121,6 +122,7 @@ if (user != null){
 										}
 										%>
 									</div>
+									<%} %>
 									
 									
 									
