@@ -45,9 +45,9 @@
 							pattern='(?=.*[!@#\$%\^\&\*\(\),\.\?:\{\}\|"])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
 							title="Must contain at least one number and one uppercase and lowercase letter and one special character, and at least 8 or more characters"
 							required>
-						<button type="button" id="toggle-psw"
+						<div id="toggle-psw"
 							class="toggle-button material-symbols-outlined"
-							onclick="togglePswVisibility()">visibility_off</button>
+							onclick="togglePswVisibility()">visibility_off</div>
 
 					</div>
 
@@ -76,9 +76,9 @@
 							id="psw2" type="password" name="password"
 							placeholder="Enter your password again" value="${password}"
 							title="Passwords must match" required>
-						<button type="button" id="toggle-psw2"
+						<div id="toggle-psw2"
 							class="toggle-button material-symbols-outlined"
-							onclick="togglePsw2Visibility()">visibility_off</button>
+							onclick="togglePsw2Visibility()">visibility_off</div>
 					</div>
 
 				</div>
