@@ -1,5 +1,5 @@
 <%@ page
-	import="java.sql.*, com.example.User, com.example.MapPreference, com.example.Filter, com.example.Plant, java.util.List, java.util.ArrayList"%>
+	import="java.sql.*, com.example.User, com.example.Filter, com.example.Plant, java.util.List, java.util.ArrayList"%>
 <html>
 <head>
 <title>Profile</title>
