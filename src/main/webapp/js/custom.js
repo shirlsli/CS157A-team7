@@ -156,7 +156,7 @@ async function updateMapWithSightings() {
 					continue;
 				}
 				
-				if (!searchQuery && filterArray.length > 0 && filterArray.includes(plantName)) {
+				if (!searchQuery && filterArray.length > 0 && !filterArray.includes(plantName)) {
 					console.log(`Filtered out plant: ${plantName}`);
 					continue;
 				}
