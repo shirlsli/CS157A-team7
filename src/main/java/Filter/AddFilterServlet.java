@@ -42,14 +42,12 @@ public class AddFilterServlet extends HttpServlet {
 
 		String[] selectedValues = request.getParameterValues("selectedPlants");
 
-		String filterColor = request.getParameter("filterColor");
-
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 
 		
 		FilterDao fDao = new FilterDao();
-		String successLog = fDao.addNewFilter(user, filterName, selectedValues, filterColor);
+		String successLog = fDao.addNewFilter(user, filterName, selectedValues);
 
 		response.setContentType("text/plain");
 		response.setCharacterEncoding("UTF-8");

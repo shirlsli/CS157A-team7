@@ -57,7 +57,7 @@ public class FilterDao {
 		return true;
 	}
 
-	public String addNewFilter(User user, String filterName, String[] selectedValues, String filterColor) {
+	public String addNewFilter(User user, String filterName, String[] selectedValues) {
 		loadDriver(dbdriver);
 		Connection con = getConnection();
 
@@ -67,24 +67,22 @@ public class FilterDao {
 
 			// checking the values:
 			System.out.println("Filter Name: " + filterName);
-			System.out.println("Filter Color: " + filterColor);
 			if (selectedValues != null) {
 				for (String value : selectedValues) {
 					System.out.println("Selected value: " + value);
 				}
 			}
 
-			Filter filter = new Filter(filterColor, filterName);
+			Filter filter = new Filter(filterName);
 
 			con.setAutoCommit(false);
 
 			// add new entry into filter
-			String insertNewFilterSQL = "INSERT INTO myflorabase.filter (color, filter_name) VALUES (?, ?);";
+			String insertNewFilterSQL = "INSERT INTO myflorabase.filter (filter_name) VALUES (?);";
 
 			try {
 				PreparedStatement ps = con.prepareStatement(insertNewFilterSQL);
-				ps.setString(1, filter.getColor());
-				ps.setString(2, filter.getFilterName());
+				ps.setString(1, filter.getFilterName());
 				int filter_row = ps.executeUpdate();
 
 				// get filter_id
@@ -347,7 +345,7 @@ public class FilterDao {
 		String successLog = "";
 		
 		String deleteSuccess = deleteFilter(user, filterId);
-		String addSuccess = addNewFilter(user, filterName, selectedValues, filterColor); // inc filter id, too lazy to actually edit
+		String addSuccess = addNewFilter(user, filterName, selectedValues); // inc filter id, too lazy to actually edit
 		
 		successLog = deleteSuccess + addSuccess;
 		
