@@ -29,6 +29,7 @@ public class LogoutServlet extends HttpServlet {
 			session.invalidate(); // Invalidates the session
 		}
 		request.setAttribute("errorMessage", "Please sign in again to access your account");
+		request.setAttribute("generalSightingActive", "active"); // set active header tab
 		request.getRequestDispatcher("sightings.jsp").forward(request, response);
 	}
 
