@@ -362,6 +362,7 @@ if (user != null){
 			flagIcon.src = 'assets/flag_icon.svg';
 			flagIcon.width = 20;
 			flagIcon.height = 20;
+			flagIcon.classList.add(curUser != null ? 'icon-shown' : 'icon-hidden');
 			flagIcon.addEventListener('mouseover', function() {
 				changeImage(this, 'assets/flag_icon_hover.svg');
 			});
