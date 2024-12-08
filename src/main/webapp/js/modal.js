@@ -2,9 +2,6 @@ var clickedLocation;
 var loc;
 // Open the modal
 function openModal(location, sighting, plant) {
-	
-	// only have ability to report new sighting if signed in
-	if (curUser != null ){
 		const htmlElement = document.documentElement;
 			htmlElement.style.overflowY = "hidden";
 			const modalTitle = document.getElementById('modalTitle');
@@ -41,7 +38,7 @@ function openModal(location, sighting, plant) {
 			loadReportSightingsMap(location);
 			sessionStorage.setItem("sighting", JSON.stringify(sighting));
 			loc = location;
-	}
+	
 }
 
 async function loadReportSightingsMap(location) {

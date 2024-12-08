@@ -169,6 +169,8 @@ if (user != null){
 	<script src="./js/buttons.js"></script>
 	<script src="./js/modal.js"></script>
 	<script>
+		var user = <%=userJson%>;
+	
 		var allSightings = [];
 		var enterPressed = false;
 		window.addEventListener("load", function() {
