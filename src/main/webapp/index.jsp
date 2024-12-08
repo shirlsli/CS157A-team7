@@ -96,7 +96,6 @@
 			statement.executeUpdate("CREATE SCHEMA myFlorabase");
 			statement.executeUpdate("USE myFlorabase");
 
-			statement.executeUpdate("DROP TABLE IF EXISTS Member");
 			statement.executeUpdate("DROP TABLE IF EXISTS Users");
 			statement.executeUpdate("DROP TABLE IF EXISTS MapPreference");
 			statement.executeUpdate("DROP TABLE IF EXISTS Filter");
@@ -122,6 +121,7 @@
 			statement.executeUpdate(createFlagTableSQL);
 			statement.executeUpdate(createUser_FilterTableSQL);
 
+			// USER table (15)
 			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
 				+ "VALUES ('user1', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', true);");
 			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
@@ -153,7 +153,8 @@
 			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
 				+ "VALUES ('user15', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
 			
-			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('All')");
+			// FILTER table (8)
+			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('All Plants')");
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Trees')");
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Flowers')");
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Allergies')");
@@ -162,7 +163,8 @@
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Sunflower')");
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Flowers')");
 			
-			// default filter 'All'
+			// USER_FILTER table (user and filters)
+				// default filter 'All' (all users with default filter)
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 1)");
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 1)");			
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (3, 1)");
@@ -179,7 +181,7 @@
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (14, 1)");
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (15, 1)");
 			
-			// custom filters
+				// custom filters (users and filters)
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 2)");
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 5)");
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 6)");
@@ -190,15 +192,25 @@
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (3, 4)");
 			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (3, 8)");
 			
-			// locations
+			// WITHIN table (plants and filters)
+			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (1, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (2, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (3, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (4, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (5, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (6, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (7, 1)");
+			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (8, 1)");
+			
+			// LOCATION table (1)
 			statement.executeUpdate("INSERT INTO myflorabase.location (latitude, longitude, name) VALUES ('37.3352', '121.8811', 'SJSU')");
 			
+			// SIGHTING table (2)
 			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (1, 1, 1, 1, 'Roses are red, violets are blue', '2024-11-11', null, 2)");
-			
-			statement.executeUpdate("INSERT INTO myflorabase.plant (plant_id, name, scientific_name, description, poisonous, invasive, endangered) VALUES (1, 'Rose', 'Rosa rubiginosa', null, true, true, true)");
-			
 			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (2, 1, 2, 1, 'Found more roses', '2024-11-12', null, 2)");
 
+			// PLANT table (1)
+			statement.executeUpdate("INSERT INTO myflorabase.plant (plant_id, name, scientific_name, description, poisonous, invasive, endangered) VALUES (1, 'Rose', 'Rosa rubiginosa', null, true, true, true)");
 
 			out.println("Initial entries in table \"myFlorabase\": <br/>");
 
