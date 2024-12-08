@@ -306,8 +306,15 @@
 					modalTitle.textContent = "Edit Filter";
 					filterModalLabel.textContent = "Filter Name";
 					filterName.value = filter_name;
+					
+					const filterId = document.getElementById('filterId');
+					filterId.value = filter_id.toString();
+					
 				}
 				else {
+					const filterId = document.getElementById('filterId');
+					filterId.value = null;
+					
 					filterForm.onsubmit = function(event) {
 						  submitFilter(event, null);
 					};
@@ -418,6 +425,9 @@
 			const modal = document.getElementById('filterModal');
 			modal.style.display = "none";
 			document.getElementById('filterForm').reset();
+			const statusElement = document.getElementById("filterNameStatus");
+			statusElement.textContent = "";
+			document.getElementById("filterName").setCustomValidity('');
 		}	
 		
 		// Form Submission for adding new filter

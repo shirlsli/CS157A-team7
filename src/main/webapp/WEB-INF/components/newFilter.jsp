@@ -62,9 +62,9 @@ try {
 			<form id="filterForm" method="POST">
 				<div class="form-group" id="filter-name-group">
 					<label id="filterModalLabel" class="required textfield-label"
-						for="filterName"></label> <input
-						type="text" id="filterName" name="filterName" placeholder=""
-						 />
+						for="filterName"></label>
+						<input id='filterId' type='text' style='display: none'/>
+						<input type="text" id="filterName" name="filterName" placeholder="" />
           <label class="invalid" id="filterNameStatus"></label>
 				</div>
 				<div class="form-group">
@@ -110,7 +110,12 @@ try {
 
 <script>
 //checks if the filter_name is unique, gives live error message
+
 document.getElementById("filterName").addEventListener("input", function() {
+		var filter_id = document.getElementById('filterId').value.toString(0);
+		/* if (filter_id != null){
+			console.log("filter_id", filter_id);
+		} */
 		var filterName = this.value.toString().trim();
 		var statusElement = document.getElementById("filterNameStatus");
 
@@ -121,7 +126,7 @@ document.getElementById("filterName").addEventListener("input", function() {
 
 			// Create the AJAX request
 			var xhr = new XMLHttpRequest();
-			xhr.open("GET", "FilterNameCheckServlet?filterName=" + encodeURIComponent(filterName), true);
+			xhr.open("GET", "FilterNameCheckServlet?filterName=" + encodeURIComponent(filterName) + "&filterId=" + encodeURIComponent(filter_id), true);
 
 			xhr.onload = function() {
 				if (xhr.status === 200) {

@@ -37,12 +37,22 @@ public class FilterDao {
 		return con;
 	}
 
-	public boolean checkForExistingFilterName(User curUser, String filterName) {
+	public boolean checkForExistingFilterName(User curUser, String filter_id, String filterName) {
 		loadDriver(dbdriver);
 		Connection con = getConnection();
+		
+		int user_id = curUser.getUserId();
+		
+		String s;
+		if (filter_id != "") {
+//			System.out.println("filter_id '" + Integer.parseInt(filter_id) + "'");
+			
+			s = "SELECT * FROM myflorabase.user_filter u_f, myflorabase.filter f WHERE user_id=" + user_id + " AND f.filter_id<>" + Integer.parseInt(filter_id) + " AND u_f.filter_id = f.filter_id AND binary filter_name='" + filterName + "';";
 
-		String s = "SELECT * FROM myflorabase.user_filter uf, myflorabase.filter f WHERE user_id ='"
-				+ curUser.getUserId() + "' AND uf.filter_id = f.filter_id AND filter_name ='" + filterName + "';";
+		} else {
+			s = "SELECT * FROM myflorabase.user_filter uf, myflorabase.filter f WHERE user_id=" + user_id + " AND uf.filter_id = f.filter_id AND binary filter_name='" + filterName + "';";
+		}
+
 		try {
 			PreparedStatement ps = con.prepareStatement(s);
 			ResultSet resultSet = ps.executeQuery();
