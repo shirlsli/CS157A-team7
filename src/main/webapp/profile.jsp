@@ -1,5 +1,5 @@
 <%@ page
-	import="java.sql.*, com.example.User, com.example.MapPreference, com.example.Filter, com.example.Plant, java.util.List, java.util.ArrayList"%>
+	import="java.sql.*, com.example.User, com.example.Filter, com.example.Plant, java.util.List, java.util.ArrayList"%>
 <html>
 <head>
 <title>Profile</title>
@@ -45,19 +45,18 @@
 			user = new User(userId, username, password, description, isAdmin, zoom, location_id);
 		}
 
-		String filtersSQL = "SELECT uf.filter_id, color, filter_name, active FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '"
+		String filtersSQL = "SELECT uf.filter_id, filter_name, active FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '"
 		+ user.getUserId() + "'";
 		rs = statement.executeQuery(filtersSQL);
 		while (rs.next()) {
 			int filterId = rs.getInt("filter_id");
-			String color = rs.getString("color");
 			String filterName = rs.getString("filter_name");
 			int active = rs.getInt("active");
 			boolean isActive = false;
 			if (active == 1) {
 		isActive = true;
 			}
-			Filter filter = new Filter(filterId, color, filterName, isActive);
+			Filter filter = new Filter(filterId, filterName, isActive);
 			filters.add(filter);
 		}
 		String allergiesSQL = "SELECT * FROM myflorabase.allergic a JOIN myflorabase.plant p ON a.user_id="
@@ -230,8 +229,12 @@
 			}
 		}
 		
+		
+		
+	
+		
 		// open the new filter modal
-		function newFilter(button, isAllergy) {
+		function newFilter(button, isAllergy, filter_id, filter_name) {
 			document.documentElement.scrollTop = 0;
 			document.body.scrollTop = 0;
 			document.body.style.overflowY = "hidden";
@@ -243,8 +246,8 @@
 			modalTitle.textContent = isAllergy ? "Add an Allergy" : "Add a New Filter";
 			const filterModalLabel = document.getElementById('filterModalLabel');
 			const filterName = document.getElementById('filterName');
-			const colorSelectGroup = document.getElementById('colorSelectGroup');
-			const filterColor = document.getElementById('filterColor');
+			
+
 			const filterModalPlantCheckboxes = document.getElementById('filterModalPlantCheckboxes');
 			const searchBar = document.getElementById("searchBar");
 			const tagList = document.getElementById("tagList");
@@ -274,9 +277,49 @@
 				filterModalPlantCheckboxes.style.display = "block";
 				filterModalLabel.textContent = "Filter Name";
 				filterName.placeholder = "Give this filter a name";
-				filterForm.onsubmit = function(event) {
-					  submitFilter(event);
-				};
+				
+				if (filter_id != null)
+				{
+					filterForm.setAttribute("onsubmit", "submitFilter(event, "+ filter_id + ")");
+
+					// load the plants that should be checked
+					fetch("/myFlorabase/EditFilterServlet?filter_id=" + filter_id, {
+						method: 'GET',
+					})
+					.then(response => {
+						return response.json();
+					})
+					.then(info => {
+						console.log(info);
+						// set the checks
+						info.forEach(filterNum => {
+							console.log(filterNum);
+							document.getElementById('plantId'+ filterNum).checked = true;
+						});
+						
+					})
+					.catch(error => {
+			        		  console.error("Issue with fetching from EditFilterServlet", error);
+			        });
+					
+					const modalTitle = document.getElementById('modalTitle');			
+					modalTitle.textContent = "Edit Filter";
+					filterModalLabel.textContent = "Filter Name";
+					filterName.value = filter_name;
+					
+					const filterId = document.getElementById('filterId');
+					filterId.value = filter_id.toString();
+					
+				}
+				else {
+					const filterId = document.getElementById('filterId');
+					filterId.value = null;
+					
+					filterForm.onsubmit = function(event) {
+						  submitFilter(event, null);
+					};
+				}			
+				
 			}
 			filterForm.addEventListener('keydown', function(event) {
 				if (event.key === 'Enter') {
@@ -382,10 +425,13 @@
 			const modal = document.getElementById('filterModal');
 			modal.style.display = "none";
 			document.getElementById('filterForm').reset();
+			const statusElement = document.getElementById("filterNameStatus");
+			statusElement.textContent = "";
+			document.getElementById("filterName").setCustomValidity('');
 		}	
 		
 		// Form Submission for adding new filter
-		function submitFilter(event) {
+		function submitFilter(event, filter_id) {
 			event.preventDefault();
 			
 			
@@ -400,9 +446,6 @@
 		        return;  // Prevent form submission if no checkbox is selected
 		    }
 			
-			// filter color
-			const filterColor = "red";
-			
 			// Prepare URL-encoded data
 			const formData = new FormData();
 			
@@ -413,7 +456,7 @@
 			
 			formData.append('filterName', filterName);
 			
-			formData.append('filterColor', filterColor);
+			formData.append('filterId', filter_id);
 			
 			 // Log each key-value pair in the FormData object
 	        for (const [key, value] of formData.entries()) {
@@ -433,26 +476,49 @@
 			lottieFileAnim.style.width = "100%";
 			lottieFileAnim.style.height = "100%";
             document.getElementById("filter-loading-text").textContent = "Saving your filter...";
-			 
-			// Send the data to the server
-			fetch('/myFlorabase/AddFilterServlet', {
-				method: 'POST',
-				body: formData // FormData handles setting the correct multipart/form-data header
-			})
-				.then(response => response.text())
-				/* .then(data => console.log('Server response:', data)) */
-				
-				
-				.then(data => {
-					console.log('Successfully completed operation');
-					setTimeout(function() {
-						lottieFileAnim.style.display = "none";
-						closeNewFilterModal();
-						createFilterPopup(null, "Your new filter has been successfully created!", "Close", "", false);
-					}, 2000);
+			
+            
+            if(filter_id == null){ // new filter
+            	// Send the data to the server
+    			fetch('/myFlorabase/AddFilterServlet', {
+    				method: 'POST',
+    				body: formData // FormData handles setting the correct multipart/form-data header
+    			})
+    				.then(response => response.text())  				
+    				.then(data => {
+    					console.log('Successfully completed operation');
+    					setTimeout(function() {
+    						lottieFileAnim.style.display = "none";
+    						closeNewFilterModal();
+    						createFilterPopup(null, "Your new filter has been successfully created!", "Close", "", false);
+    					}, 2000);
+    				})
+    				
+    				.catch(error => console.error('Error:', error));
+    			
+            }
+            else 
+			{ // editing existing filter
+				// Send the data to the server
+				fetch('/myFlorabase/EditFilterServlet', {
+					method: 'POST',
+					body: formData // FormData handles setting the correct multipart/form-data header
 				})
-				
-				.catch(error => console.error('Error:', error));
+					.then(response => response.text())
+					
+					.then(data => {
+						console.log('Successfully completed operation');
+						setTimeout(function() {
+							lottieFileAnim.style.display = "none";
+							closeNewFilterModal();
+							createFilterPopup(null, "Your filter has been successfully edited!", "Close", "", false);
+						}, 3000);
+					})
+					
+					.catch(error => console.error('Error:', error));
+			}
+			
+	
 
 		}
 		
@@ -668,8 +734,8 @@
 				class="filters-checkbox" <%=f.isActive() ? "checked" : ""%>
 				onchange="updateActiveFilters()"> <span class="checkbox"></span>
 				<%=f.getFilterName()%> <span class="icon-row"> <%=f.getFilterId() != 1
-		? "<button id='editButton' class='icon-button'><img onmouseover='editMouseover(this)' onmouseout='editMouseout(this)' onclick='editClick("
-				+ f.getFilterId() + ", \"" + f.getFilterName() + "\", \"" + f.getColor()
+		? "<button id='editButton' class='icon-button'><img onmouseover='editMouseover(this)' onmouseout='editMouseout(this)' onclick='newFilter(this, false,"
+				+ f.getFilterId() + ", \"" + f.getFilterName() + "\", \""
 				+ "\")' src='assets/edit_icon.svg' width='20' height='20' class='icon-shown'> </button>	<button class='icon-button'> <img id='trash-icon' onmouseover='trashMouseover(this)' onmouseout='trashMouseout(this)' onclick='deleteFilterConfirmation("
 				+ f.getFilterId() + ", \"" + f.getFilterName()
 				+ "\")' src='assets/trash_icon.svg' width='20' height='20' class='icon-shown'></button>"
@@ -697,130 +763,6 @@
 	function editMouseout(img){
 		img.src='assets/edit_icon.svg';
 	}
-	
-	function editClick(filter_id, filter_name, filter_color){
-		document.documentElement.scrollTop = 0;
-		document.body.scrollTop = 0;
-		document.body.style.overflowY = "hidden";
-		const filterForm = document.getElementById('filterForm');
-		filterForm.setAttribute("onsubmit", "editFilter(event, "+ filter_id + ")");
-		const searchBar = document.getElementById('searchBar');
-		searchBar.style.display = "none";
-		
-		const modal = document.getElementById('filterModal');
-		modal.style.display = "block";
-		
-		const filterModalPlantLabel = document.getElementById('filterModalPlantLabel');
-		filterModalPlantLabel.style.display = "none";
-		
-		const modalContent = document.getElementById('filterModalContent');
-		modalContent.style.display = "block";
-		
-		const filterName = document.getElementById('filterName');
-		const filterColor =  document.getElementById('filterColor');
-		const filterModalLabel = document.getElementById('filterModalLabel');
-		//const plants = document.getElementById('');
-		// TODO: load the plants that should be checked
-		fetch("/myFlorabase/EditFilterServlet?filter_id=" + filter_id, {
-			method: 'GET',
-		})
-		.then(response => {
-			return response.json();
-		})
-		.then(info => {
-			console.log(info);
-			// set the checks?
-			info.forEach(filterNum => {
-				console.log(filterNum);
-				document.getElementById('plantId'+ filterNum).checked = true;
-			});
-			
-		})
-		.catch(error => {
-        		  console.error("Issue with fetching from EditFilterServlet", error);
-        });
-		
-		if (filter_id != null){
-			const modalTitle = document.getElementById('modalTitle');			
-			modalTitle.textContent = "Edit Filter";
-			filterModalLabel.textContent = "Filter Name";
-			filterName.value = filter_name;
-			/* filterColor.value = filter_color; */
-		}
-	}
-	
-	// Form Submission for editing filter
-	function editFilter(event, filter_id) {
-		event.preventDefault();
-		
-		// filter name
-		const filterName = document.getElementById('filterName').value.trim();
-		
-		// selected plants
-		const selectedPlants = document.querySelectorAll('#filterForm input[type="checkbox"]:checked');
-		
-		if (selectedPlants.length === 0) {
-	        alert('Please select at least one plant option.');
-	        return;  // Prevent form submission if no checkbox is selected
-	    }
-		
-		// filter color
-		const filterColor = "red";
-		
-		// Prepare URL-encoded data
-		const formData = new FormData();
-		
-		// Append the value of each checked checkbox to the FormData object
-	    selectedPlants.forEach(function(checkbox) {
-	        formData.append('selectedPlants', checkbox.value);
-	    });
-		
-		formData.append('filterName', filterName);
-		
-		formData.append('filterColor', filterColor);
-		
-		formData.append('filterId', filter_id);
-		
-		 // Log each key-value pair in the FormData object
-        for (const [key, value] of formData.entries()) {
-            console.log(key, `:`, value);
-        }
-				
-		// loading screen
-		const modalContent = document.getElementById("filterModalContent");
-		modalContent.style.display = "none";
-		const lottieFileAnim = document.getElementById("lottieFileAnim");
-		lottieFileAnim.style.display = "flex";
-		lottieFileAnim.style.position = "fixed";
-		lottieFileAnim.style.top = 0;
-		lottieFileAnim.style.left = 0;
-		lottieFileAnim.style.justifyContent = "center";
-		lottieFileAnim.style.alignItems = "center";
-		lottieFileAnim.style.width = "100%";
-		lottieFileAnim.style.height = "100%";
-        document.getElementById("filter-loading-text").textContent = "Saving your filter...";
-		 
-		// Send the data to the server
-		fetch('/myFlorabase/EditFilterServlet', {
-			method: 'POST',
-			body: formData // FormData handles setting the correct multipart/form-data header
-		})
-			.then(response => response.text())
-			
-			.then(data => {
-				console.log('Successfully completed operation');
-				setTimeout(function() {
-					lottieFileAnim.style.display = "none";
-					closeNewFilterModal();
-					createFilterPopup(null, "Your filter has been successfully edited!", "Close", "", false);
-				}, 3000);
-			})
-			
-			.catch(error => console.error('Error:', error));
-
-	}
-	
-	
 	
 	function trashMouseover(img){
 		img.src='assets/trash_icon_hover.svg';

@@ -17,13 +17,17 @@ public class Filter {
 		this.setFilterName(filterName);
 		this.setActive(isActive);
 	}
+	public Filter(int filterId, String filterName, boolean isActive) {
+		this.setFilterId(filterId);
+		this.setFilterName(filterName);
+		this.setActive(isActive);
+	}
 	public Filter(String color, String filterName, boolean isActive) {
 		this.setColor(color);
 		this.setFilterName(filterName);
 		this.setActive(isActive);
 	}
-	public Filter(String color, String filterName) {
-		this.setColor(color);
+	public Filter(String filterName) {
 		this.setFilterName(filterName);
 	}
 

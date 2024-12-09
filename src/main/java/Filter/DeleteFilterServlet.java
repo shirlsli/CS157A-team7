@@ -1,4 +1,4 @@
-package addFilter;
+package Filter;
 
 import com.example.*;
 import java.io.IOException;
@@ -20,12 +20,11 @@ import javax.servlet.http.HttpSession;
 
 import com.example.User;
 
-@WebServlet("/AddFilterServlet")
-@MultipartConfig
-public class AddFilterServlet extends HttpServlet {
+@WebServlet("/DeleteFilterServlet")
+public class DeleteFilterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public AddFilterServlet() {
+	public DeleteFilterServlet() {
 		super();
 	}
 
@@ -37,26 +36,18 @@ public class AddFilterServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-
-		String filterName = request.getParameter("filterName");
-
-		String[] selectedValues = request.getParameterValues("selectedPlants");
-
-		String filterColor = request.getParameter("filterColor");
-
+		
+		String filter_id = request.getParameter("filter_id");
+		
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 
-		
 		FilterDao fDao = new FilterDao();
-		String successLog = fDao.addNewFilter(user, filterName, selectedValues, filterColor);
-
+		String successLog = fDao.deleteFilter(user, filter_id);
+		
 		response.setContentType("text/plain");
 		response.setCharacterEncoding("UTF-8");
-
 		response.getWriter().write(successLog);
-
-
 	}
 
 }

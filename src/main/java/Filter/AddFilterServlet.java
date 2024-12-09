@@ -1,4 +1,4 @@
-package addFilter;
+package Filter;
 
 import com.example.*;
 import java.io.IOException;
@@ -20,12 +20,12 @@ import javax.servlet.http.HttpSession;
 
 import com.example.User;
 
-@WebServlet("/EditActiveFilterServlet")
+@WebServlet("/AddFilterServlet")
 @MultipartConfig
-public class EditActiveFilterServlet extends HttpServlet {
+public class AddFilterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public EditActiveFilterServlet() {
+	public AddFilterServlet() {
 		super();
 	}
 
@@ -38,27 +38,23 @@ public class EditActiveFilterServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 
-		String[] activeFilters = request.getParameterValues("activeFilters");
-		String[] inactiveFilters = request.getParameterValues("inactiveFilters");
+		String filterName = request.getParameter("filterName");
 
-		// checking the values:
-		if (activeFilters != null) {
-			for (String value : activeFilters) {
-				System.out.println("Active filter_id: " + Integer.parseInt(value));
-			}
-		}
-		if (inactiveFilters != null) {
-			for (String value : inactiveFilters) {
-				System.out.println("Inactive filter_id: " + Integer.parseInt(value));
-			}
-		}
+		String[] selectedValues = request.getParameterValues("selectedPlants");
 
+		HttpSession session = request.getSession(false);
+		User user = (User) session.getAttribute("user");
+
+		
 		FilterDao fDao = new FilterDao();
-		String successLog = fDao.editActiveFilters(activeFilters, inactiveFilters);
+		String successLog = fDao.addNewFilter(user, filterName, selectedValues);
 
 		response.setContentType("text/plain");
 		response.setCharacterEncoding("UTF-8");
+
 		response.getWriter().write(successLog);
+
+
 	}
 
 }

@@ -17,6 +17,9 @@
 
 </head>
 <body>
+ 	<div id="header"><jsp:include
+				page="WEB-INF/components/header.jsp"></jsp:include></div>
+
 	<div id="signUpPage">
 		<div>
 			<span id="signUpPageHeader" class="prevent-select"> <img
@@ -31,6 +34,9 @@
 						pattern='^(?=[A-Za-z0-9_]{3,15}$)(?=.*[A-Za-z]).*'
 						title='Must only use letters, numbers, and underscores. Must be 3 to 15 characters, and at least one character must be a letter'
 						required></span> <label class="invalid" id="usernameStatus"></label>
+						<label class="invalid" id="usernameLengthStatus"></label>
+						<label class="invalid" id="usernameLetterStatus"></label>
+						<label class="invalid" id="usernameAtLeastOneLetterStatus"></label>
 				</div>
 				<div class="inputGroup prevent-select">
 					<div class="psw-wrap">
@@ -39,9 +45,9 @@
 							pattern='(?=.*[!@#\$%\^\&\*\(\),\.\?:\{\}\|"])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
 							title="Must contain at least one number and one uppercase and lowercase letter and one special character, and at least 8 or more characters"
 							required>
-						<button type="button" id="toggle-psw"
+						<div id="toggle-psw"
 							class="toggle-button material-symbols-outlined"
-							onclick="togglePswVisibility()">visibility_off</button>
+							onclick="togglePswVisibility()">visibility_off</div>
 
 					</div>
 
@@ -70,9 +76,9 @@
 							id="psw2" type="password" name="password"
 							placeholder="Enter your password again" value="${password}"
 							title="Passwords must match" required>
-						<button type="button" id="toggle-psw2"
+						<div id="toggle-psw2"
 							class="toggle-button material-symbols-outlined"
-							onclick="togglePsw2Visibility()">visibility_off</button>
+							onclick="togglePsw2Visibility()">visibility_off</div>
 					</div>
 
 				</div>
@@ -83,7 +89,7 @@
 					</div>
 					<label class="label prevent-select">OR</label>
 					<%--                need to redirect this to the login page --%>
-					<button onclick="window.location.href='login.jsp';"
+					<button onclick="window.location='login';"
 						class="major-button secondary-button" value="Log in">Log
 						in</button>
 				</div>
@@ -104,43 +110,162 @@
 
 	var myInput2 = document.getElementById("psw2");
 	var match = document.getElementById("match");
+	
+	// prevent paste
+	window.onload = () => {
+		myInput.oncopy = e => e.preventDefault();
+		myInput.onpaste = e => e.preventDefault();
+		myInput2.oncopy = e => e.preventDefault();
+		myInput2.onpaste = e => e.preventDefault();
+	}
 
 	// checks if the username is unique, gives live error message
 	document.getElementById("username").addEventListener("input", function() {
 			var username = this.value;
-			var statusElement = document
-					.getElementById("usernameStatus");
-
-			if (username.length >= 3) { // Only send request if username has at least 3 characters
+			var statusElement = document.getElementById("usernameStatus");
+			var letterStatus = document.getElementById('usernameLetterStatus');
+			var lengthStatus = document.getElementById('usernameLengthStatus');
+			var oneLetterStatus = document.getElementById('usernameAtLeastOneLetterStatus');
+			
+			const regex = /^(?=[A-Za-z0-9_]{3,15}$)(?=.*[A-Za-z]).*/;
+			
+			// checking for 
+			if (!regex.test(username)) {
+				
+				statusElement.classList.remove('valid');
+				statusElement.classList.add('invalid');
+				statusElement.textContent = '';
+				
+				const noSpecialChar = /^[A-Za-z0-9_]+$/;
+				const atLeast1Letter = /(?=.*[A-Za-z])/;
+				
+				if (atLeast1Letter.test(username)) {
+					oneLetterStatus.textContent = '';
+				} else {
+					oneLetterStatus.textContent = "At least one character must be a letter";
+				}
+				if (noSpecialChar.test(username)){
+					letterStatus.textContent = '';
+				} else {
+					letterStatus.textContent = "Please only use letters, numbers, and underscores.";
+				}
+				if (username.length >= 3 && username.length <= 15){
+					lengthStatus.textContent = '';
+				} else {
+					lengthStatus.textContent = "Username must be 3 to 15 characters";
+				}
+				
+				
+				
+			} else 	if (username.length >= 3) { // Only send request if username has at least 3 characters
+				oneLetterStatus.textContent = '';
+				letterStatus.textContent = '';
+				lengthStatus.textContent = '';
+				
 				// Create the AJAX request
 				var xhr = new XMLHttpRequest();
 				xhr.open("GET", "UsernameCheckServlet?username="
 						+ encodeURIComponent(username), true);
 
-				xhr.onload = function() {
-					if (xhr.status === 200) {
-						var response = JSON.parse(xhr.responseText);
-						if (response.available) {
-							statusElement.textContent = "";
-							document.getElementById("username").setCustomValidity('');
+				
+
+			    
+					xhr.onload = function() {
+						if (xhr.status === 200) {
+							var response = JSON.parse(xhr.responseText);
+							if (response.available) {
+								
+								
+
+									statusElement.textContent = "Username available!";
+									statusElement.classList.remove('invalid');
+									statusElement.classList.add('valid');
+									document.getElementById("username").setCustomValidity('');
+								
+								
+							} else {
+								statusElement.classList.add('invalid');
+								statusElement.classList.remove('valid');
+								statusElement.textContent = "Username is already taken. Please enter a different username.";
+								document.getElementById("username").setCustomValidity('Please enter a different username');
+							}
 						} else {
-							statusElement.textContent = "Username is already taken. Please enter a different username.";
-							document.getElementById("username").setCustomValidity('Please enter a different username');
+							console.error("Error checking username availability");
 						}
-					} else {
-						console.error("Error checking username availability");
-					}
-				};
+					};
 
-				xhr.onerror = function() {
-					console.error("Request failed");
-				};
+					xhr.onerror = function() {
+						console.error("Request failed");
+					};
 
-				xhr.send();
-			} else {
-				statusElement.textContent = "";
+					xhr.send();
+				} else {
+					statusElement.textContent = "";
+					oneLetterStatus.textContent = '';
+					letterStatus.textContent = '';
+					lengthStatus.textContent = '';
+				}
+
+				
+			    
+			});
+
+			// When the user starts to type something inside the password field
+			myInput.onkeyup = function() {
+				// Validate lowercase letters
+				if (!document.getElementById("psw").checkValidity()) {
+					document.getElementById("message").style.display = "block";
+				}
+
+				var lowerCaseLetters = /[a-z]/g;
+				if (myInput.value.match(lowerCaseLetters)) {
+					letter.classList.remove("invalid");
+					letter.classList.add("valid");
+				} else {
+					letter.classList.remove("valid");
+					letter.classList.add("invalid");
+				}
+
+				// Validate capital letters
+				var upperCaseLetters = /[A-Z]/g;
+				if (myInput.value.match(upperCaseLetters)) {
+					capital.classList.remove("invalid");
+					capital.classList.add("valid");
+				} else {
+					capital.classList.remove("valid");
+					capital.classList.add("invalid");
+				}
+
+				// Validate numbers
+				var numbers = /[0-9]/g;
+				if (myInput.value.match(numbers)) {
+					number.classList.remove("invalid");
+					number.classList.add("valid");
+				} else {
+					number.classList.remove("valid");
+					number.classList.add("invalid");
+				}
+
+				// Validate length
+				if (myInput.value.length >= 8) {
+					length.classList.remove("invalid");
+					length.classList.add("valid");
+				} else {
+					length.classList.remove("valid");
+					length.classList.add("invalid");
+				}
+
+				// Validate special characters
+				var specialChars = /[!@#$%^&*(),.?:{}|"]/g;
+				if (myInput.value.match(specialChars)) {
+					special.classList.remove("invalid");
+					special.classList.add("valid");
+				} else {
+					special.classList.remove("valid");
+					special.classList.add("invalid");
+				}
+
 			}
-		});
 
 	// When the user clicks on the password field, show the message box
 	myInput.onfocus = function() {

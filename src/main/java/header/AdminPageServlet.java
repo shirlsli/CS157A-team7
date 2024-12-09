@@ -20,7 +20,7 @@ public class AdminPageServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		request.setAttribute("admin", "active"); // set active header tab
+		request.setAttribute("adminPageActive", "active"); // set active header tab
 
 		HttpSession curSession = request.getSession(false);
 		

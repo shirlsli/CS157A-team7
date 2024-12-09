@@ -69,6 +69,8 @@ function attachInfoWindow(marker, content) {
 	});
 }
 
+var mapClickListener;
+
 async function initMap() {
 	const position = { lat: 37.3352, lng: -121.8811 };
 	//@ts-ignore
@@ -95,7 +97,7 @@ async function initMap() {
 		</div>
 	`);
 
-	map.addListener('click', function (event) {
+	mapClickListener = map.addListener('click', function (event) {
 		clickedPosition = event.latLng;
 		openModal(clickedPosition);
 	});
@@ -108,6 +110,7 @@ async function initMap() {
 	}
 
 	updateMapWithSightings();
+	
 }
 
 async function updateMapWithSightings() {
@@ -156,7 +159,7 @@ async function updateMapWithSightings() {
 					continue;
 				}
 				
-				if (!searchQuery && filterArray.length > 0 && filterArray.includes(plantName)) {
+				if (!searchQuery && filterArray.length > 0 && !filterArray.includes(plantName)) {
 					console.log(`Filtered out plant: ${plantName}`);
 					continue;
 				}
@@ -214,6 +217,11 @@ async function updateMapWithSightings() {
 	} catch (error) {
 		console.error("Issue with fetching sightings:", error);
 	}
+	
+	// only allow reports if logged in
+	if (user == null){
+		google.maps.event.removeListener(mapClickListener);
+	} 	
 	
 	// Commented out the pollen-related map overlay initialization
 	// const pollenMapType = new PollenMapType(new google.maps.Size(256, 256), apiKey);

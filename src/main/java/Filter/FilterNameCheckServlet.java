@@ -1,4 +1,4 @@
-package addFilter;
+package Filter;
 import com.example.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,9 +25,10 @@ public class FilterNameCheckServlet extends HttpServlet {
 
 		
 		String filterName = request.getParameter("filterName").trim();
+		String filter_id = request.getParameter("filterId");
 		
         FilterDao fDao = new FilterDao();
-        boolean isAvailable = fDao.checkForExistingFilterName(curUser, filterName);
+        boolean isAvailable = fDao.checkForExistingFilterName(curUser, filter_id, filterName);
 
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
