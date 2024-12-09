@@ -219,7 +219,7 @@
 				
 			for (int i = 1; i <= numberOfPlants; i++){
 				// create default filter for each existing user
-				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (" + i + ", 1)");
+				statement.executeUpdate("INSERT INTO myflorabase.within (plant_id, filter_id) VALUES (" + i + ", 1)");
 				
 			}
 
