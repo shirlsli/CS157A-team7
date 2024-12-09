@@ -142,7 +142,8 @@ input[type="checkbox"] {
 
 .checkbox {
 	display: inline-block;
-	width: 15px;
+	min-width: 15px;
+	max-width: 15px;
 	height: 15px;
 	position: relative;
 	cursor: pointer;
@@ -377,6 +378,40 @@ input {
 	align-items: center;
 	left: 0;
 	bottom: 0;
+}
+#custom_filters {
+	position: fixed;
+	display: flex;
+	gap: 20px;
+	justify-content: space-between;
+	align-items: bottom;
+	left: 5px;
+	bottom: 40px;
+	background: white;
+	padding: 10px 10px 10px 20px;
+	border: 2px solid #EAAC9D;
+	border-radius: 30px;
+	max-height: 300px;
+	max-width: 200px;
+	overflow: auto;
+}
+
+/* Style the scrollbar itself */
+#custom_filters::-webkit-scrollbar {
+    width: 0px; /* width of the vertical scrollbar */
+    height: 1px; /* height of the horizontal scrollbar */
+}
+
+/* Style the thumb (the draggable part of the scrollbar) */
+#custom_filters::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    border-radius: 30px;
+}
+
+/* Style the track (the background part of the scrollbar) */
+#custom_filters::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 30px;
 }
 
 .pageTitle {
