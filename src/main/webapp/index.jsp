@@ -1,4 +1,4 @@
-<%@ page import="java.sql.*, java.io.IOException" %>
+<%@ page import="java.sql.*, java.io.IOException, java.sql.PreparedStatement, java.sql.ResultSet" %>
 <%
 	// Getting database credentials from environment variables
 	String dbUser = "root";
@@ -92,37 +92,37 @@
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 		try (Statement statement = con.createStatement()) {
-			statement.executeUpdate("DROP SCHEMA IF EXISTS myFlorabase");
-			statement.executeUpdate("CREATE SCHEMA myFlorabase");
+			// statement.executeUpdate("DROP SCHEMA IF EXISTS myFlorabase");
+			// statement.executeUpdate("CREATE SCHEMA myFlorabase");
 			statement.executeUpdate("USE myFlorabase");
 
-			statement.executeUpdate("DROP TABLE IF EXISTS Users");
-			statement.executeUpdate("DROP TABLE IF EXISTS MapPreference");
+			// statement.executeUpdate("DROP TABLE IF EXISTS Users");
+			statement.executeUpdate("DROP TABLE IF EXISTS MapPreference"); // this table should no longer exist
 			statement.executeUpdate("DROP TABLE IF EXISTS Filter");
-			statement.executeUpdate("DROP TABLE IF EXISTS Location");
-			statement.executeUpdate("DROP TABLE IF EXISTS Sighting");
-			statement.executeUpdate("DROP TABLE IF EXISTS Plant");
-			statement.executeUpdate("DROP TABLE IF EXISTS Reports");
-			statement.executeUpdate("DROP TABLE IF EXISTS Allergic");
-			statement.executeUpdate("DROP TABLE IF EXISTS Edits");
+			// statement.executeUpdate("DROP TABLE IF EXISTS Location");
+			// statement.executeUpdate("DROP TABLE IF EXISTS Sighting");
+			// statement.executeUpdate("DROP TABLE IF EXISTS Plant");
+			// statement.executeUpdate("DROP TABLE IF EXISTS Reports");
+			// statement.executeUpdate("DROP TABLE IF EXISTS Allergic");
+			// statement.executeUpdate("DROP TABLE IF EXISTS Edits");
 			statement.executeUpdate("DROP TABLE IF EXISTS Within");
-			statement.executeUpdate("DROP TABLE IF EXISTS Flag");
+			// statement.executeUpdate("DROP TABLE IF EXISTS Flag");
 			statement.executeUpdate("DROP TABLE IF EXISTS User_Filter");
 
-			statement.executeUpdate(createUserTableSQL);
+			// statement.executeUpdate(createUserTableSQL);
 			statement.executeUpdate(createFilterTableSQL);
-			statement.executeUpdate(createLocationTableSQL);
-			statement.executeUpdate(createSightingTableSQL);
-			statement.executeUpdate(createPlantTableSQL);
-			statement.executeUpdate(createReportsTableSQL);
-			statement.executeUpdate(createAllergicTableSQL);
-			statement.executeUpdate(createEditsTableSQL);
+			// statement.executeUpdate(createLocationTableSQL);
+			// statement.executeUpdate(createSightingTableSQL);
+			// statement.executeUpdate(createPlantTableSQL);
+			// statement.executeUpdate(createReportsTableSQL);
+			// statement.executeUpdate(createAllergicTableSQL);
+			// statement.executeUpdate(createEditsTableSQL);
 			statement.executeUpdate(createWithinTableSQL);
-			statement.executeUpdate(createFlagTableSQL);
+			// statement.executeUpdate(createFlagTableSQL);
 			statement.executeUpdate(createUser_FilterTableSQL);
 
 			// USER table (15)
-			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
+			/* statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
 				+ "VALUES ('user1', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', true);");
 			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
 				+ "VALUES ('user2', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
@@ -151,7 +151,7 @@
 			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
 				+ "VALUES ('user14', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
 			statement.executeUpdate("INSERT INTO myflorabase.user (username, password, profile_pic, description, isAdmin)"
-				+ "VALUES ('user15', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);");
+				+ "VALUES ('user15', 'root', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', false);"); */
 			
 			// FILTER table (8)
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('All Plants')");
@@ -164,53 +164,85 @@
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Flowers')");
 			
 			// USER_FILTER table (user and filters)
-				// default filter 'All' (all users with default filter)
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 1)");			
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (3, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (4, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (5, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (6, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (7, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (8, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (9, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (10, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (11, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (12, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (13, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (14, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (15, 1)");
 			
-				// custom filters (users and filters)
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 2)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 5)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 6)");
+			// default filter 'All' (all users with default filter)
+			// get the number of users already in the table 
+			String getNumUsersSQL = "SELECT COUNT(*) FROM user;";
+			PreparedStatement ps = con.prepareStatement(getNumUsersSQL);
+            ResultSet resultSet = ps.executeQuery();
+         	
+            int numberOfUsers = 0;
+            // Check if the result set has data (it should have 1 row with the count)
+            if (resultSet.next()) {
+                // Get the count from the first column (which is the result of COUNT(*))
+                numberOfUsers = resultSet.getInt(1);
+            }
+            
+            out.println("Number of Users: " + numberOfUsers);
+				
+			for (int i = 1; i <= numberOfUsers; i++){
+				// create default filter for each existing user
+				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (" + i + ", 1)");
+				
+			}
 			
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 3)");			
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 7)");
-			
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (3, 4)");
-			statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (3, 8)");
+			if (numberOfUsers >=1){
+				// some random custom filters (users and filters)
+				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 2)");
+				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 4)");
+				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 5)");
+				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 6)");
+				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 8)");
+				
+				if (numberOfUsers >=2){
+					statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 3)");			
+					statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 7)");
+				}
+			}
 			
 			// WITHIN table (plants and filters)
-			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (1, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (2, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (3, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (4, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (5, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (6, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (7, 1)");
-			statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (8, 1)");
+			
+			// get all the plants for the default filter
+			String getNumPlantsSQL = "SELECT COUNT(*) FROM plant;";
+			ps = con.prepareStatement(getNumPlantsSQL);
+            resultSet = ps.executeQuery();
+         	
+            int numberOfPlants = 0;
+            // Check if the result set has data (it should have 1 row with the count)
+            if (resultSet.next()) {
+                // Get the count from the first column (which is the result of COUNT(*))
+                numberOfPlants = resultSet.getInt(1);
+            }
+            
+            out.println("Number of Plants: " + numberOfPlants);
+
+				
+			for (int i = 1; i <= numberOfPlants; i++){
+				// create default filter for each existing user
+				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (" + i + ", 1)");
+				
+			}
+
+			// just use the first plant for the other custom filters
+			if (numberOfPlants >=1){
+				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (2, 1)");
+				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (3, 1)");
+				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (4, 1)");
+				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (5, 1)");
+				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (6, 1)");
+				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (7, 1)");
+				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (8, 1)");
+			}
 			
 			// LOCATION table (1)
-			statement.executeUpdate("INSERT INTO myflorabase.location (latitude, longitude, name) VALUES ('37.3352', '121.8811', 'SJSU')");
+			// statement.executeUpdate("INSERT INTO myflorabase.location (latitude, longitude, name) VALUES ('37.3352', '121.8811', 'SJSU')");
 			
 			// SIGHTING table (2)
-			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (1, 1, 1, 1, 'Roses are red, violets are blue', '2024-11-11', null, 2)");
-			statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (2, 1, 2, 1, 'Found more roses', '2024-11-12', null, 2)");
+			// statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (1, 1, 1, 1, 'Roses are red, violets are blue', '2024-11-11', null, 2)");
+			// statement.executeUpdate("INSERT INTO myflorabase.sighting (sighting_id, plant_id, user_id, location_id, description, date, photo, radius) VALUES (2, 1, 2, 1, 'Found more roses', '2024-11-12', null, 2)");
 
 			// PLANT table (1)
-			statement.executeUpdate("INSERT INTO myflorabase.plant (plant_id, name, scientific_name, description, poisonous, invasive, endangered) VALUES (1, 'Rose', 'Rosa rubiginosa', null, true, true, true)");
+			// statement.executeUpdate("INSERT INTO myflorabase.plant (plant_id, name, scientific_name, description, poisonous, invasive, endangered) VALUES (1, 'Rose', 'Rosa rubiginosa', null, true, true, true)");
 
 			out.println("Initial entries in table \"myFlorabase\": <br/>");
 
@@ -219,6 +251,8 @@
 				out.println("<tr>" + "<td>" + rs.getString(1) + "</td>" + "<td>" + rs.getString(3) + "</td>" + "<td>"
 						+ rs.getString(4) + "</td>" + "</tr>");
 			}
+			resultSet.close();
+			ps.close();
 			rs.close();
 			statement.close();
 			con.close();
