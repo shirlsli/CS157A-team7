@@ -65,6 +65,7 @@ if (user != null){
 	rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
+<script>var user = <%=userJson%>; /*  for disabling map click */</script>
 <body>
 	<div id="sightingsPage" class="sightingsPage">
 		<div id="header"><jsp:include
@@ -169,7 +170,7 @@ if (user != null){
 	<script src="./js/buttons.js"></script>
 	<script src="./js/modal.js"></script>
 	<script>
-		var user = <%=userJson%>;
+		
 	
 		var allSightings = [];
 		var enterPressed = false;
@@ -566,17 +567,20 @@ if (user != null){
 				.then(response => response.text())
 				.then(data => {
 					console.log('Server response:', data)
-					updateMapWithSightings();
-					updateListWithSightings();
+					updateMapWithSightings(user);
+					// updateListWithSightings();
 				})
 				.catch(error => console.error('Error:', error));
 			
 	    }
 		
-	    function updateListWithSightings() {
+	    /* function updateListWithSightings() {
 	    	// TODO: figure out how to update the list with custom filters
+	    	
 			
-		}
+		} */
+	    
+	    
 	    
 	    
 	    
