@@ -156,84 +156,65 @@
 			// FILTER table (8)
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('All Plants')");
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Trees')");
-			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Flowers')");
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Allergies')");
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Filter')");
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Tree')");
-			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Sunflower')");
 			statement.executeUpdate("INSERT INTO myflorabase.filter (filter_name) VALUES ('Flowers')");
 			
 			// USER_FILTER table (user and filters)
 			
 			// default filter 'All' (all users with default filter)
 			// get the number of users already in the table 
-			String getNumUsersSQL = "SELECT COUNT(*) FROM user;";
+			String getNumUsersSQL = "SELECT * FROM user;";
 			PreparedStatement ps = con.prepareStatement(getNumUsersSQL);
             ResultSet resultSet = ps.executeQuery();
          	
-            int numberOfUsers = 0;
+           /*  int numberOfUsers = 0; */
             // Check if the result set has data (it should have 1 row with the count)
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 // Get the count from the first column (which is the result of COUNT(*))
-                numberOfUsers = resultSet.getInt(1);
+                int userId = resultSet.getInt(1);
+                out.println("userId: " + userId + "<br/>");
+				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (" + userId + ", 1)");
+            
+				if (userId == 1){
+					statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 2)");
+					statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 3)");
+					statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 4)");
+					statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 5)");
+					statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 6)");
+					
+				}
             }
             
-            out.println("Number of Users: " + numberOfUsers);
-				
-			for (int i = 1; i <= numberOfUsers; i++){
-				// create default filter for each existing user
-				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (" + i + ", 1)");
-				
-			}
-			
-			if (numberOfUsers >=1){
-				// some random custom filters (users and filters)
-				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 2)");
-				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 4)");
-				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 5)");
-				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 6)");
-				statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (1, 8)");
-				
-				if (numberOfUsers >=2){
-					statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 3)");			
-					statement.executeUpdate("INSERT INTO myflorabase.user_filter (user_id, filter_id) VALUES (2, 7)");
-				}
-			}
 			
 			// WITHIN table (plants and filters)
 			
 			// get all the plants for the default filter
-			String getNumPlantsSQL = "SELECT COUNT(*) FROM plant;";
+			String getNumPlantsSQL = "SELECT * FROM plant;";
 			ps = con.prepareStatement(getNumPlantsSQL);
             resultSet = ps.executeQuery();
          	
-            int numberOfPlants = 0;
+            
             // Check if the result set has data (it should have 1 row with the count)
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 // Get the count from the first column (which is the result of COUNT(*))
-                numberOfPlants = resultSet.getInt(1);
+                int plantId = resultSet.getInt(1);
+                out.println("plantId: " + plantId + "<br/>");
+             	// create default filter for each existing user
+				statement.executeUpdate("INSERT INTO myflorabase.within (plant_id, filter_id) VALUES (" + plantId + ", 1)");
+				
+				// just use the first plant for the other custom filters
+             	if (plantId ==1){
+             		statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (2, 1)");
+    				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (3, 1)");
+    				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (4, 1)");
+    				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (5, 1)");
+    				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (6, 1)");
+             	}
             }
             
-            out.println("Number of Plants: " + numberOfPlants);
-
-				
-			for (int i = 1; i <= numberOfPlants; i++){
-				// create default filter for each existing user
-				statement.executeUpdate("INSERT INTO myflorabase.within (plant_id, filter_id) VALUES (" + i + ", 1)");
-				
-			}
-
-			// just use the first plant for the other custom filters
-			if (numberOfPlants >=1){
-				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (2, 1)");
-				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (3, 1)");
-				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (4, 1)");
-				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (5, 1)");
-				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (6, 1)");
-				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (7, 1)");
-				statement.executeUpdate("INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (8, 1)");
-			}
-			
+       
 			// LOCATION table (1)
 			// statement.executeUpdate("INSERT INTO myflorabase.location (latitude, longitude, name) VALUES ('37.3352', '121.8811', 'SJSU')");
 			

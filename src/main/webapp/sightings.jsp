@@ -66,6 +66,8 @@ if (user != null){
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<script>var user = <%=userJson%>; /*  for disabling map click */</script>
+
 	<div id="sightingsPage" class="sightingsPage">
 		<div id="header"><jsp:include
 				page="WEB-INF/components/header.jsp"></jsp:include></div>
@@ -73,6 +75,30 @@ if (user != null){
 		<div id="sightingsDiv">
 			<div>
 				<div id="map" class="column"></div>
+				
+					<!--  -->
+					<%if (user != null) { %>
+					<div id="custom_filters">
+						<div id="filtersDiv">
+							<span class="section-title-with-button">
+								<h2 id="map_filter_title">My Map Filters</h2>
+							</span>
+							<%
+							for (Filter f : filters) {
+							%>
+							<label id="filter-checkbox-row" class="checkbox-label prevent-select">
+								<input type="checkbox" value="<%=f.getFilterId()%>"
+								class="filters-checkbox" <%=f.isActive() ? "checked" : ""%>
+								onchange="updateActiveFilters()"> <span class="checkbox"></span>
+								<%=f.getFilterName()%> <span class="icon-row"> 
+							</span>
+							</label>
+							<%
+							}
+							%>
+						</div>
+					</div>
+					<%} %>	
 				<div id="container">
 					<button class="major-button secondary-button" type="button"
 						id="tree">Tree</button>
@@ -101,33 +127,7 @@ if (user != null){
 										class="checkbox"></span> Oldest
 									</label> 
 									
-									<!--  -->
-									<%if (user != null) { %>
-									<div id="filtersDiv">
-										<span class="section-title-with-button">
-											<h2>My Custom Filters</h2>
-										</span>
-										
-										<%
-										for (Filter f : filters) {
-										%>
-										<label id="filter-checkbox-row" class="checkbox-label prevent-select">
-											<input type="checkbox" value="<%=f.getFilterId()%>"
-											class="filters-checkbox" <%=f.isActive() ? "checked" : ""%>
-											onchange="updateActiveFilters()"> <span class="checkbox"></span>
-											<%=f.getFilterName()%> <span class="icon-row"> 
-										</span>
-										</label>
-										<%
-										}
-										%>
-									</div>
-									<%} %>
 									
-									
-									
-									
-									<!--  -->
 									
 									<span id="filterDropdownCloseButton">
 										<button class="major-button secondary-button" type="button"
@@ -169,7 +169,7 @@ if (user != null){
 	<script src="./js/buttons.js"></script>
 	<script src="./js/modal.js"></script>
 	<script>
-		var user = <%=userJson%>;
+		
 	
 		var allSightings = [];
 		var enterPressed = false;
@@ -567,18 +567,9 @@ if (user != null){
 				.then(data => {
 					console.log('Server response:', data)
 					updateMapWithSightings();
-					updateListWithSightings();
 				})
 				.catch(error => console.error('Error:', error));
-			
 	    }
-		
-	    function updateListWithSightings() {
-	    	// TODO: figure out how to update the list with custom filters
-			
-		}
-	    
-	    
 	    
 	</script>
 
