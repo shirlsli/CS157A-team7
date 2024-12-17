@@ -1,4 +1,4 @@
-# 🌸🌿🌼🍃🌺🌻 myFloraBase 🌻🌺🍃🌼🌿🌸
+# 🌸🌿🌼🍃🌺🌻 myFloraBase 🌻🌺🍃🌼🌿🌸 (Changes made before this fork was created are on 'shirley' branch: https://github.com/seannian/CS157A-team7/tree/shirley)
 ## 👥 Team Members (Team 7)
 
 - **Irene Chen**
