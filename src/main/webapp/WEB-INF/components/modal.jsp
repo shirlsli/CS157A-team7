@@ -36,17 +36,17 @@
 							<div class="form-group">
 								<label class="required textfield-label" for="plantName">Plant
 									Name</label> <input type="text" id="plantName" name="plantName"
-									placeholder="Try your best to identify the plant" />
+									placeholder="Try your best to identify the plant" required />
 							</div>
 							<div class="form-group">
 								<label class="required textfield-label" for="date">Date</label>
-								<input type="date" id="date" name="date" />
+								<input type="date" id="date" name="date" required/>
 							</div>
 						</span>
 						<div class="form-group">
 							<label class="textfield-label" for="description">Description</label>
 							<textarea id="description" name="description"
-								placeholder="Try your best to describe the plant and the nearby surroundings"></textarea>
+								placeholder="Try your best to describe the plant and the nearby surroundings" ></textarea>
 						</div>
 						<span class="input-span">
 							<div class="form-group">
@@ -57,7 +57,7 @@
 							<div class="form-group">
 								<label class="required textfield-label" for="photo">Photo
 									of Plant</label> <input type="file" id="photo" name="photo"
-									accept="image/*" />
+									accept="image/*" required/>
 							</div>
 						</span>
 					</div>
