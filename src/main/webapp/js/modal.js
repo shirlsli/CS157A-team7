@@ -2,42 +2,43 @@ var clickedLocation;
 var loc;
 // Open the modal
 function openModal(location, sighting, plant) {
-	const htmlElement = document.documentElement;
-	htmlElement.style.overflowY = "hidden";
-	const modalTitle = document.getElementById('modalTitle');
-	const plantName = document.getElementById('plantName');
-	const date = document.getElementById('date');
-	const description = document.getElementById('description');
-	const radius = document.getElementById('radius');
-	const reportButton = document.getElementById("reportButton");
-	if (sighting != null) {
-		modalTitle.textContent = "Edit this Sighting";
-		plantName.value = plant.name;
-		const dateValue = new Date(sighting.date);
-		const year = dateValue.getFullYear();
-		const month = String(dateValue.getMonth() + 1).padStart(2, '0');
-		const day = String(dateValue.getDate()).padStart(2, '0');
-		const formattedDate = `${year}-${month}-${day}`;
-		date.value = formattedDate;
-		description.textContent = sighting.description;
-		radius.value = sighting.radius;
-		reportButton.textContent = "Save";
-	} else {
-		modalTitle.textContent = "Report a New Sighting";
-		plantName.value = "";
-		date.value = "";
-		description.textContent = "";
-		reportButton.textContent = "Report";
-	}
-	const modal = document.getElementById('markerModal');
-	const sightingsPage = document.getElementById('sightingsPage');
-	sightingsPage.style.overflowY = "hidden";
-	const header = document.getElementById('header');
-	header.style.display = "hidden";
-	modal.style.display = "block";
-	loadReportSightingsMap(location);
-	sessionStorage.setItem("sighting", JSON.stringify(sighting));
-	loc = location;
+		const htmlElement = document.documentElement;
+			htmlElement.style.overflowY = "hidden";
+			const modalTitle = document.getElementById('modalTitle');
+			const plantName = document.getElementById('plantName');
+			const date = document.getElementById('date');
+			const description = document.getElementById('description');
+			const radius = document.getElementById('radius');
+			const reportButton = document.getElementById("reportButton");
+			if (sighting != null) {
+				modalTitle.textContent = "Edit this Sighting";
+				plantName.value = plant.name;
+				const dateValue = new Date(sighting.date);
+				const year = dateValue.getFullYear();
+				const month = String(dateValue.getMonth() + 1).padStart(2, '0');
+				const day = String(dateValue.getDate()).padStart(2, '0');
+				const formattedDate = `${year}-${month}-${day}`;
+				date.value = formattedDate;
+				description.textContent = sighting.description;
+				radius.value = sighting.radius;
+				reportButton.textContent = "Save";
+			} else {
+				modalTitle.textContent = "Report a New Sighting";
+				plantName.value = "";
+				date.value = "";
+				description.textContent = "";
+				reportButton.textContent = "Report";
+			}
+			const modal = document.getElementById('markerModal');
+			const sightingsPage = document.getElementById('sightingsPage');
+			sightingsPage.style.overflowY = "hidden";
+			const header = document.getElementById('header');
+			header.style.display = "hidden";
+			modal.style.display = "block";
+			loadReportSightingsMap(location);
+			sessionStorage.setItem("sighting", JSON.stringify(sighting));
+			loc = location;
+	
 }
 
 async function loadReportSightingsMap(location) {

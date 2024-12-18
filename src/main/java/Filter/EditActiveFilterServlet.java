@@ -1,4 +1,4 @@
-package addFilter;
+package Filter;
 
 import com.example.*;
 import java.io.IOException;
@@ -20,11 +20,12 @@ import javax.servlet.http.HttpSession;
 
 import com.example.User;
 
-@WebServlet("/DeleteFilterServlet")
-public class DeleteFilterServlet extends HttpServlet {
+@WebServlet("/EditActiveFilterServlet")
+@MultipartConfig
+public class EditActiveFilterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public DeleteFilterServlet() {
+	public EditActiveFilterServlet() {
 		super();
 	}
 
@@ -37,14 +38,27 @@ public class DeleteFilterServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		
-		String filter_id = request.getParameter("filter_id");
-		
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 
+		String[] activeFilters = request.getParameterValues("activeFilters");
+		String[] inactiveFilters = request.getParameterValues("inactiveFilters");
+
+		// checking the values:
+		if (activeFilters != null) {
+			for (String value : activeFilters) {
+				System.out.println("Active filter_id: " + Integer.parseInt(value));
+			}
+		}
+		if (inactiveFilters != null) {
+			for (String value : inactiveFilters) {
+				System.out.println("Inactive filter_id: " + Integer.parseInt(value));
+			}
+		}
+
 		FilterDao fDao = new FilterDao();
-		String successLog = fDao.deleteFilter(user, filter_id);
-		
+		String successLog = fDao.editActiveFilters(user, activeFilters, inactiveFilters);
+
 		response.setContentType("text/plain");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(successLog);

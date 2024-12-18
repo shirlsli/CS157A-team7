@@ -1,4 +1,4 @@
-package addFilter;
+package Filter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -37,12 +37,22 @@ public class FilterDao {
 		return con;
 	}
 
-	public boolean checkForExistingFilterName(User curUser, String filterName) {
+	public boolean checkForExistingFilterName(User curUser, String filter_id, String filterName) {
 		loadDriver(dbdriver);
 		Connection con = getConnection();
+		
+		int user_id = curUser.getUserId();
+		
+		String s;
+		if (filter_id != "") {
+//			System.out.println("filter_id '" + Integer.parseInt(filter_id) + "'");
+			
+			s = "SELECT * FROM myflorabase.user_filter u_f, myflorabase.filter f WHERE user_id=" + user_id + " AND f.filter_id<>" + Integer.parseInt(filter_id) + " AND u_f.filter_id = f.filter_id AND binary filter_name='" + filterName + "';";
 
-		String s = "SELECT * FROM myflorabase.user_filter uf, myflorabase.filter f WHERE user_id ='"
-				+ curUser.getUserId() + "' AND uf.filter_id = f.filter_id AND filter_name ='" + filterName + "';";
+		} else {
+			s = "SELECT * FROM myflorabase.user_filter uf, myflorabase.filter f WHERE user_id=" + user_id + " AND uf.filter_id = f.filter_id AND binary filter_name='" + filterName + "';";
+		}
+
 		try {
 			PreparedStatement ps = con.prepareStatement(s);
 			ResultSet resultSet = ps.executeQuery();
@@ -57,7 +67,7 @@ public class FilterDao {
 		return true;
 	}
 
-	public String addNewFilter(User user, String filterName, String[] selectedValues, String filterColor) {
+	public String addNewFilter(User user, String filterName, String[] selectedValues) {
 		loadDriver(dbdriver);
 		Connection con = getConnection();
 
@@ -67,24 +77,22 @@ public class FilterDao {
 
 			// checking the values:
 			System.out.println("Filter Name: " + filterName);
-			System.out.println("Filter Color: " + filterColor);
 			if (selectedValues != null) {
 				for (String value : selectedValues) {
 					System.out.println("Selected value: " + value);
 				}
 			}
 
-			Filter filter = new Filter(filterColor, filterName);
+			Filter filter = new Filter(filterName);
 
 			con.setAutoCommit(false);
 
 			// add new entry into filter
-			String insertNewFilterSQL = "INSERT INTO myflorabase.filter (color, filter_name) VALUES (?, ?);";
+			String insertNewFilterSQL = "INSERT INTO myflorabase.filter (filter_name) VALUES (?);";
 
 			try {
 				PreparedStatement ps = con.prepareStatement(insertNewFilterSQL);
-				ps.setString(1, filter.getColor());
-				ps.setString(2, filter.getFilterName());
+				ps.setString(1, filter.getFilterName());
 				int filter_row = ps.executeUpdate();
 
 				// get filter_id
@@ -243,11 +251,14 @@ public class FilterDao {
 		return successLog;
 	}
 
-	public String editActiveFilters(String[] activeFilters, String[] inactiveFilters) {
+	public String editActiveFilters(User user, String[] activeFilters, String[] inactiveFilters) {
 		loadDriver(dbdriver);
 		Connection con = getConnection();
 
 		String successLog = "active filters updated";
+		
+		int user_id = user.getUserId();
+		System.out.println("userid " + user_id);
 
 		try {
 			con.setAutoCommit(false);
@@ -255,20 +266,22 @@ public class FilterDao {
 			try {
 
 				int updatedRows = 0;
-				String activateFiltersSQL = "UPDATE myflorabase.filter SET active=1 WHERE filter_id = ?;";
+				String activateFiltersSQL = "UPDATE myflorabase.user_filter SET active=1 WHERE user_id=? AND filter_id=?;";
 				PreparedStatement ps = con.prepareStatement(activateFiltersSQL);
 				if (activeFilters != null) {
 					for (String value : activeFilters) {
-						ps.setInt(1, Integer.parseInt(value));
+						ps.setInt(1, user_id);
+						ps.setInt(2, Integer.parseInt(value));
 						updatedRows += ps.executeUpdate();
 					}
 				}
 
-				String deactivateFiltersSQL = "UPDATE myflorabase.filter SET active=0 WHERE filter_id = ?;";
+				String deactivateFiltersSQL = "UPDATE myflorabase.user_filter SET active=0 WHERE user_id=? AND filter_id=?;";
 				PreparedStatement ps2 = con.prepareStatement(deactivateFiltersSQL);
 				if (inactiveFilters != null) {
 					for (String value : inactiveFilters) {
-						ps2.setInt(1, Integer.parseInt(value));
+						ps2.setInt(1, user_id);
+						ps2.setInt(2, Integer.parseInt(value));
 						updatedRows += ps2.executeUpdate();
 					}
 				}
@@ -341,15 +354,90 @@ public class FilterDao {
 		return (String[]) plants.toArray(new String[0]);
 	}
 
-	public String editFilter(User user, String filterId, String filterName, String[] selectedValues, String filterColor) {
+	public String editFilter(User user, String filter_id, String filterName, String[] selectedValues, String filterColor) {
 		loadDriver(dbdriver);
 		Connection con = getConnection();
 		String successLog = "";
 		
-		String deleteSuccess = deleteFilter(user, filterId);
-		String addSuccess = addNewFilter(user, filterName, selectedValues, filterColor); // inc filter id, too lazy to actually edit
-		
-		successLog = deleteSuccess + addSuccess;
+		try {
+
+			con.setAutoCommit(false);
+
+			try {
+				// update the name
+				String updateFilterSQL = "UPDATE myflorabase.filter SET filter_name=? WHERE filter_id=?;";
+				PreparedStatement ps = con.prepareStatement(updateFilterSQL);
+				ps.setString(1, filterName);
+				ps.setInt(2, Integer.parseInt(filter_id));
+				int filter_rows = ps.executeUpdate();
+
+				if (filter_rows > 0) {
+					System.out.println("Record(s) found in `user_filter` with user_id= " + user.getUserId()
+							+ " and filter_id=" + Integer.parseInt(filter_id) + " updated sucessfully.");
+				} else {
+					System.out.println("No record found in `user_filter` with user_id= " + user.getUserId()
+							+ " and filter_id=" + Integer.parseInt(filter_id));
+				}
+
+				// remove from within
+				String deleteWithinSQL = "DELETE FROM myflorabase.within WHERE filter_id=?;";
+				PreparedStatement ps3 = con.prepareStatement(deleteWithinSQL);
+				ps3.setInt(1, Integer.parseInt(filter_id));
+				int deleted_within_rows = ps3.executeUpdate();
+
+				if (deleted_within_rows > 0) {
+					System.out.println("Record(s) found in `within` with filter_id=" + Integer.parseInt(filter_id)
+							+ " deleted sucessfully.");
+				} else {
+					System.out.println("No record found in `within` with filter_id=" + Integer.parseInt(filter_id));
+				}
+				
+
+				// add entries to within (filter and plants)
+				String addPlantsToFilter = "INSERT INTO myflorabase.within (filter_id, plant_id) VALUES (?,?);";
+				PreparedStatement ps4 = con.prepareStatement(addPlantsToFilter);
+				ps4.setInt(1, Integer.parseInt(filter_id));
+				for (String value : selectedValues) {
+					ps4.setInt(2, Integer.parseInt(value));
+					int added_within_rows = ps4.executeUpdate();
+					if (added_within_rows == 0) {
+						throw new SQLException();
+					}
+				}
+
+				// ensure all operation successful
+				if (filter_rows == 1 && deleted_within_rows > 0) {
+					// If successful, commit the transaction
+					con.commit();
+					successLog = "Update filter successful.";
+
+				} else {
+					// If any operation fails, rollback the transaction
+					con.rollback();
+					successLog = "Update filter failed. Rolling back changes.";
+
+				}
+
+			} catch (SQLException e) {
+				con.rollback();
+				System.out.println("Error updating filter: " + e.getMessage());
+				return e.getMessage();
+			}
+
+		} catch (SQLException e) {
+			System.out.println("SQLException caught: " + e.getMessage());
+			e.printStackTrace();
+			return e.getMessage();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					System.out.println("Failed to close the connection: " + e.getMessage());
+					return e.getMessage();
+				}
+			}
+		}
 		
 		return successLog;
 	}

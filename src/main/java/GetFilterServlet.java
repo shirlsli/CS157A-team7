@@ -50,7 +50,7 @@ public class GetFilterServlet extends HttpServlet {
 		List<String> plantNames = new ArrayList<>();
 
 		try (Connection con = DriverManager.getConnection(dbUrl, databaseUser, databasePassword)) {
-			String userFilterQuery = "SELECT filter_id FROM user_filter WHERE user_id = ?";
+			String userFilterQuery = "SELECT filter_id FROM user_filter WHERE user_id = ? AND active=1";
 			List<Integer> activeFilterIds = new ArrayList<>();
 
 			try (PreparedStatement userFilterStatement = con.prepareStatement(userFilterQuery)) {
@@ -58,15 +58,8 @@ public class GetFilterServlet extends HttpServlet {
 				try (ResultSet rs = userFilterStatement.executeQuery()) {
 					while (rs.next()) {
 						int filterId = rs.getInt("filter_id");
-						String filterQuery = "SELECT active FROM Filter WHERE filter_id = ?";
-						try (PreparedStatement filterStatement = con.prepareStatement(filterQuery)) {
-							filterStatement.setInt(1, filterId);
-							try (ResultSet filterRs = filterStatement.executeQuery()) {
-								if (filterRs.next() && filterRs.getBoolean("active")) {
-									activeFilterIds.add(filterId);
-								}
-							}
-						}
+						activeFilterIds.add(filterId);
+						System.out.println("activeFilterIds: " + filterId);
 					}
 				}
 			}

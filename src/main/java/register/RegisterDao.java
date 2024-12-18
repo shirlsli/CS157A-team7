@@ -103,7 +103,7 @@ public class RegisterDao {
         Connection con=getConnection();
 
 
-        String s = "SELECT * FROM myflorabase.user WHERE username = '" + username + "'";
+        String s = "SELECT * FROM myflorabase.user WHERE binary username = '" + username + "'";
         try{
             PreparedStatement ps = con.prepareStatement(s);
             ResultSet resultSet = ps.executeQuery();

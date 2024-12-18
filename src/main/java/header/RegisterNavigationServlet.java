@@ -8,18 +8,18 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.*;
 
-@WebServlet("/login")
-public class LoginNavigationServlet extends HttpServlet {
+@WebServlet("/signup")
+public class RegisterNavigationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public LoginNavigationServlet() {
+	public RegisterNavigationServlet() {
 		super();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-		request.setAttribute("loginHeaderButton", "active-regular"); // set active header tab
+		RequestDispatcher dispatcher = request.getRequestDispatcher("userRegister.jsp");
+		request.setAttribute("registerHeaderButton", "active-regular"); // set active header tab
 		dispatcher.forward(request, response);
 	}
 

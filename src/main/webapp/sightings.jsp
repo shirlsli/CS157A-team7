@@ -1,5 +1,5 @@
 <%@ page
-	import="java.sql.*, java.util.Properties, com.google.gson.Gson, java.io.FileInputStream, java.io.IOException, java.util.HashMap, java.util.List, java.util.ArrayList, com.example.Sighting, com.example.User, com.example.Plant, java.util.Date"%>
+	import="java.sql.*, java.util.Properties, com.google.gson.Gson, java.io.FileInputStream, java.io.IOException, java.util.HashMap, java.util.List, java.util.ArrayList, com.example.Sighting, com.example.User, com.example.Plant, com.example.Filter, java.util.Date"%>
 <%
 String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
 HttpSession curSession = request.getSession(false);
@@ -9,6 +9,46 @@ boolean mySightingsPage = false;
 if (request.getAttribute("mySightingActive") != null) {
 	mySightingsPage = true;
 }
+
+
+String dUser; // assumes database name is the same as username
+dUser = "root";
+String pwd = System.getenv("DB_PASSWORD");
+
+if (pwd == null) {
+	System.out.println("DB_PASSWORD environment variable is not set.");
+}
+
+List<Filter> filters = new ArrayList<>();
+if (user != null){
+	try {
+		java.sql.Connection con;
+		Class.forName("com.mysql.jdbc.Driver");
+		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false", dUser, pwd);
+		Statement statement = con.createStatement();
+
+		String filtersSQL = "SELECT uf.filter_id, filter_name, active FROM myflorabase.user_filter uf, myflorabase.filter f WHERE uf.filter_id = f.filter_id AND user_id = '"
+		+ user.getUserId() + "'";
+		ResultSet rs = statement.executeQuery(filtersSQL);
+		while (rs.next()) {
+			int filterId = rs.getInt("filter_id");
+			String filterName = rs.getString("filter_name");
+			int active = rs.getInt("active");
+			boolean isActive = false;
+			if (active == 1) {
+		isActive = true;
+			}
+			Filter filter = new Filter(filterId, filterName, isActive);
+			filters.add(filter);
+		}
+		rs.close();
+		statement.close();
+		con.close();
+	} catch (SQLException e) {
+		System.out.println("SQLException caught: " + e.getMessage());
+	}
+}
+
 %>
 <!DOCTYPE html>
 <html>
@@ -26,6 +66,8 @@ if (request.getAttribute("mySightingActive") != null) {
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<script>var user = <%=userJson%>; /*  for disabling map click */</script>
+
 	<div id="sightingsPage" class="sightingsPage">
 		<div id="header"><jsp:include
 				page="WEB-INF/components/header.jsp"></jsp:include></div>
@@ -33,6 +75,30 @@ if (request.getAttribute("mySightingActive") != null) {
 		<div id="sightingsDiv">
 			<div>
 				<div id="map" class="column"></div>
+				
+					<!--  -->
+					<%if (user != null) { %>
+					<div id="custom_filters">
+						<div id="filtersDiv">
+							<span class="section-title-with-button">
+								<h2 id="map_filter_title">My Map Filters</h2>
+							</span>
+							<%
+							for (Filter f : filters) {
+							%>
+							<label id="filter-checkbox-row" class="checkbox-label prevent-select">
+								<input type="checkbox" value="<%=f.getFilterId()%>"
+								class="filters-checkbox" <%=f.isActive() ? "checked" : ""%>
+								onchange="updateActiveFilters()"> <span class="checkbox"></span>
+								<%=f.getFilterName()%> <span class="icon-row"> 
+							</span>
+							</label>
+							<%
+							}
+							%>
+						</div>
+					</div>
+					<%} %>	
 				<div id="container">
 					<button class="major-button secondary-button" type="button"
 						id="tree">Tree</button>
@@ -59,7 +125,11 @@ if (request.getAttribute("mySightingActive") != null) {
 										id="oldestCheckbox" type="checkbox"
 										onchange="dropdownSubmit(this)"> <span
 										class="checkbox"></span> Oldest
-									</label> <span id="filterDropdownCloseButton">
+									</label> 
+									
+									
+									
+									<span id="filterDropdownCloseButton">
 										<button class="major-button secondary-button" type="button"
 											onclick="hideFilterDropdown()">Close</button>
 									</span>
@@ -99,6 +169,8 @@ if (request.getAttribute("mySightingActive") != null) {
 	<script src="./js/buttons.js"></script>
 	<script src="./js/modal.js"></script>
 	<script>
+		
+	
 		var allSightings = [];
 		var enterPressed = false;
 		window.addEventListener("load", function() {
@@ -290,6 +362,7 @@ if (request.getAttribute("mySightingActive") != null) {
 			flagIcon.src = 'assets/flag_icon.svg';
 			flagIcon.width = 20;
 			flagIcon.height = 20;
+			flagIcon.classList.add(curUser != null ? 'icon-shown' : 'icon-hidden');
 			flagIcon.addEventListener('mouseover', function() {
 				changeImage(this, 'assets/flag_icon_hover.svg');
 			});
@@ -453,6 +526,51 @@ if (request.getAttribute("mySightingActive") != null) {
 				console.log(flagReason);
 			}, true, curUser);
 		}
+		
+		// activate/deactivate filters
+	    function updateActiveFilters() {
+	    	
+	    	const filterCheckboxes = document.querySelectorAll('.filters-checkbox');
+	      	const activeFilters = [];
+	      	const inactiveFilters = [];
+	        filterCheckboxes.forEach(checkbox => {
+	        	if (checkbox.checked) {
+	        		activeFilters.push(checkbox.value);  // Store checked values
+	        	} else {
+	        		inactiveFilters.push(checkbox.value); // Store unchecked values
+	        	}
+	        }); 
+	     	// Prepare URL-encoded data
+			const formData = new FormData();
+			
+			// Append the value of each checked checkbox to the FormData object
+		    activeFilters.forEach(value => {
+		        formData.append('activeFilters', value);
+		    });
+			
+			// Append the value of each unchecked checkbox to the FormData object
+		    inactiveFilters.forEach(value => {
+		        formData.append('inactiveFilters', value);
+		    });
+		    
+		 	// Log each key-value pair in the FormData object
+	        for (const [key, value] of formData.entries()) {
+	            console.log(key, `:`, value);
+	        }
+						
+			// Send the data to the server
+			fetch('/myFlorabase/EditActiveFilterServlet', {
+				method: 'POST',
+				body: formData // FormData handles setting the correct multipart/form-data header
+			})
+				.then(response => response.text())
+				.then(data => {
+					console.log('Server response:', data)
+					updateMapWithSightings();
+				})
+				.catch(error => console.error('Error:', error));
+	    }
+	    
 	</script>
 
 	<!-- Load the Google Maps JavaScript API -->
